@@ -12,7 +12,7 @@ export default function AllBooks({ books }: AllBooksProps) {
     const [openModal, setOpenModal] = useState<Book | Record<string, never>>({})
 
     return (
-        <div className="w-full flex flex-wrap gap-4 ">
+        <div className="w-full flex flex-wrap gap-4 max-w-[740px] mx-auto">
             {openModal?.title && <BookModal onClose={() => setOpenModal({})} book={openModal} />}
 
             {books?.map((book, index) => {
