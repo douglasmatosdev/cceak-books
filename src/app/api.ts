@@ -1,4 +1,4 @@
-import axios, { AxiosPromise, AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 export const fetchBookDetails = async (isbn: string) => {
     try {
@@ -10,7 +10,7 @@ export const fetchBookDetails = async (isbn: string) => {
     }
 }
 
-const sheet_url = 'https://sheet.best/api/sheets/99cebc57-8df6-4be0-aaf6-74bc06c4d37b'
+const sheet_url = `https://sheet.best/api/sheets/${process.env.NEXT_PUBLIC_SHEET_KEY}`
 
 export const api = {
     sheet: {
