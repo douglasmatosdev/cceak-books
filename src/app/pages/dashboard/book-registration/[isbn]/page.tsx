@@ -1,6 +1,6 @@
 'use client'
 import { fetchBookDetails } from "@/app/api";
-import { Emtpy } from "@/components/Emtpy";
+import { Empty } from "@/components/Empty";
 import { GoogleApiBooks } from "@/types/google-api-book";
 import { useEffect, useState } from "react";
 import CreateForm from "@/components/CreateForm";
@@ -24,13 +24,13 @@ export default function SearchPage({ params }: SearchPageProps) {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     if (!bookInfo) {
-        return <Emtpy />
+        return <Empty />
     }
 
     if (!params.isbn || !bookInfo?.title) {
         return (
             <div className="w-full h-full p-8 max-w-[740px] max-auto">
-                <Emtpy />
+                <Empty />
             </div>
         )
     }
