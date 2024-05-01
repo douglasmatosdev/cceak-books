@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate'
 import styled from 'styled-components';
 import AllBooks from './AllBooks';
+import { Empty } from './Empty';
 
 export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }) => {
     const [itemOffset, setItemOffset] = useState(0);
@@ -17,9 +18,6 @@ export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }) => {
 
     const handlePageClick = (event: { selected: number }) => {
         const newOffset = (event.selected * itemsPerPage) % books.length;
-        console.log(
-            `User requested page number ${event.selected}, which is offset ${newOffset}`
-        );
         setItemOffset(newOffset);
     };
 
@@ -32,7 +30,7 @@ export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }) => {
 
     return (
         <StyledDiv>
-            <AllBooks books={currentItems} />
+            {!books?.length ? <Empty /> : <AllBooks books={currentItems} />}
             <ReactPaginate
                 breakLabel="..."
                 nextLabel="próximo >"

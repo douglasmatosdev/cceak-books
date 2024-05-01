@@ -1,6 +1,6 @@
 'use client'
 import { api } from "@/app/api";
-import { Emtpy } from "@/components/Emtpy";
+import { Empty } from "@/components/Empty";
 import { PaginatedBookItems } from "@/components/PaginatedBookItems";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -33,7 +33,7 @@ export default function Dashboard() {
                     Cadastrar livro
                 </Link>
             </div>
-            {!books?.length ? <Emtpy /> :
+            {!books?.length ? <Empty /> :
                 (
                     <div className="px-4">
                         <div className="flex justify-between items-center mb-8">

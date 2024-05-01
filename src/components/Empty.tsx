@@ -1,6 +1,6 @@
 import { FaRegFolderOpen } from "react-icons/fa"
 
-export const Emtpy = () => {
+export const Empty = () => {
     return (
         <div className='p-8'>
             <div className='min-w-[250px] min-h-[250px] w-full h-full flex  flex-col justify-center items-center rounded-lg border-4 border-gray-200'>
