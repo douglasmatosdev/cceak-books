@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from 'next/navigation'
+import { api } from "@/app/api";
 
 type EditFormProps = {
 
@@ -15,23 +16,12 @@ export default function CreateForm(props: EditFormProps) {
     const router = useRouter()
 
     const handleSubmit = async (book: Book) => {
-        try {
-            const response = await fetch(
-                'https://sheet.best/api/sheets/c64dfadb-646c-4759-8e38-6de10bc6b4ff',
-                {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(book)
+        await api.sheet.post(book)
+            .then(response => {
+                if (response.status === 200) {
+                    router.push('/pages/dashboard')
                 }
-            )
-            if (response.ok) {
-                router.push('/pages/dashboard')
-            }
-        } catch (error) {
-            console.warn(error);
-        }
+            })
     }
 
     return (
