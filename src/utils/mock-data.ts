@@ -1,4 +1,4 @@
-export const books =[
+export const booksMock =[
     {
         "title": "Sherlock Holmes: Volume 1",
         "subtitle": "Um estudo em vermelho | O sinal dos quatro | As aventuras de Sherlock Holmes",

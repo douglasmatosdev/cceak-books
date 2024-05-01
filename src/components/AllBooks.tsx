@@ -1,21 +1,39 @@
-import { books } from "@/utils/mock-data"
-import Image from "next/image"
+/* eslint-disable @next/next/no-img-element */
+'use client'
+import { useState } from "react";
+import { BookModal } from "./BookModal";
+import { Img } from "./Img";
 
-export default function AllBooks() {
+
+interface AllBooksProps {
+    books: Book[]
+}
+export default function AllBooks({ books }: AllBooksProps) {
+    const [openModal, setOpenModal] = useState<Book | Record<string, never>>({})
 
     return (
-        <div className="w-full flex flex-wrap gap-8">
+        <div className="w-full flex flex-wrap gap-4 ">
+            {openModal?.title && <BookModal onClose={() => setOpenModal({})} book={openModal} />}
 
-            {books.map((book, index) => {
+            {books?.map((book, index) => {
                 return (
-
                     <div
                         key={index}
-                        className="bg-white p-8 w-[90%] mx-auto sm:w-[350px] rounded-md flex flex-col justify-center items-center"
+                        className="bg-white w-40 p-2 mx-auto rounded-md flex flex-col justify-center cursor-pointer"
+                        onClick={() => {
+                            setOpenModal(book)
+                        }}
                     >
-                        <img src={book.imageLinks.thumbnail} width={250} height={350} alt={book.title} />
-                        <h2>{book.title}</h2>
-                        <small>{book.subtitle}</small>
+                        <Img
+                            src={book?.image}
+                            alt={book.title}
+                            width={150}
+                            height={250}
+                        />
+                        <h2 className="font-semibold mt-2 mb-2">
+                            {book.title}
+                        </h2>
+                        <h3>{book.author}</h3>
                     </div>
                 )
             })}

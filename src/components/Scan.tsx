@@ -1,12 +1,10 @@
 'use client'
 import { Html5QrcodeScanner } from "html5-qrcode"
 import { useEffect, useState } from "react"
-import { fetchBookDetails } from "../app/api"
-import { GoogleApiBooks } from "@/types/google-api-book"
+import Link from "next/link"
 
-export const Scanner = () => {
+export const Scan = () => {
     const [scanResult, setScanResult] = useState<null | string>(null)
-    const [bookInfo, setBookInfo] = useState<GoogleApiBooks | Record<string, never>>({})
 
     useEffect(() => {
 
@@ -30,6 +28,7 @@ export const Scanner = () => {
         function error(err: string) {
             console.warn(err)
             scanner.resume()
+            scanner.clear()
         }
 
         scanner.render(success, error)
@@ -40,29 +39,23 @@ export const Scanner = () => {
     }, [])
 
 
-    const search = async (code: string) => {
-        const bookDetails = await fetchBookDetails(code);
-        console.log(bookDetails);
-
-        setBookInfo(bookDetails);
-    }
-    console.log(bookInfo);
-
     if (scanResult) {
         return (
-            <div className="w-screen md:w-full flex flex-col items-center justify-center border">
+            <div className="w-screen md:w-full flex flex-col items-center justify-center">
                 <h2>Succcess: {scanResult}</h2>
-                <button
-                    onClick={() => search(scanResult)}
+                <Link
+                    href={`/pages/dashboard/book-registration/${scanResult}`}
                     className="py-4 px-6 bg-green-500 rounded-lg text-white"
-                >search</button>
+                >
+                    Pesquisar
+                </Link>
             </div>
         )
     }
 
     return (
-        <div className="w-screen md:w-full px-4 flex justify-center">
-            <div className="w-full " id="reader"></div>
+        <div className="flex justify-center  border-4 border-black">
+            <div className="w-full" id="reader"></div>
         </div>
     )
 }
