@@ -5,6 +5,7 @@ import { GoogleApiBooks } from "@/types/google-api-book";
 import { useEffect, useState } from "react";
 import CreateForm from "@/components/CreateForm";
 import { Img } from "@/components/Img";
+import { useToastify } from "@/hooks/useToastify";
 
 interface SearchPageProps {
     params: {
@@ -14,9 +15,22 @@ interface SearchPageProps {
 export default function SearchPage({ params }: SearchPageProps) {
     const [bookInfo, setBookInfo] = useState<GoogleApiBooks | Record<string, never>>({})
 
+    const { toast } = useToastify()
+
     const search = async (code: string) => {
-        const bookDetails = await fetchBookDetails(code);
-        setBookInfo(bookDetails);
+        await fetchBookDetails(code)
+            .then(bookDetails => {
+                if (bookDetails?.title) {
+                    setBookInfo(bookDetails)
+                    toast('Livro encontrado!', 'success')
+                } else {
+                    toast('Livro não encontrado!', 'warning')
+                }
+            })
+            .catch(error => {
+                console.error('Error trying search book', error)
+                toast('Erro ao tentar pesquisar livro', 'error')
+            })
     }
 
     useEffect(() => {
@@ -27,25 +41,27 @@ export default function SearchPage({ params }: SearchPageProps) {
         return <Empty />
     }
 
-    if (!params.isbn || !bookInfo?.title) {
-        return (
-            <div className="w-full h-full p-8 max-w-[740px] max-auto">
-                <Empty />
-            </div>
-        )
-    }
+    // if (!params.isbn || !bookInfo?.title) {
+    //     return (
+    //         <div className="w-full h-full p-8 max-w-[740px] max-auto">
+    //             <Empty />
+    //         </div>
+    //     )
+    // }
 
     return bookInfo && (
-        <div className="w-full h-full p-8 max-w-[740px] max-auto">
+        <div className="w-full h-full p-8 max-w-[740px] mx-auto">
             <h2>Resultado da pesquisa</h2>
             <span>Verifique se está correto antes de cadastrar</span>
             <div className="flex flex-col">
-                <Img
-                    src={`${bookInfo?.imageLinks?.thumbnail}`}
-                    alt="capa do livro"
-                    width={250}
-                    className="mb-4"
-                />
+                <div className="p-8">
+                    <Img
+                        src={`${bookInfo?.imageLinks?.thumbnail}`}
+                        alt="capa do livro"
+                        width={250}
+                        className="mb-4"
+                    />
+                </div>
                 <CreateForm
                     isbn={+params.isbn}
                     title={bookInfo.title}

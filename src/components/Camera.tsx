@@ -8,7 +8,10 @@ interface CameraProps {
     onSave: (image: string) => void
 }
 export const Camera = ({ onCancel, onSave }: CameraProps) => {
-    const [image, setImage] = useState('')
+    const [image, setImage] = useState({
+        origial: '',
+        compressed: ''
+    })
     const [deviceId, setDeviceId] = useState('');
     const [devices, setDevices] = useState<Device[]>([]);
     const webcamRef = useRef(null);
@@ -24,9 +27,13 @@ export const Camera = ({ onCancel, onSave }: CameraProps) => {
     const capture = useCallback(() => {
         if (webcamRef.current) {
             // @ts-ignore
-            reduceImageFileSize(webcamRef.current.getScreenshot(), 50, 100)
+            const base64 = webcamRef.current.getScreenshot()
+            reduceImageFileSize(base64, 50, 100)
                 .then(compressed => {
-                    setImage(compressed)
+                    setImage({
+                        origial: base64,
+                        compressed
+                    })
                 })
         }
     }, [webcamRef])
@@ -35,9 +42,9 @@ export const Camera = ({ onCancel, onSave }: CameraProps) => {
         <div className="flex flex-col justify-center items-center w-full h-full fixed bottom-0 top-0 right-0 left-0 bg-[#0008]">
             <div className="flex flex-col justify-center items-center w-full h-full">
 
-                {image ? (
+                {image.origial ? (
                     <div>
-                        <Img src={image} alt="foto agora" />
+                        <Img src={image.origial} alt="foto agora" />
                     </div>
                 ) :
                     (
@@ -73,11 +80,11 @@ export const Camera = ({ onCancel, onSave }: CameraProps) => {
                     >
                         Cancelar
                     </button>
-                    {image ?
+                    {image.origial ?
                         (
                             <button
                                 className="py-4 px-8 rounded-lg bg-green-500 text-xl text-white font-semibold ml-10"
-                                onClick={() => onSave(image)}
+                                onClick={() => onSave(image.compressed)}
                             >
                                 Salvar
                             </button>

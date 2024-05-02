@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ImCamera } from "react-icons/im";
 import { Camera } from "./Camera";
 import { SelectPhoto } from "./SelectPhoto";
+import { useToastify } from "@/hooks/useToastify";
 
 type EditFormProps = {
     rowIndex: number
@@ -18,12 +19,19 @@ export default function EditForm(props: EditFormProps) {
 
     const router = useRouter()
 
+    const { toast } = useToastify()
+
     const handleSubmit = async (book: Book) => {
         await api.sheet.put(rowIndex, book)
             .then(response => {
                 if (response?.status === 200) {
+                    toast('Alterações salvas com sucesso!', 'success')
                     router.push('/pages/dashboard')
+                } else {
+                    toast('Alterações não foram salvas!', 'warning')
                 }
+            }).catch(error => {
+                toast('Erro ao tentar salvar as alterações', 'error')
             })
     }
 
@@ -33,6 +41,7 @@ export default function EditForm(props: EditFormProps) {
             image
         })
         setGetPhoto(false)
+        toast('Imagem selecionada com sucesso!', 'info')
     }
 
     useEffect(() => {

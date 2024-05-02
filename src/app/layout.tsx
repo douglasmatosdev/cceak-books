@@ -1,10 +1,13 @@
 import './globals.css'
+import 'react-toastify/dist/ReactToastify.css'
 
 import Image from 'next/image'
 import Link from 'next/link'
 
 import dynamic from "next/dynamic"
 import { RxExit } from 'react-icons/rx'
+
+import { ToastContainer } from 'react-toastify'
 
 const AdminLink = dynamic(() => import('@/components/AdminLink'), { ssr: false })
 
@@ -21,6 +24,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning={true} lang="en">
       <body>
+        <ToastContainer />
         <header className="w-full mb-10">
           <ul className="flex justify-between items-center bg-primary w-full px-8 py-4">
             <li className="">

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { api } from "@/app/api";
 import { ImCamera } from "react-icons/im";
 import { SelectPhoto } from "@/components/SelectPhoto";
+import { useToastify } from '@/hooks/useToastify'
 
 const initialState: Book = {
     isbn: 0,
@@ -14,20 +15,28 @@ const initialState: Book = {
     description: '',
     category: '',
     image: '',
-    amount: 0
+    amount: 1
 }
 
 export default function ManualRegister() {
     const [value, setValue] = useState<Book>(initialState)
     const [getPhoto, setGetPhoto] = useState<boolean>(false)
 
+    const { toast } = useToastify()
+
     const router = useRouter()
 
     const handleSubmit = async () => {
         await api.sheet.post(value).then(response => {
             if (response.status === 200) {
+                toast("Livro cadastrado com sucesso", "success")
                 router.push('/pages/dashboard')
+            } else {
+                toast("Não foi possível cadastrar o livro", "warning")
             }
+        }).catch(error => {
+            console.error("Error trying register book manually", error)
+            toast("Erro ao tentar cadastrar o livro", "error")
         })
     }
 

@@ -5,6 +5,8 @@ import ReactPaginate from 'react-paginate'
 import styled from 'styled-components';
 import Link from 'next/link';
 import { FaPencilAlt, FaTrash } from 'react-icons/fa';
+import { useToastify } from '@/hooks/useToastify';
+import { Img } from './Img';
 
 export const PaginatedBookItems = ({
     itemsPerPage,
@@ -16,6 +18,8 @@ export const PaginatedBookItems = ({
     onDelete: (index: number) => void
 }) => {
     const [itemOffset, setItemOffset] = useState(0);
+
+    const { toast } = useToastify()
 
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = books.slice(itemOffset, endOffset);
@@ -36,8 +40,15 @@ export const PaginatedBookItems = ({
                     return (
                         <div
                             key={`${book.title} - ${index}`}
-                            className="flex items-center w-full h-10 border-b-2 mb-2"
+                            className="flex items-center w-full h-12 border-b-2 p-4 even:bg-slate-100 hover:bg-slate-200"
                         >
+                            <div className="mr-4">
+                                <Img 
+                                    width={20}
+                                    src={book.image}
+                                    alt={book.title}
+                                />
+                            </div>
                             <h2
                                 className="flex-1 text-gray-500 font-semibold"
                             >
@@ -52,7 +63,14 @@ export const PaginatedBookItems = ({
                             </Link>
                             <button
                                 className="text-red-500"
-                                onClick={() => onDelete(index)}
+                                onClick={() => {
+                                    const answer = prompt('Digite EXCLUIR para confirmar')
+
+                                    if (answer?.toLocaleUpperCase() === 'EXCLUIR') {
+                                        onDelete(index)
+                                        toast('Livro foi excluído com sucesso!', 'success')
+                                    }
+                                }}
                             >
                                 <FaTrash />
                             </button>
