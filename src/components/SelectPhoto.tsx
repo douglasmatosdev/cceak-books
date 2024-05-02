@@ -10,7 +10,6 @@ export const SelectPhoto = ({ onCancel, onSave }: SelectPhotoProps) => {
     const [isFromCamera, setISFromCamera] = useState<boolean>(false)
     const [isFromGallery, setISFromGallery] = useState<boolean>(false)
 
-
     if (isFromCamera) {
         return <Camera onCancel={onCancel} onSave={onSave} />
     }

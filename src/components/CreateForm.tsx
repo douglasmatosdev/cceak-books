@@ -152,7 +152,7 @@ export default function CreateForm(props: EditFormProps) {
 
             <div className="flex w-full justify-between items-center">
                 <Link
-                    href={"/pages/dashboard"}
+                    href={"/pages/dashboard/book-registration"}
                     className="py-4 px-8 rounded-lg bg-primary text-white font-semibold"
                     onClick={() => {
                         localStorage.removeItem('book')
