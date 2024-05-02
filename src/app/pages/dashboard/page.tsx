@@ -1,5 +1,5 @@
 'use client'
-import { api } from "@/app/api";
+import { api } from "@/services/api";
 import { Empty } from "@/components/Empty";
 import { PaginatedBookItems } from "@/components/PaginatedBookItems";
 import Link from "next/link";
@@ -74,7 +74,7 @@ export default function Dashboard() {
                             itemsPerPage={10}
                             books={filteredBooks}
                             onDelete={handleDelete}
-                            />
+                        />
                     </div>
                 )}
         </div>

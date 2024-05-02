@@ -1,6 +1,6 @@
 'use client'
 
-import { api } from '@/app/api';
+import { api } from '@/services/api';
 import { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate'
 import styled from 'styled-components';

@@ -1,5 +1,5 @@
 'use client'
-import { api } from "@/app/api"
+import { api } from "@/services/api"
 import EditForm from "@/components/EditForm"
 import { useEffect, useState } from "react"
 

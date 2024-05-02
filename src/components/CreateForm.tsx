@@ -2,7 +2,10 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from 'next/navigation'
-import { api } from "@/app/api";
+import { api } from "@/services/api";
+import { useToastify } from "@/hooks/useToastify";
+import { SelectPhoto } from "./SelectPhoto";
+import { ImCamera } from "react-icons/im";
 
 type EditFormProps = {
 
@@ -12,8 +15,11 @@ export default function CreateForm(props: EditFormProps) {
     const { isbn, title, subtitle, author, description, image, amount, category } = props
 
     const [value, setValue] = useState({ isbn, title, subtitle, author, description, image, amount, category })
+    const [getPhoto, setGetPhoto] = useState<boolean>(false)
 
     const router = useRouter()
+
+    const { toast } = useToastify()
 
     const handleSubmit = async (book: Book) => {
         await api.sheet.post(book)
@@ -24,9 +30,19 @@ export default function CreateForm(props: EditFormProps) {
             })
     }
 
+    const handleSave = (image: string) => {
+        setValue({
+            ...value,
+            image
+        })
+        setGetPhoto(false)
+        toast('Imagem selecionada com sucesso!', 'info')
+    }
+
     return (
         <div className="p-8">
             <h2 className="text-2xl">Formulário de Edição</h2>
+            {getPhoto && <SelectPhoto onCancel={() => setGetPhoto(false)} onSave={handleSave} />}
             <form className="mt-4">
                 <label htmlFor="isbn">
                     ISBN
@@ -120,18 +136,29 @@ export default function CreateForm(props: EditFormProps) {
                 </label>
                 <label htmlFor="image">
                     Imagem
-                    <input
-                        type="text"
-                        name="image"
-                        id="image"
-                        placeholder="Url da Imagem"
-                        value={value.image}
-                        onChange={e => setValue({
-                            ...value,
-                            image: e.target.value
-                        })}
-                        className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
-                    />
+                    <div className="flex items-center mb-4">
+                        <input
+                            type="text"
+                            name="image"
+                            id="image"
+                            placeholder="Url da Imagem"
+                            value={value.image}
+                            onChange={e => setValue({
+                                ...value,
+                                image: e.target.value
+                            })}
+                            className="border-2 border-gray-400 rounded-md p-2 w-full h-10"
+                        />
+                        <button
+                            className="h-10 py-2 px-4 rounded-lg bg-primary ml-2 cursor-pointer text-white"
+                            onClick={(e) => {
+                                e.preventDefault()
+                                setGetPhoto(true)
+                            }}
+                        >
+                            <ImCamera />
+                        </button>
+                    </div>
                 </label>
                 <label htmlFor="amount">
                     Quantidade
