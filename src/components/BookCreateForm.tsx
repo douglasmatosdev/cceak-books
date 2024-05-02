@@ -7,11 +7,11 @@ import { useToastify } from "@/hooks/useToastify";
 import { SelectPhoto } from "./SelectPhoto";
 import { ImCamera } from "react-icons/im";
 
-type EditFormProps = {
+type BookCreateFormProps = {
 
 } & Book
 
-export default function CreateForm(props: EditFormProps) {
+export default function BookCreateForm(props: BookCreateFormProps) {
     const { isbn, title, subtitle, author, description, image, amount, category } = props
 
     const [value, setValue] = useState({ isbn, title, subtitle, author, description, image, amount, category })
@@ -22,7 +22,7 @@ export default function CreateForm(props: EditFormProps) {
     const { toast } = useToastify()
 
     const handleSubmit = async (book: Book) => {
-        await api.sheet.post(book)
+        await api.sheet.books.post(book)
             .then(response => {
                 if (response.status === 200) {
                     router.push('/pages/dashboard')
@@ -181,9 +181,6 @@ export default function CreateForm(props: EditFormProps) {
                 <Link
                     href={"/pages/dashboard/book-registration"}
                     className="py-4 px-8 rounded-lg bg-primary text-white font-semibold"
-                    onClick={() => {
-                        localStorage.removeItem('book')
-                    }}
                 >
                     Cancelar
                 </Link>
