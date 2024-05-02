@@ -7,9 +7,8 @@ import styled from "styled-components"
 export const Scan = () => {
     const [scanResult, setScanResult] = useState<null | string>(null)
 
-    const sound = new Audio('/audios/barcode.wav')
-
     useEffect(() => {
+        const sound = new Audio('/audios/barcode.wav')
         const scanner = new Html5QrcodeScanner(
             'reader',
             {
