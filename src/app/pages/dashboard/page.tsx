@@ -14,7 +14,7 @@ export default function Dashboard() {
         await api.sheet.delete(rowIndex)
             .then(response => {
                 if (response.status === 200) {
-                    setBooks(prev => prev.filter((_, i) => i !== rowIndex))
+                    setFilteredBooks(prev => prev.filter((_, i) => i !== rowIndex))
                 }
             })
     }

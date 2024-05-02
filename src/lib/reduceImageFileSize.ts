@@ -30,7 +30,18 @@ export async function reduceImageFileSize(base64Str: string, MAX_WIDTH = 450, MA
             canvas.height = height
             let ctx = canvas.getContext('2d')
             ctx!.drawImage(img, 0, 0, width, height)
-            resolve(canvas.toDataURL()) // this will return base64 image results after resize
+            canvas.toBlob(blob => {
+                const fr = new FileReader()
+                fr.readAsDataURL(blob as Blob)
+
+                fr.addEventListener('load', ()=> {
+                    const dataUrl = fr.result
+                    // console.log('a: ', calcImageSize(dataUrl))
+                    resolve(dataUrl)
+                })
+
+            }, 'image/webp', 0.5)
+            // resolve(canvas.toDataURL()) // this will return base64 image results after resize
         }
     });
 
