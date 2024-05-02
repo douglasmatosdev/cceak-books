@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from 'next/navigation'
 import { api } from "@/app/api";
+import { ImCamera } from "react-icons/im";
+import { SelectPhoto } from "@/components/SelectPhoto";
 
 const initialState: Book = {
     isbn: 0,
@@ -17,6 +19,8 @@ const initialState: Book = {
 
 export default function ManualRegister() {
     const [value, setValue] = useState<Book>(initialState)
+    const [getPhoto, setGetPhoto] = useState<boolean>(false)
+
     const router = useRouter()
 
     const handleSubmit = async () => {
@@ -27,9 +31,18 @@ export default function ManualRegister() {
         })
     }
 
+    const handleSave = (image: string) => {
+        setValue({
+            ...value,
+            image
+        })
+        setGetPhoto(false)
+    }
+
     return (
         <div className="p-8 w-full max-w-[740px] mx-auto">
             <h2 className="text-2xl">Cadastro manual</h2>
+            {getPhoto && <SelectPhoto onCancel={() => setGetPhoto(false)} onSave={handleSave} />}
             <form className="mt-4">
                 <label htmlFor="isbn">
                     ISBN
@@ -123,18 +136,29 @@ export default function ManualRegister() {
                 </label>
                 <label htmlFor="image">
                     Imagem
-                    <input
-                        type="text"
-                        name="image"
-                        id="image"
-                        placeholder="Url da Imagem"
-                        value={value.image}
-                        onChange={e => setValue({
-                            ...value,
-                            image: e.target.value
-                        })}
-                        className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
-                    />
+                    <div className="flex items-center mb-4">
+                        <input
+                            type="text"
+                            name="image"
+                            id="image"
+                            placeholder="Url da Imagem"
+                            value={value.image}
+                            onChange={e => setValue({
+                                ...value,
+                                image: e.target.value
+                            })}
+                            className="border-2 border-gray-400 rounded-md p-2 w-full h-10"
+                        />
+                        <button
+                            className="h-10 py-2 px-4 rounded-lg bg-primary ml-2 cursor-pointer text-white"
+                            onClick={(e) => {
+                                e.preventDefault()
+                                setGetPhoto(true)
+                            }}
+                        >
+                            <ImCamera />
+                        </button>
+                    </div>
                 </label>
                 <label htmlFor="amount">
                     Quantidade
@@ -143,7 +167,7 @@ export default function ManualRegister() {
                         name="amount"
                         id="amount"
                         placeholder="Quantidade"
-                        // value={value.amount}
+                        value={value.amount}
                         onChange={e => setValue({
                             ...value,
                             amount: +e.target.value
