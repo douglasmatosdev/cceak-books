@@ -2,17 +2,16 @@
 import { api } from "@/services/api";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ImCamera } from "react-icons/im";
-import { Camera } from "./Camera";
 import { SelectPhoto } from "./SelectPhoto";
 import { useToastify } from "@/hooks/useToastify";
 
-type EditFormProps = {
+type BookEditFormProps = {
     rowIndex: number
 } & Book
 
-export default function EditForm(props: EditFormProps) {
+export default function BookEditForm(props: BookEditFormProps) {
     const { rowIndex, isbn, title, subtitle, author, description, image, amount, category } = props
     const [value, setValue] = useState({ isbn, title, subtitle, author, description, image, amount, category })
     const [getPhoto, setGetPhoto] = useState<boolean>(false)
@@ -22,7 +21,7 @@ export default function EditForm(props: EditFormProps) {
     const { toast } = useToastify()
 
     const handleSubmit = async (book: Book) => {
-        await api.sheet.put(rowIndex, book)
+        await api.sheet.books.put(rowIndex, book)
             .then(response => {
                 if (response?.status === 200) {
                     toast('Alterações salvas com sucesso!', 'success')

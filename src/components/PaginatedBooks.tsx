@@ -22,7 +22,7 @@ export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }) => {
     };
 
     useEffect(() => {
-        api.sheet.get()
+        api.sheet.books.get()
             .then(data => {
                 setBooks(data)
             })

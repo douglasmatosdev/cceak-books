@@ -26,12 +26,13 @@ export default function RootLayout({
       <body>
         <ToastContainer />
         <header className="w-full mb-10">
-          <ul className="flex justify-between items-center bg-primary w-full px-8 py-4">
-            <li className="">
+          <ul className="flex items-center bg-primary w-full px-8 py-4">
+            <li className="flex-1">
               <Link href={"/"}>
                 <Image src={"/images/cceak-books.png"} width={60} height={60} alt={"CCAK Books logo"} />
               </Link>
             </li>
+           
             <li className="text-white uppercase hover:underline">
               <AdminLink
                 beforeNavigate={{

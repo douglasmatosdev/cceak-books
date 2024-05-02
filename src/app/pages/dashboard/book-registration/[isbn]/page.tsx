@@ -3,7 +3,7 @@ import { services } from "@/services/api";
 import { Empty } from "@/components/Empty";
 import { GoogleApiBooks } from "@/types/google-api-book";
 import { useEffect, useState } from "react";
-import CreateForm from "@/components/CreateForm";
+import BookCreateForm from "@/components/BookCreateForm";
 import { Img } from "@/components/Img";
 import { useToastify } from "@/hooks/useToastify";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -101,7 +101,7 @@ export default function SearchPage({ params }: SearchPageProps) {
                             className="mb-4"
                         />
                     </div>
-                    <CreateForm
+                    <BookCreateForm
                         isbn={+params?.isbn}
                         title={bookInfo?.title}
                         subtitle={bookInfo?.subtitle}

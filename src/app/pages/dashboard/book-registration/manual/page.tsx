@@ -27,7 +27,7 @@ export default function ManualRegister() {
     const router = useRouter()
 
     const handleSubmit = async () => {
-        await api.sheet.post(value).then(response => {
+        await api.sheet.books.post(value).then(response => {
             if (response.status === 200) {
                 toast("Livro cadastrado com sucesso", "success")
                 router.push('/pages/dashboard')
