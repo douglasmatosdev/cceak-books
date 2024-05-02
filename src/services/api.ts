@@ -1,16 +1,29 @@
 import axios, { AxiosResponse } from 'axios';
 
-export const fetchBookDetails = async (isbn: string) => {
-    try {
-        const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${isbn}`);
-        return response.data.items[0].volumeInfo;
-    } catch (error) {
-        console.error('[googleapis] - Error fetching book:', error);
-        return null;
+const sheet_url = `https://sheet.best/api/sheets/${process.env.NEXT_PUBLIC_SHEET_KEY}`
+
+
+export const services = {
+    google: async (isbn: string) => {
+        try {
+            const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${isbn}`);
+            return response.data.items[0].volumeInfo;
+        } catch (error) {
+            console.error('[googleapis] - Error fetching book:', error);
+            return null;
+        }
+    },
+    brasilapi: async (isbn: string) => {
+        try {
+            const response = await axios.get(`https://brasilapi.com.br/api/isbn/v1/${isbn}`);
+            return response?.data
+        } catch (error) {
+            console.error('[brasilapi] - Error fetching book:', error);
+            return null;
+        }
     }
 }
 
-const sheet_url = `https://sheet.best/api/sheets/${process.env.NEXT_PUBLIC_SHEET_KEY}`
 
 export const api = {
     sheet: {

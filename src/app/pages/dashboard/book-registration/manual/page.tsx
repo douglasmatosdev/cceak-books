@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from 'next/navigation'
-import { api } from "@/app/api";
+import { api } from "@/services/api";
 import { ImCamera } from "react-icons/im";
 import { SelectPhoto } from "@/components/SelectPhoto";
 import { useToastify } from '@/hooks/useToastify'
