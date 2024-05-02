@@ -27,9 +27,6 @@ export const PaginatedBookItems = ({
 
     const handlePageClick = (event: { selected: number }) => {
         const newOffset = (event.selected * itemsPerPage) % books.length;
-        console.log(
-            `User requested page number ${event.selected}, which is offset ${newOffset}`
-        );
         setItemOffset(newOffset);
     };
 
@@ -43,7 +40,7 @@ export const PaginatedBookItems = ({
                             className="flex items-center w-full h-12 border-b-2 p-4 even:bg-slate-100 hover:bg-slate-200"
                         >
                             <div className="mr-4">
-                                <Img 
+                                <Img
                                     width={20}
                                     src={book.image}
                                     alt={book.title}
