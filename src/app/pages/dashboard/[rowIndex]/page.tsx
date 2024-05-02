@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 
 interface EditBookProps {
     params: {
-        rowIndex: number
+        rowIndex: string
     }
 }
 export default function EditBook({ params }: EditBookProps) {
@@ -23,7 +23,7 @@ export default function EditBook({ params }: EditBookProps) {
 
     return (
         <BookEditForm
-            rowIndex={params.rowIndex}
+            rowIndex={`${params.rowIndex}`}
             isbn={book.isbn}
             title={book.title}
             subtitle={book.subtitle}

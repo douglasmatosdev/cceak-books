@@ -7,13 +7,13 @@ import Link from 'next/link';
 import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 import { useToastify } from '@/hooks/useToastify';
 
-export const PaginatedUserItems = ({
+export const PaginatedLendsItems = ({
     itemsPerPage,
-    users,
+    lends,
     onDelete
 }: {
     itemsPerPage: number
-    users: User[]
+    lends: Lend[]
     onDelete: (index: string) => void
 }) => {
     const [itemOffset, setItemOffset] = useState(0);
@@ -21,27 +21,27 @@ export const PaginatedUserItems = ({
     const { toast } = useToastify()
 
     const endOffset = itemOffset + itemsPerPage;
-    const currentItems = users.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(users.length / itemsPerPage);
+    const currentItems = lends.slice(itemOffset, endOffset);
+    const pageCount = Math.ceil(lends.length / itemsPerPage);
 
     const handlePageClick = (event: { selected: number }) => {
-        const newOffset = (event.selected * itemsPerPage) % users.length;
+        const newOffset = (event.selected * itemsPerPage) % lends.length;
         setItemOffset(newOffset);
     };
 
     return (
         <StyledDiv>
             <div className="flex flex-col">
-                {currentItems?.map((user, index) => {
+                {currentItems?.map((lend, index) => {
                     return (
                         <div
-                            key={`${user.phone} - ${index}`}
+                            key={`${lend.first_name} - ${index}`}
                             className="flex items-center w-full h-12 border-b-2 p-4 even:bg-slate-100 hover:bg-slate-200"
                         >
                             <h2
                                 className="flex-1 text-gray-500 font-semibold"
                             >
-                                {user.first_name} {user.last_name}
+                                {lend.first_name} {lend.last_name}
                             </h2>
 
                             <Link

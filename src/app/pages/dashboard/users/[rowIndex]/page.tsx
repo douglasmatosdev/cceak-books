@@ -5,7 +5,7 @@ import UserEditForm from "@/components/UserEditForm"
 
 interface EditUserProps {
     params: {
-        rowIndex: number
+        rowIndex: string
     }
 }
 export default function EditUser({ params }: EditUserProps) {

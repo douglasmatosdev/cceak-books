@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useToastify } from "@/hooks/useToastify";
 
 type UserEditFormProps = {
-    rowIndex: number
+    rowIndex: string
 } & User
 
 export default function UserEditForm(props: UserEditFormProps) {

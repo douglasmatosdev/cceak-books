@@ -1,21 +1,20 @@
 'use client'
 import { Empty } from "@/components/Empty";
-import { PaginatedBookItems } from "@/components/PaginatedBookItems";
-import { PaginatedUserItems } from "@/components/PaginatedUserItems";
+import { PaginatedLendsItems } from "@/components/PaginatedLendsItems";
 import { api } from "@/services/api";
 import Link from "next/link";
 import { ChangeEvent, useEffect, useState } from "react";
 
 export default function Users() {
-    const [users, setUsers] = useState<User[]>([])
-    const [filteredUsers, setFilteredUsers] = useState<User[]>(users)
+    const [lends, setLends] = useState<Lend[]>([])
+    const [filteredLends, setFilteredLends] = useState<Lend[]>(lends)
 
 
     const handleDelete = async (rowIndex: string) => {
         await api.sheet.users.delete(rowIndex)
             .then(response => {
                 if (response.status === 200) {
-                    setFilteredUsers(prev => prev.filter((_, i) => `${i}` !== rowIndex))
+                    setFilteredLends(prev => prev.filter((_, i) => `${i}` !== rowIndex))
                 }
             })
     }
@@ -26,18 +25,18 @@ export default function Users() {
         // setSearch(value)
 
         if (value) {
-            setFilteredUsers(users.filter(user => user.first_name.match(value)))
+            setFilteredLends(lends.filter(user => user.first_name.match(value)))
         } else {
-            setFilteredUsers(users)
+            setFilteredLends(lends)
         }
     }
     
 
     useEffect(() => {
-        api.sheet.users.getIndexed()
+        api.sheet.lends.getIndexed()
             .then(data => {
-                setUsers(data)
-                setFilteredUsers(data)
+                setLends(data)
+                setFilteredLends(data)
             })
     }, [])
 
@@ -45,13 +44,13 @@ export default function Users() {
         <div className="w-full max-w-[740px] mx-auto">
             <div className="w-full flex justify-center items-center mb-8">
                 <Link
-                    href={"/pages/dashboard/users/user-registration"}
+                    href={"/pages/dashboard/lends/lends-registration"}
                     className="py-2 px-4 bg-primary text-white rounded-lg"
                 >
-                    Cadastrar usuário
+                    Registrar um empréstimo
                 </Link>
             </div>
-            {!filteredUsers?.length ? <Empty /> :
+            {!filteredLends?.length ? <Empty /> :
                 (
                     <div className="px-4">
                         <div className="flex justify-between items-center mb-8">
@@ -73,9 +72,9 @@ export default function Users() {
                                 pesquisar
                             </button> */}
                         </div>
-                        <PaginatedUserItems
+                        <PaginatedLendsItems
                             itemsPerPage={10}
-                            users={filteredUsers}
+                            lends={filteredLends}
                             onDelete={handleDelete}
                         />
                     </div>
