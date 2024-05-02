@@ -1,6 +1,12 @@
-import Image from 'next/image'
 import './globals.css'
+
+import Image from 'next/image'
 import Link from 'next/link'
+
+import dynamic from "next/dynamic"
+import { RxExit } from 'react-icons/rx'
+
+const AdminLink = dynamic(() => import('@/components/AdminLink'), { ssr: false })
 
 export const metadata = {
   title: 'CCEAK Books',
@@ -23,7 +29,16 @@ export default function RootLayout({
               </Link>
             </li>
             <li className="text-white uppercase hover:underline">
-              <Link href={"/pages/dashboard"}>Administração</Link>
+              <AdminLink
+                beforeNavigate={{
+                  label: "Administração",
+                  path: "/pages/dashboard"
+                }}
+                afterNavigate={{
+                  label: <RxExit className='text-2xl' title='Sair' />,
+                  path: "/"
+                }}
+              />
             </li>
           </ul>
         </header>
