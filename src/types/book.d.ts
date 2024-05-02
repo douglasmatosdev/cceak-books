@@ -1,4 +1,5 @@
 declare type Book = {
+    rowIndex?: string
     isbn: number
     title: string
     subtitle: string

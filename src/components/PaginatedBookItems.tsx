@@ -15,7 +15,7 @@ export const PaginatedBookItems = ({
 }: {
     itemsPerPage: number
     books: Book[]
-    onDelete: (index: number) => void
+    onDelete: (index: string) => void
 }) => {
     const [itemOffset, setItemOffset] = useState(0);
 
@@ -64,7 +64,7 @@ export const PaginatedBookItems = ({
                                     const answer = prompt('Digite EXCLUIR para confirmar')
 
                                     if (answer?.toLocaleUpperCase() === 'EXCLUIR') {
-                                        onDelete(index)
+                                        onDelete(`${index}`)
                                         toast('Livro foi excluído com sucesso!', 'success')
                                     }
                                 }}

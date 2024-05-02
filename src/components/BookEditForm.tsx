@@ -8,7 +8,7 @@ import { SelectPhoto } from "./SelectPhoto";
 import { useToastify } from "@/hooks/useToastify";
 
 type BookEditFormProps = {
-    rowIndex: number
+    rowIndex: string
 } & Book
 
 export default function BookEditForm(props: BookEditFormProps) {

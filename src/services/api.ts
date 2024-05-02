@@ -49,7 +49,7 @@ export const api = {
 
                 return response!.data as unknown as Promise<Book[]>
             },
-            getByRowIndex: async (rowIndex: number): Promise<Book> => {
+            getByRowIndex: async (rowIndex: string): Promise<Book> => {
                 const response = await axios.get(`${sheet_url}/tabs/books/${rowIndex}`)
                 const [data] = await response.data
 
@@ -69,14 +69,14 @@ export const api = {
 
                 return response as AxiosResponse
             },
-            delete: async (rowIndex: number): Promise<AxiosResponse> => {
+            delete: async (rowIndex: string): Promise<AxiosResponse> => {
                 const response = await axios.delete(`${sheet_url}/tabs/books/${rowIndex}`)
                     .catch(error => {
                         console.error(`[Sheet] - Error deleting rowIndex ${rowIndex}:`, error)
                     })
                 return response as AxiosResponse
             },
-            put: async (rowIndex: number, book: Book): Promise<AxiosResponse> => {
+            put: async (rowIndex: string, book: Book): Promise<AxiosResponse> => {
                 const response = await axios.put(`${sheet_url}/tabs/books/${rowIndex}`,
                     JSON.stringify(book),
                     {
@@ -104,7 +104,7 @@ export const api = {
                         console.error('[Sheet] - Error fetching getIndexed:', error)
                     })
                 const data = response!.data
-                return Object.keys(data).map(key => data[key])
+                return Object.keys(data).map(key => ({ ...data[key], rowIndex: key }))
             },
             get: async (): Promise<User[]> => {
                 const response = await axios.get<Record<string, User>>(`${sheet_url}/tabs/users`)
@@ -114,7 +114,7 @@ export const api = {
 
                 return response!.data as unknown as Promise<User[]>
             },
-            getByRowIndex: async (rowIndex: number): Promise<User> => {
+            getByRowIndex: async (rowIndex: string): Promise<User> => {
                 const response = await axios.get(`${sheet_url}/tabs/users/${rowIndex}`)
                 const [data] = await response.data
 
@@ -134,14 +134,14 @@ export const api = {
 
                 return response as AxiosResponse
             },
-            delete: async (rowIndex: number): Promise<AxiosResponse> => {
+            delete: async (rowIndex: string): Promise<AxiosResponse> => {
                 const response = await axios.delete(`${sheet_url}/tabs/users/${rowIndex}`)
                     .catch(error => {
                         console.error(`[Sheet] - Error deleting rowIndex ${rowIndex}:`, error)
                     })
                 return response as AxiosResponse
             },
-            put: async (rowIndex: number, user: User): Promise<AxiosResponse> => {
+            put: async (rowIndex: string, user: User): Promise<AxiosResponse> => {
                 const response = await axios.put(`${sheet_url}/tabs/users/${rowIndex}`,
                     JSON.stringify(user),
                     {
@@ -156,8 +156,70 @@ export const api = {
                 return response as AxiosResponse
             },
         },
-        lend: {
+        lends: {
+            search: async (term: string): Promise<Lend> => {
+                const response = await axios.get(`${sheet_url}/tabs/lends/search?title=*${term}*`)
+                const [data] = await response.data
 
+                return data
+            },
+            getIndexed: async (): Promise<Lend[]> => {
+                const response = await axios.get<Record<string, Lend>>(`${sheet_url}/tabs/lends?_format=index`)
+                    .catch(error => {
+                        console.error('[Sheet] - Error fetching getIndexed:', error)
+                    })
+                const data = response!.data
+                return Object.keys(data).map(key => ({ ...data[key], rowIndex: key })).filter(d => d.first_name)
+            },
+            get: async (): Promise<Lend[]> => {
+                const response = await axios.get<Record<string, Lend>>(`${sheet_url}/tabs/lends`)
+                    .catch(error => {
+                        console.error('[Sheet] - Error fetching Lends:', error)
+                    })
+
+                return response!.data as unknown as Promise<Lend[]>
+            },
+            getByRowIndex: async (rowIndex: string): Promise<Lend> => {
+                const response = await axios.get(`${sheet_url}/tabs/lends/${rowIndex}`)
+                const [data] = await response.data
+
+                return data
+            },
+            post: async (lend: Lend): Promise<AxiosResponse> => {
+                const response = await axios.post(`${sheet_url}/tabs/lends`,
+                    JSON.stringify(lend),
+                    {
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    }
+                ).catch(error => {
+                    console.error(`[Sheet] - Error register book:`, error)
+                })
+
+                return response as AxiosResponse
+            },
+            delete: async (rowIndex: string): Promise<AxiosResponse> => {
+                const response = await axios.delete(`${sheet_url}/tabs/lends/${rowIndex}`)
+                    .catch(error => {
+                        console.error(`[Sheet] - Error deleting rowIndex ${rowIndex}:`, error)
+                    })
+                return response as AxiosResponse
+            },
+            put: async (rowIndex: string, lend: Lend): Promise<AxiosResponse> => {
+                const response = await axios.put(`${sheet_url}/tabs/lends/${rowIndex}`,
+                    JSON.stringify(lend),
+                    {
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    }
+                ).catch(error => {
+                    console.error(`[Sheet] - Error update book:`, error)
+                })
+
+                return response as AxiosResponse
+            },
         }
 
     }

@@ -10,11 +10,11 @@ export default function Books() {
     const [filteredBooks, setFilteredBooks] = useState<Book[]>(books)
     // const [search, setSearch] = useState('')
 
-    const handleDelete = async (rowIndex: number) => {
+    const handleDelete = async (rowIndex: string) => {
         await api.sheet.books.delete(rowIndex)
             .then(response => {
                 if (response.status === 200) {
-                    setFilteredBooks(prev => prev.filter((_, i) => i !== rowIndex))
+                    setFilteredBooks(prev => prev.filter((_, i) => `${i}` !== rowIndex))
                 }
             })
     }

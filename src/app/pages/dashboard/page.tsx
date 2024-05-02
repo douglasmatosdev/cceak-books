@@ -17,12 +17,13 @@ export default function Dashboard() {
                     Usuários
                 </Link>
 
-                <Link
-                    href={"/pages/dashboard/lend"}
-                    className="py-2 px-4 bg-primary text-white w-80 text-center mt-8 font-semibold uppercase"
+                <button
+                    // href={"/pages/dashboard/lends"}
+                    disabled
+                    className="py-2 px-4 bg-primary text-white w-80 text-center mt-8 font-semibold uppercase opacity-40"
                 >
                     Empréstimos
-                </Link>
+                </button>
             </div>
 
         </div>
