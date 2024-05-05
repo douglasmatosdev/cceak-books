@@ -5,16 +5,25 @@ import { api } from "@/services/api";
 import Link from "next/link";
 import { ChangeEvent, useEffect, useState } from "react";
 
-export default function Users() {
+export default function Lends() {
+    const [books, setBooks] = useState<Book[]>([])
     const [lends, setLends] = useState<Lend[]>([])
     const [filteredLends, setFilteredLends] = useState<Lend[]>(lends)
 
 
     const handleDelete = async (rowIndex: string) => {
-        await api.sheet.users.delete(rowIndex)
+        await api.sheet.lends.delete(rowIndex)
             .then(response => {
                 if (response.status === 200) {
                     setFilteredLends(prev => prev.filter((_, i) => `${i}` !== rowIndex))
+                    const bookId = lends[+rowIndex].book_id
+                    const book = books.find(b => b.id === bookId)
+                    const updatedBook = {
+                        ...book,
+                        status: 'avaiable'
+                    }
+                    // @ts-ignore
+                    api.sheet.books.putByColumn('id', bookId, updatedBook)
                 }
             })
     }
@@ -30,7 +39,7 @@ export default function Users() {
             setFilteredLends(lends)
         }
     }
-    
+
 
     useEffect(() => {
         api.sheet.lends.getIndexed()
@@ -38,13 +47,18 @@ export default function Users() {
                 setLends(data)
                 setFilteredLends(data)
             })
+
+        api.sheet.books.getIndexed()
+            .then(data => {
+                setBooks(data)
+            })
     }, [])
 
     return (
         <div className="w-full max-w-[740px] mx-auto">
             <div className="w-full flex justify-center items-center mb-8">
                 <Link
-                    href={"/pages/dashboard/lends/lends-registration"}
+                    href={"/pages/dashboard/lends/lend-registration"}
                     className="py-2 px-4 bg-primary text-white rounded-lg"
                 >
                     Registrar um empréstimo
@@ -60,17 +74,6 @@ export default function Users() {
                                 className="border-2 border-gray-300 w-full h-10 p-2"
                                 onChange={handleChange}
                             />
-                            {/* <button
-                                className="py-2 px-4 bg-primary text-white rounded-lg ml-2"
-                                onClick={() => {
-                                    api.sheet.search(search)
-                                        .then(data => {
-                                            setBooks([data])
-                                        })
-                                }}
-                            >
-                                pesquisar
-                            </button> */}
                         </div>
                         <PaginatedLendsItems
                             itemsPerPage={10}

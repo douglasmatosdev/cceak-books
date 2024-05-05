@@ -6,7 +6,7 @@ export function useToastify(): { toast: (message: string, type: ToastOptions['ty
         toast(message, {
             type,
             position: 'bottom-right',
-            autoClose: 2000,
+            autoClose: 4000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,

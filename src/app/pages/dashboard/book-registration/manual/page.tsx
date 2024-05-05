@@ -7,6 +7,8 @@ import { ImCamera } from "react-icons/im";
 import { SelectPhoto } from "@/components/SelectPhoto";
 import { useToastify } from '@/hooks/useToastify'
 
+import { v4 as uuidv4 } from 'uuid'
+
 const initialState: Book = {
     isbn: 0,
     title: '',
@@ -27,7 +29,11 @@ export default function ManualRegister() {
     const router = useRouter()
 
     const handleSubmit = async () => {
-        await api.sheet.books.post(value).then(response => {
+        await api.sheet.books.post({
+            ...value,
+            id: uuidv4(),
+            status: 'avaiable'
+        }).then(response => {
             if (response.status === 200) {
                 toast("Livro cadastrado com sucesso", "success")
                 router.push('/pages/dashboard')

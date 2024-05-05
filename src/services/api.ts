@@ -5,22 +5,12 @@ const sheet_url = `https://sheet.best/api/sheets/${process.env.NEXT_PUBLIC_SHEET
 
 export const services = {
     google: async (isbn: string) => {
-        try {
-            const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${isbn}`);
-            return response.data.items[0].volumeInfo;
-        } catch (error) {
-            console.error('[googleapis] - Error fetching book:', error);
-            return null;
-        }
+        const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${isbn}`);
+        return response?.data?.items[0]?.volumeInfo;
     },
     brasilapi: async (isbn: string) => {
-        try {
-            const response = await axios.get(`https://brasilapi.com.br/api/isbn/v1/${isbn}`);
-            return response?.data
-        } catch (error) {
-            console.error('[brasilapi] - Error fetching book:', error);
-            return null;
-        }
+        const response = await axios.get(`https://brasilapi.com.br/api/isbn/v1/${isbn}`);
+        return response?.data
     }
 }
 
@@ -78,6 +68,20 @@ export const api = {
             },
             put: async (rowIndex: string, book: Book): Promise<AxiosResponse> => {
                 const response = await axios.put(`${sheet_url}/tabs/books/${rowIndex}`,
+                    JSON.stringify(book),
+                    {
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    }
+                ).catch(error => {
+                    console.error(`[Sheet] - Error update book:`, error)
+                })
+
+                return response as AxiosResponse
+            },
+            putByColumn: async (colmunName: string, value: string, book: Book): Promise<AxiosResponse> => {
+                const response = await axios.put(`${sheet_url}/tabs/books/${colmunName}/${value}`,
                     JSON.stringify(book),
                     {
                         headers: {

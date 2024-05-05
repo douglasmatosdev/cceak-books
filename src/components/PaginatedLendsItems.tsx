@@ -38,18 +38,24 @@ export const PaginatedLendsItems = ({
                             key={`${lend.first_name} - ${index}`}
                             className="flex items-center w-full h-12 border-b-2 p-4 even:bg-slate-100 hover:bg-slate-200"
                         >
-                            <h2
+                            <span
                                 className="flex-1 text-gray-500 font-semibold"
                             >
                                 {lend.first_name} {lend.last_name}
-                            </h2>
+                            </span>
+                            <span
+                                className="flex-1 text-gray-500 font-semibold"
 
-                            <Link
-                                href={`/pages/dashboard/users/${index}`}
+                            >
+                                {lend.book_title}
+                            </span>
+
+                            {/* <Link
+                                href={`/pages/dashboard/lends/${index}`}
                                 className="mr-8 text-primary"
                             >
                                 <FaPencilAlt />
-                            </Link>
+                            </Link> */}
                             <button
                                 className="text-red-500"
                                 onClick={() => {
@@ -57,7 +63,7 @@ export const PaginatedLendsItems = ({
 
                                     if (answer?.toLocaleUpperCase() === 'EXCLUIR') {
                                         onDelete(`${index}`)
-                                        toast('Livro foi excluído com sucesso!', 'success')
+                                        toast('Emrpéstiom foi excluído com sucesso!', 'success')
                                     }
                                 }}
                             >
