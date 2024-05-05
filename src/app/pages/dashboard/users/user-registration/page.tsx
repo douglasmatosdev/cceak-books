@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation'
 import { api } from "@/services/api";
 import { useToastify } from '@/hooks/useToastify'
+import { v4 as uuidv4 } from 'uuid'
 
 const initialState: User = {
     first_name: '',
@@ -19,7 +20,10 @@ export default function UserRegister() {
     const router = useRouter()
 
     const handleSubmit = async () => {
-        await api.sheet.users.post(value).then(response => {
+        await api.sheet.users.post({
+            ...value,
+            id: uuidv4()
+        }).then(response => {
             if (response.status === 200) {
                 toast("Usuário cadastrado com sucesso", "success")
                 router.push('/pages/dashboard/users')
@@ -82,7 +86,7 @@ export default function UserRegister() {
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
                     />
                 </label>
-               
+
             </form>
 
             <div className="flex w-full justify-between items-center">

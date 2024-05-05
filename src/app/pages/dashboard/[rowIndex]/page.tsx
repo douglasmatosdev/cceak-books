@@ -15,7 +15,6 @@ export default function EditBook({ params }: EditBookProps) {
         (async () => {
             await api.sheet.books.getByRowIndex(params.rowIndex)
                 .then(data => {
-
                     setBook(data)
                 })
         })()

@@ -3,7 +3,6 @@ import { toBase64 } from "@/lib/toBase64"
 import { ChangeEvent, useState } from "react"
 import styled from "styled-components"
 import { Img } from "./Img"
-import { calcImageSize } from "@/lib/calcImageSize"
 
 interface GalleryProps {
     onCancel: () => void
@@ -21,12 +20,9 @@ export const Gallery = ({ onCancel, onSave }: GalleryProps) => {
         }
         const file = e.target.files[0]
         const imageBase64 = await toBase64(file) as string
-        console.log(calcImageSize(imageBase64));
 
         await reduceImageFileSize(imageBase64, 50, 100)
             .then(compressed => {
-                console.log(calcImageSize(compressed));
-
                 setImg({
                     original: imageBase64,
                     compressed

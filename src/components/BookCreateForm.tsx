@@ -7,6 +7,8 @@ import { useToastify } from "@/hooks/useToastify";
 import { SelectPhoto } from "./SelectPhoto";
 import { ImCamera } from "react-icons/im";
 
+import { v4 as uuidv4 } from 'uuid'
+
 type BookCreateFormProps = {
 
 } & Book
@@ -22,10 +24,15 @@ export default function BookCreateForm(props: BookCreateFormProps) {
     const { toast } = useToastify()
 
     const handleSubmit = async (book: Book) => {
-        await api.sheet.books.post(book)
+        await api.sheet.books.post({
+            ...book,
+            id: uuidv4(),
+            status: 'avaiable'
+        })
             .then(response => {
                 if (response.status === 200) {
                     router.push('/pages/dashboard')
+                    toast('Livro cadastrado com sucesso!', 'success')
                 }
             })
     }
