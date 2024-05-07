@@ -1,16 +1,17 @@
+/* eslint-disable camelcase */
 'use client'
-import { api } from "@/services/api";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { api } from '@/services/api'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
-import { useToastify } from "@/hooks/useToastify";
+import { useToastify } from '@/hooks/useToastify'
 
 type UserEditFormProps = {
     rowIndex: string
 } & User
 
-export default function UserEditForm(props: UserEditFormProps) {
+export default function UserEditForm(props: UserEditFormProps): JSX.Element {
     const { rowIndex, first_name, last_name, phone } = props
     const [value, setValue] = useState({ first_name, last_name, phone })
 
@@ -18,8 +19,9 @@ export default function UserEditForm(props: UserEditFormProps) {
 
     const { toast } = useToastify()
 
-    const handleSubmit = async (user: User) => {
-        await api.sheet.users.put(rowIndex, user)
+    const handleSubmit = async (user: User): Promise<void> => {
+        await api.sheet.users
+            .put(rowIndex, user)
             .then(response => {
                 if (response?.status === 200) {
                     toast('Alterações salvas com sucesso!', 'success')
@@ -27,8 +29,10 @@ export default function UserEditForm(props: UserEditFormProps) {
                 } else {
                     toast('Alterações não foram salvas!', 'warning')
                 }
-            }).catch(error => {
+            })
+            .catch(error => {
                 toast('Erro ao tentar salvar as alterações', 'error')
+                console.log('Error trying save changes', error)
             })
     }
 
@@ -48,10 +52,12 @@ export default function UserEditForm(props: UserEditFormProps) {
                         id="first_name"
                         placeholder="Primeiro nome"
                         value={value.first_name}
-                        onChange={e => setValue({
-                            ...value,
-                            first_name: e.target.value
-                        })}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                first_name: e.target.value
+                            })
+                        }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
                     />
                 </label>
@@ -63,10 +69,12 @@ export default function UserEditForm(props: UserEditFormProps) {
                         id="last_name"
                         placeholder="Sobrenome"
                         value={value.last_name}
-                        onChange={e => setValue({
-                            ...value,
-                            last_name: e.target.value
-                        })}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                last_name: e.target.value
+                            })
+                        }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
                     />
                 </label>
@@ -78,21 +86,19 @@ export default function UserEditForm(props: UserEditFormProps) {
                         id="phone"
                         placeholder="Telefone"
                         value={value.phone}
-                        onChange={e => setValue({
-                            ...value,
-                            phone: e.target.value
-                        })}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                phone: e.target.value
+                            })
+                        }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
                     />
                 </label>
-               
             </form>
 
             <div className="flex w-full justify-between items-center">
-                <Link
-                    href={"/pages/dashboard"}
-                    className="py-4 px-8 rounded-lg bg-primary text-white font-semibold"
-                >
+                <Link href={'/pages/dashboard'} className="py-4 px-8 rounded-lg bg-primary text-white font-semibold">
                     Cancelar
                 </Link>
 
@@ -103,7 +109,6 @@ export default function UserEditForm(props: UserEditFormProps) {
                     Salvar
                 </button>
             </div>
-
         </div>
     )
 }

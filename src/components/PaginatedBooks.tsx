@@ -1,31 +1,30 @@
 'use client'
 
-import { api } from '@/services/api';
-import { useEffect, useState } from 'react';
+import { api } from '@/services/api'
+import { useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate'
-import styled from 'styled-components';
-import AllBooks from './AllBooks';
-import { Empty } from './Empty';
+import styled from 'styled-components'
+import AllBooks from './AllBooks'
+import { Empty } from './Empty'
 
-export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }) => {
-    const [itemOffset, setItemOffset] = useState(0);
+export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }): JSX.Element => {
+    const [itemOffset, setItemOffset] = useState(0)
 
     const [books, setBooks] = useState<Book[]>([])
 
-    const endOffset = itemOffset + itemsPerPage;
-    const currentItems = books.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(books.length / itemsPerPage);
+    const endOffset = itemOffset + itemsPerPage
+    const currentItems = books.slice(itemOffset, endOffset)
+    const pageCount = Math.ceil(books.length / itemsPerPage)
 
-    const handlePageClick = (event: { selected: number }) => {
-        const newOffset = (event.selected * itemsPerPage) % books.length;
-        setItemOffset(newOffset);
-    };
+    const handlePageClick = (event: { selected: number }): void => {
+        const newOffset = (event.selected * itemsPerPage) % books.length
+        setItemOffset(newOffset)
+    }
 
     useEffect(() => {
-        api.sheet.books.get()
-            .then(data => {
-                setBooks(data)
-            })
+        api.sheet.books.get().then(data => {
+            setBooks(data)
+        })
     }, [])
 
     return (
@@ -45,7 +44,7 @@ export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }) => {
 }
 
 const StyledDiv = styled.div`
-    ul[role=navigation] {
+    ul[role='navigation'] {
         display: flex;
         max-width: 600px;
         margin: 2rem auto;
@@ -59,7 +58,7 @@ const StyledDiv = styled.div`
 
         li.next,
         li.previous {
-            background-color: #0B8EC2;
+            background-color: #0b8ec2;
             padding: 4px 8px;
             color: #fff;
             width: 100px;

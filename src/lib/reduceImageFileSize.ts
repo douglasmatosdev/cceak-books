@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 // Credit: https://github.com/Gimyk/resize_base64_image/blob/main/main.js
 
 /**
@@ -7,11 +8,11 @@
  * @param {Number} MAX_HEIGHT - The height of the image in pixels
  */
 export async function reduceImageFileSize(base64Str: string, MAX_WIDTH = 450, MAX_HEIGHT = 450): Promise<string> {
-    let resized_base64 = await new Promise((resolve) => {
-        let img = new Image()
+    const resized_base64 = await new Promise(resolve => {
+        const img = new Image()
         img.src = base64Str
         img.onload = () => {
-            let canvas = document.createElement('canvas')
+            const canvas = document.createElement('canvas')
             let width = img.width
             let height = img.height
 
@@ -28,22 +29,25 @@ export async function reduceImageFileSize(base64Str: string, MAX_WIDTH = 450, MA
             }
             canvas.width = width
             canvas.height = height
-            let ctx = canvas.getContext('2d')
+            const ctx = canvas.getContext('2d')
             ctx!.drawImage(img, 0, 0, width, height)
-            canvas.toBlob(blob => {
-                const fr = new FileReader()
-                fr.readAsDataURL(blob as Blob)
+            canvas.toBlob(
+                blob => {
+                    const fr = new FileReader()
+                    fr.readAsDataURL(blob as Blob)
 
-                fr.addEventListener('load', ()=> {
-                    const dataUrl = fr.result
-                    // console.log('a: ', calcImageSize(dataUrl))
-                    resolve(dataUrl)
-                })
-
-            }, 'image/webp', 0.5)
+                    fr.addEventListener('load', () => {
+                        const dataUrl = fr.result
+                        // console.log('a: ', calcImageSize(dataUrl))
+                        resolve(dataUrl)
+                    })
+                },
+                'image/webp',
+                0.5
+            )
             // resolve(canvas.toDataURL()) // this will return base64 image results after resize
         }
-    });
+    })
 
     return resized_base64 as string
 }

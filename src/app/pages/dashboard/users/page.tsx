@@ -1,26 +1,23 @@
 'use client'
-import { Empty } from "@/components/Empty";
-import { PaginatedBookItems } from "@/components/PaginatedBookItems";
-import { PaginatedUserItems } from "@/components/PaginatedUserItems";
-import { api } from "@/services/api";
-import Link from "next/link";
-import { ChangeEvent, useEffect, useState } from "react";
+import { Empty } from '@/components/Empty'
+import { PaginatedUserItems } from '@/components/PaginatedUserItems'
+import { api } from '@/services/api'
+import Link from 'next/link'
+import { ChangeEvent, useEffect, useState } from 'react'
 
-export default function Users() {
+export default function Users(): JSX.Element {
     const [users, setUsers] = useState<User[]>([])
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users)
 
-
-    const handleDelete = async (rowIndex: string) => {
-        await api.sheet.users.delete(rowIndex)
-            .then(response => {
-                if (response.status === 200) {
-                    setFilteredUsers(prev => prev.filter((_, i) => `${i}` !== rowIndex))
-                }
-            })
+    const handleDelete = async (rowIndex: string): Promise<void> => {
+        await api.sheet.users.delete(rowIndex).then(response => {
+            if (response.status === 200) {
+                setFilteredUsers(prev => prev.filter((_, i) => `${i}` !== rowIndex))
+            }
+        })
     }
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const value = e.target.value
 
         // setSearch(value)
@@ -31,37 +28,36 @@ export default function Users() {
             setFilteredUsers(users)
         }
     }
-    
 
     useEffect(() => {
-        api.sheet.users.getIndexed()
-            .then(data => {
-                setUsers(data)
-                setFilteredUsers(data)
-            })
+        api.sheet.users.getIndexed().then(data => {
+            setUsers(data)
+            setFilteredUsers(data)
+        })
     }, [])
 
     return (
         <div className="w-full max-w-[740px] mx-auto">
             <div className="w-full flex justify-center items-center mb-8">
                 <Link
-                    href={"/pages/dashboard/users/user-registration"}
+                    href={'/pages/dashboard/users/user-registration'}
                     className="py-2 px-4 bg-primary text-white rounded-lg"
                 >
                     Cadastrar usuário
                 </Link>
             </div>
-            {!filteredUsers?.length ? <Empty /> :
-                (
-                    <div className="px-4">
-                        <div className="flex justify-between items-center mb-8">
-                            <input
-                                type="text"
-                                placeholder="Pesquise pelo primeiro nome do usuário"
-                                className="border-2 border-gray-300 w-full h-10 p-2"
-                                onChange={handleChange}
-                            />
-                            {/* <button
+            {!filteredUsers?.length ? (
+                <Empty />
+            ) : (
+                <div className="px-4">
+                    <div className="flex justify-between items-center mb-8">
+                        <input
+                            type="text"
+                            placeholder="Pesquise pelo primeiro nome do usuário"
+                            className="border-2 border-gray-300 w-full h-10 p-2"
+                            onChange={handleChange}
+                        />
+                        {/* <button
                                 className="py-2 px-4 bg-primary text-white rounded-lg ml-2"
                                 onClick={() => {
                                     api.sheet.search(search)
@@ -72,14 +68,10 @@ export default function Users() {
                             >
                                 pesquisar
                             </button> */}
-                        </div>
-                        <PaginatedUserItems
-                            itemsPerPage={10}
-                            users={filteredUsers}
-                            onDelete={handleDelete}
-                        />
                     </div>
-                )}
+                    <PaginatedUserItems itemsPerPage={10} users={filteredUsers} onDelete={handleDelete} />
+                </div>
+            )}
         </div>
     )
 }

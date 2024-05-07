@@ -1,4 +1,4 @@
-export interface GoogleApiBooks {
+declare type GoogleApiBooks = {
     title: string
     subtitle: string
     authors: string[]
@@ -19,25 +19,24 @@ export interface GoogleApiBooks {
     previewLink: string
     infoLink: string
     canonicalVolumeLink: string
-  }
-  
-  export interface IndustryIdentifier {
+}
+
+declare type IndustryIdentifier = {
     type: string
     identifier: string
-  }
-  
-  export interface ReadingModes {
+}
+
+declare type ReadingModes = {
     text: boolean
     image: boolean
-  }
-  
-  export interface PanelizationSummary {
+}
+
+declare type PanelizationSummary = {
     containsEpubBubbles: boolean
     containsImageBubbles: boolean
-  }
-  
-  export interface ImageLinks {
+}
+
+declare type ImageLinks = {
     smallThumbnail: string
     thumbnail: string
-  }
-  
+}

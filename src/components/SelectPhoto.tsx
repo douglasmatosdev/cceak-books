@@ -1,12 +1,12 @@
-import { useState } from "react"
-import { Camera } from "./Camera"
-import { Gallery } from "./Gallery"
+import { useState } from 'react'
+import { Camera } from './Camera'
+import { Gallery } from './Gallery'
 
 interface SelectPhotoProps {
     onCancel: () => void
     onSave: (img: string) => void
 }
-export const SelectPhoto = ({ onCancel, onSave }: SelectPhotoProps) => {
+export const SelectPhoto = ({ onCancel, onSave }: SelectPhotoProps): JSX.Element => {
     const [isFromCamera, setISFromCamera] = useState<boolean>(false)
     const [isFromGallery, setISFromGallery] = useState<boolean>(false)
 

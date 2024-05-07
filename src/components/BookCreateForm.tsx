@@ -1,19 +1,17 @@
 'use client'
-import Link from "next/link";
-import { useState } from "react";
+import Link from 'next/link'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { api } from "@/services/api";
-import { useToastify } from "@/hooks/useToastify";
-import { SelectPhoto } from "./SelectPhoto";
-import { ImCamera } from "react-icons/im";
+import { api } from '@/services/api'
+import { useToastify } from '@/hooks/useToastify'
+import { SelectPhoto } from './SelectPhoto'
+import { ImCamera } from 'react-icons/im'
 
 import { v4 as uuidv4 } from 'uuid'
 
-type BookCreateFormProps = {
+type BookCreateFormProps = Book
 
-} & Book
-
-export default function BookCreateForm(props: BookCreateFormProps) {
+export default function BookCreateForm(props: BookCreateFormProps): JSX.Element {
     const { isbn, title, subtitle, author, description, image, amount, category } = props
 
     const [value, setValue] = useState({ isbn, title, subtitle, author, description, image, amount, category })
@@ -23,12 +21,13 @@ export default function BookCreateForm(props: BookCreateFormProps) {
 
     const { toast } = useToastify()
 
-    const handleSubmit = async (book: Book) => {
-        await api.sheet.books.post({
-            ...book,
-            id: uuidv4(),
-            status: 'avaiable'
-        })
+    const handleSubmit = async (book: Book): Promise<void> => {
+        await api.sheet.books
+            .post({
+                ...book,
+                id: uuidv4(),
+                status: 'avaiable'
+            })
             .then(response => {
                 if (response.status === 200) {
                     router.push('/pages/dashboard')
@@ -37,7 +36,7 @@ export default function BookCreateForm(props: BookCreateFormProps) {
             })
     }
 
-    const handleSave = (image: string) => {
+    const handleSave = (image: string): void => {
         setValue({
             ...value,
             image
@@ -59,10 +58,12 @@ export default function BookCreateForm(props: BookCreateFormProps) {
                         id="isbn"
                         placeholder="ISBN"
                         value={value.isbn}
-                        onChange={e => setValue({
-                            ...value,
-                            isbn: +e.target.value
-                        })}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                isbn: +e.target.value
+                            })
+                        }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
                     />
                 </label>
@@ -74,10 +75,12 @@ export default function BookCreateForm(props: BookCreateFormProps) {
                         id="title"
                         placeholder="Título"
                         value={value.title}
-                        onChange={e => setValue({
-                            ...value,
-                            title: e.target.value
-                        })}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                title: e.target.value
+                            })
+                        }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
                     />
                 </label>
@@ -89,10 +92,12 @@ export default function BookCreateForm(props: BookCreateFormProps) {
                         id="subtitle"
                         placeholder="Subtítulo"
                         value={value.subtitle}
-                        onChange={e => setValue({
-                            ...value,
-                            subtitle: e.target.value
-                        })}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                subtitle: e.target.value
+                            })
+                        }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
                     />
                 </label>
@@ -104,10 +109,12 @@ export default function BookCreateForm(props: BookCreateFormProps) {
                         id="author"
                         placeholder="Autor"
                         value={value.author}
-                        onChange={e => setValue({
-                            ...value,
-                            author: e.target.value
-                        })}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                author: e.target.value
+                            })
+                        }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
                     />
                 </label>
@@ -119,10 +126,12 @@ export default function BookCreateForm(props: BookCreateFormProps) {
                         id="description"
                         placeholder="Descrição"
                         value={value.description}
-                        onChange={e => setValue({
-                            ...value,
-                            description: e.target.value
-                        })}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                description: e.target.value
+                            })
+                        }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
                     />
                 </label>
@@ -134,10 +143,12 @@ export default function BookCreateForm(props: BookCreateFormProps) {
                         id="category"
                         placeholder="Categoria"
                         value={value.category}
-                        onChange={e => setValue({
-                            ...value,
-                            category: e.target.value
-                        })}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                category: e.target.value
+                            })
+                        }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
                     />
                 </label>
@@ -150,15 +161,17 @@ export default function BookCreateForm(props: BookCreateFormProps) {
                             id="image"
                             placeholder="Url da Imagem"
                             value={value.image}
-                            onChange={e => setValue({
-                                ...value,
-                                image: e.target.value
-                            })}
+                            onChange={e =>
+                                setValue({
+                                    ...value,
+                                    image: e.target.value
+                                })
+                            }
                             className="border-2 border-gray-400 rounded-md p-2 w-full h-10"
                         />
                         <button
                             className="h-10 py-2 px-4 rounded-lg bg-primary ml-2 cursor-pointer text-white"
-                            onClick={(e) => {
+                            onClick={e => {
                                 e.preventDefault()
                                 setGetPhoto(true)
                             }}
@@ -175,10 +188,12 @@ export default function BookCreateForm(props: BookCreateFormProps) {
                         id="amount"
                         placeholder="Quantidade"
                         value={value.amount}
-                        onChange={e => setValue({
-                            ...value,
-                            amount: +e.target.value
-                        })}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                amount: +e.target.value
+                            })
+                        }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
                     />
                 </label>
@@ -186,7 +201,7 @@ export default function BookCreateForm(props: BookCreateFormProps) {
 
             <div className="flex w-full justify-between items-center">
                 <Link
-                    href={"/pages/dashboard/book-registration"}
+                    href={'/pages/dashboard/book-registration'}
                     className="py-4 px-8 rounded-lg bg-primary text-white font-semibold"
                 >
                     Cancelar
@@ -199,7 +214,6 @@ export default function BookCreateForm(props: BookCreateFormProps) {
                     Cadastrar
                 </button>
             </div>
-
         </div>
     )
 }

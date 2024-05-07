@@ -1,13 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from 'react'
 
-export const Img = ({ src, alt, width, height, className = '' }: {
+export const Img = ({
+    src,
+    alt,
+    width,
+    height,
+    className = ''
+}: {
     src: string
     alt: string
     width?: number
     height?: number
     className?: string
-}) => {
+}): JSX.Element => {
     const imgRef = useRef<HTMLImageElement>(null)
 
     useEffect(() => {
@@ -20,16 +26,7 @@ export const Img = ({ src, alt, width, height, className = '' }: {
 
     return (
         <>
-            <img
-                ref={imgRef}
-                src={src}
-                width={width}
-                height={height}
-                alt={alt}
-                className={className}
-            />
+            <img ref={imgRef} src={src} width={width} height={height} alt={alt} className={className} />
         </>
     )
 }
-
-

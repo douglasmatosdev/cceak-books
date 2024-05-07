@@ -1,20 +1,20 @@
 'use client'
-import { services } from "@/services/api";
-import { Empty } from "@/components/Empty";
-import { GoogleApiBooks } from "@/types/google-api-book";
-import { useEffect, useState } from "react";
-import BookCreateForm from "@/components/BookCreateForm";
-import { Img } from "@/components/Img";
-import { useToastify } from "@/hooks/useToastify";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useRouter } from "next/navigation";
+import { services } from '@/services/api'
+import { Empty } from '@/components/Empty'
+import { GoogleApiBooks } from '@/types/google-api-book'
+import { useEffect, useState } from 'react'
+import BookCreateForm from '@/components/BookCreateForm'
+import { Img } from '@/components/Img'
+import { useToastify } from '@/hooks/useToastify'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { useRouter } from 'next/navigation'
 
 interface SearchPageProps {
     params: {
         isbn: string
     }
 }
-export default function SearchPage({ params }: SearchPageProps) {
+export default function SearchPage({ params }: SearchPageProps): JSX.Element {
     const [bookInfo, setBookInfo] = useState<GoogleApiBooks | Record<string, never>>({})
     const [loading, setLoading] = useState(true)
 
@@ -27,8 +27,9 @@ export default function SearchPage({ params }: SearchPageProps) {
 
     const { toast } = useToastify()
 
-    const search = async (code: string) => {
-        await services.google(code)
+    const search = async (code: string): Promise<void> => {
+        await services
+            .google(code)
             .then(async bookDetails => {
                 if (bookDetails?.title) {
                     setBookInfo(bookDetails)
@@ -44,12 +45,18 @@ export default function SearchPage({ params }: SearchPageProps) {
                 })
 
                 await setTimeout(async () => {
-                    await services.brasilapi(code)
+                    await services
+                        .brasilapi(code)
                         .then(bookDetails => {
-                            setBookInfo({ ...bookDetails, image: bookDetails?.cover_url, categories: bookDetails?.subjects })
+                            setBookInfo({
+                                ...bookDetails,
+                                image: bookDetails?.cover_url,
+                                categories: bookDetails?.subjects
+                            })
                             setLoading(false)
                             toast('Livro encontrado!', 'success')
-                        }).catch(error => {
+                        })
+                        .catch(error => {
                             setApiSelected({
                                 brasilapi: false,
                                 google: false
@@ -59,7 +66,7 @@ export default function SearchPage({ params }: SearchPageProps) {
                             console.error('Error trying fetch brasilapi ', error)
                             toast('Erro ao tentar pesquisar livro', 'error')
                         })
-                }, 3000);
+                }, 3000)
             })
     }
 
@@ -113,9 +120,11 @@ export default function SearchPage({ params }: SearchPageProps) {
                     `}
                 >
                     Google API
-                    {apiSelected.google && <div className="ml-4">
-                        <AiOutlineLoading3Quarters className="animate-spin text-white text-2xl" />
-                    </div>}
+                    {apiSelected.google && (
+                        <div className="ml-4">
+                            <AiOutlineLoading3Quarters className="animate-spin text-white text-2xl" />
+                        </div>
+                    )}
                 </button>
 
                 <button
@@ -125,11 +134,13 @@ export default function SearchPage({ params }: SearchPageProps) {
                     `}
                 >
                     Brasil API
-                    {apiSelected.brasilapi && <div className="ml-4">
-                        <AiOutlineLoading3Quarters className="animate-spin text-white text-2xl" />
-                    </div>}
+                    {apiSelected.brasilapi && (
+                        <div className="ml-4">
+                            <AiOutlineLoading3Quarters className="animate-spin text-white text-2xl" />
+                        </div>
+                    )}
                 </button>
             </div>
         </div>
     )
-} 
+}

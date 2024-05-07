@@ -1,22 +1,21 @@
 'use client'
-import { api } from "@/services/api"
-import BookEditForm from "@/components/BookEditForm"
-import { useEffect, useState } from "react"
+import { api } from '@/services/api'
+import BookEditForm from '@/components/BookEditForm'
+import { useEffect, useState } from 'react'
 
 interface EditBookProps {
     params: {
         rowIndex: string
     }
 }
-export default function EditBook({ params }: EditBookProps) {
+export default function EditBook({ params }: EditBookProps): JSX.Element {
     const [book, setBook] = useState<Book | Record<string, never>>({})
 
     useEffect(() => {
-        (async () => {
-            await api.sheet.books.getByRowIndex(params.rowIndex)
-                .then(data => {
-                    setBook(data)
-                })
+        ;(async () => {
+            await api.sheet.books.getByRowIndex(params.rowIndex).then(data => {
+                setBook(data)
+            })
         })()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
