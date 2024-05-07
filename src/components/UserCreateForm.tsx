@@ -1,30 +1,25 @@
+/* eslint-disable camelcase */
 'use client'
-import Link from "next/link";
-import { useState } from "react";
+import Link from 'next/link'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { api } from "@/services/api";
-import { useToastify } from "@/hooks/useToastify";
+import { api } from '@/services/api'
 
-type UserCreateFormProps = {
+type UserCreateFormProps = User
 
-} & User
+export default function UserCreateForm(props: UserCreateFormProps): JSX.Element {
+    const { first_name, last_name, phone } = props
 
-export default function UserCreateForm(props: UserCreateFormProps) {
-    const { first_name,last_name,phone } = props
-
-    const [value, setValue] = useState<User>({ first_name,last_name,phone })
+    const [value, setValue] = useState<User>({ first_name, last_name, phone })
 
     const router = useRouter()
 
-    const { toast } = useToastify()
-
-    const handleSubmit = async (user: User) => {
-        await api.sheet.users.post(user)
-            .then(response => {
-                if (response.status === 200) {
-                    router.push('/pages/dashboard/users')
-                }
-            })
+    const handleSubmit = async (user: User): Promise<void> => {
+        await api.sheet.users.post(user).then(response => {
+            if (response.status === 200) {
+                router.push('/pages/dashboard/users')
+            }
+        })
     }
 
     return (
@@ -39,10 +34,12 @@ export default function UserCreateForm(props: UserCreateFormProps) {
                         id="first_name"
                         placeholder="Primeiro nome"
                         value={value.first_name}
-                        onChange={e => setValue({
-                            ...value,
-                            first_name: e.target.value
-                        })}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                first_name: e.target.value
+                            })
+                        }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
                     />
                 </label>
@@ -54,10 +51,12 @@ export default function UserCreateForm(props: UserCreateFormProps) {
                         id="last_name"
                         placeholder="Sobrenome"
                         value={value.last_name}
-                        onChange={e => setValue({
-                            ...value,
-                            last_name: e.target.value
-                        })}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                last_name: e.target.value
+                            })
+                        }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
                     />
                 </label>
@@ -69,19 +68,20 @@ export default function UserCreateForm(props: UserCreateFormProps) {
                         id="phone"
                         placeholder="Telefone"
                         value={value.phone}
-                        onChange={e => setValue({
-                            ...value,
-                            phone: e.target.value
-                        })}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                phone: e.target.value
+                            })
+                        }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
                     />
                 </label>
-               
             </form>
 
             <div className="flex w-full justify-between items-center">
                 <Link
-                    href={"/pages/dashboard/book-registration"}
+                    href={'/pages/dashboard/book-registration'}
                     className="py-4 px-8 rounded-lg bg-primary text-white font-semibold"
                 >
                     Cancelar
@@ -94,7 +94,6 @@ export default function UserCreateForm(props: UserCreateFormProps) {
                     Cadastrar
                 </button>
             </div>
-
         </div>
     )
 }

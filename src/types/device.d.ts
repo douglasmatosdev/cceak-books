@@ -1,6 +1,6 @@
 declare interface Device {
-  deviceId: string
-  kind: string
-  label: string
-  groupId: string
+    deviceId: string
+    kind: string
+    label: string
+    groupId: string
 }

@@ -1,10 +1,10 @@
 'use client'
-import { Html5QrcodeScanner } from "html5-qrcode"
-import { useEffect, useState } from "react"
-import Link from "next/link"
-import styled from "styled-components"
+import { Html5QrcodeScanner } from 'html5-qrcode'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import styled from 'styled-components'
 
-export const Scan = () => {
+export const Scan = (): JSX.Element => {
     const [scanResult, setScanResult] = useState<null | string>(null)
 
     useEffect(() => {
@@ -27,7 +27,7 @@ export const Scan = () => {
             sound.play()
         }
 
-        function error(err: string) {
+        function error(err: string): void {
             console.warn(err)
             scanner.resume()
             scanner.clear()
@@ -39,7 +39,6 @@ export const Scan = () => {
             scanner.clear()
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
 
     if (scanResult) {
         return (
@@ -63,30 +62,30 @@ export const Scan = () => {
 }
 
 const StyledDiv = styled.div`
-   display: flex;
-   justify-content: center;
-   border: 4px solid #000;
-   
-   #html5-qrcode-button-camera-permission {
-        background-color: #0B8EC2;
+    display: flex;
+    justify-content: center;
+    border: 4px solid #000;
+
+    #html5-qrcode-button-camera-permission {
+        background-color: #0b8ec2;
         color: #fff;
         padding: 4px 8px;
         cursor: pointer;
-   }
-   #reader__dashboard_section_csr {
+    }
+    #reader__dashboard_section_csr {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-   }
-   
-   #html5-qrcode-button-camera-stop,
-   #html5-qrcode-button-camera-start {
-        background-color: #0B8EC2;
+    }
+
+    #html5-qrcode-button-camera-stop,
+    #html5-qrcode-button-camera-start {
+        background-color: #0b8ec2;
         color: #fff;
         padding: 4px 8px;
         cursor: pointer;
         margin-top: 4px;
         margin-bottom: 4px;
-   }
+    }
 `

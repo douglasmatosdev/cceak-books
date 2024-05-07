@@ -1,23 +1,21 @@
 'use client'
-import { api } from "@/services/api"
-import { useEffect, useState } from "react"
-import UserEditForm from "@/components/UserEditForm"
+import { api } from '@/services/api'
+import { useEffect, useState } from 'react'
+import UserEditForm from '@/components/UserEditForm'
 
 interface EditUserProps {
     params: {
         rowIndex: string
     }
 }
-export default function EditUser({ params }: EditUserProps) {
+export default function EditUser({ params }: EditUserProps): JSX.Element {
     const [user, setUser] = useState<User | Record<string, never>>({})
 
     useEffect(() => {
-        (async () => {
-            await api.sheet.users.getByRowIndex(params.rowIndex)
-                .then(data => {
-
-                    setUser(data)
-                })
+        ;(async () => {
+            await api.sheet.users.getByRowIndex(params.rowIndex).then(data => {
+                setUser(data)
+            })
         })()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 

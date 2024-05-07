@@ -1,34 +1,32 @@
-import { reduceImageFileSize } from "@/lib/reduceImageFileSize"
-import { toBase64 } from "@/lib/toBase64"
-import { ChangeEvent, useState } from "react"
-import styled from "styled-components"
-import { Img } from "./Img"
+import { reduceImageFileSize } from '@/lib/reduceImageFileSize'
+import { toBase64 } from '@/lib/toBase64'
+import { ChangeEvent, useState } from 'react'
+import styled from 'styled-components'
+import { Img } from './Img'
 
 interface GalleryProps {
     onCancel: () => void
     onSave: (img: string) => void
 }
-export const Gallery = ({ onCancel, onSave }: GalleryProps) => {
+export const Gallery = ({ onCancel, onSave }: GalleryProps): JSX.Element => {
     const [img, setImg] = useState({
         original: '',
         compressed: ''
     })
 
-    const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const handleChange = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
         if (!e.target.files?.length) {
             return
         }
         const file = e.target.files[0]
-        const imageBase64 = await toBase64(file) as string
+        const imageBase64 = (await toBase64(file)) as string
 
-        await reduceImageFileSize(imageBase64, 50, 100)
-            .then(compressed => {
-                setImg({
-                    original: imageBase64,
-                    compressed
-                })
+        await reduceImageFileSize(imageBase64, 50, 100).then(compressed => {
+            setImg({
+                original: imageBase64,
+                compressed
             })
-
+        })
     }
 
     return (
@@ -36,11 +34,7 @@ export const Gallery = ({ onCancel, onSave }: GalleryProps) => {
             <div className="flex flex-col justify-center items-center w-full h-full">
                 {img && (
                     <div className="border flex justify-center items-center w-[max-content]">
-                        <Img
-                            src={img.compressed}
-                            width={250}
-                            alt="pré visualização da imagem"
-                        />
+                        <Img src={img.compressed} width={250} alt="pré visualização da imagem" />
                     </div>
                 )}
                 <div className="flex justify-center items-center sm:h-16 mt-8 bg-white p-4 sm:w-auto rounded-md">
@@ -80,8 +74,7 @@ export const Gallery = ({ onCancel, onSave }: GalleryProps) => {
 }
 
 const StyledDiv = styled.div`
-
-    input[type="file"] {
+    input[type='file'] {
         display: none;
     }
 
@@ -101,5 +94,4 @@ const StyledDiv = styled.div`
         color: #333;
         background-color: #fff;
     }
-    
 `
