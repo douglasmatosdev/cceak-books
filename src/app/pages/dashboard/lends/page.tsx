@@ -1,13 +1,17 @@
 'use client'
+import { booksAtom, lendsAtom } from '@/atoms/atoms'
+import { BackButton } from '@/components/BackButton'
 import { Empty } from '@/components/Empty'
 import { PaginatedLendsItems } from '@/components/PaginatedLendsItems'
 import { api } from '@/services/api'
+import { useAtom, useAtomValue } from 'jotai'
 import Link from 'next/link'
 import { ChangeEvent, useEffect, useState } from 'react'
 
 export default function Lends(): JSX.Element {
-    const [books, setBooks] = useState<Book[]>([])
-    const [lends, setLends] = useState<Lend[]>([])
+    const books = useAtomValue(booksAtom)
+
+    const [lends, setLends] = useAtom(lendsAtom)
     const [filteredLends, setFilteredLends] = useState<Lend[]>(lends)
 
     const handleDelete = async (rowIndex: string): Promise<void> => {
@@ -30,8 +34,6 @@ export default function Lends(): JSX.Element {
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const value = e.target.value
 
-        // setSearch(value)
-
         if (value) {
             setFilteredLends(lends.filter(user => user.first_name.match(value)))
         } else {
@@ -44,14 +46,11 @@ export default function Lends(): JSX.Element {
             setLends(data)
             setFilteredLends(data)
         })
-
-        api.sheet.books.getIndexed().then(data => {
-            setBooks(data)
-        })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className="w-full max-w-[740px] mx-auto">
+            <BackButton classNameContainer="ml-4 mb-8" />
             <div className="w-full flex justify-center items-center mb-8">
                 <Link
                     href={'/pages/dashboard/lends/lend-registration'}

@@ -1,6 +1,9 @@
 'use client'
+import { booksAtom } from '@/atoms/atoms'
+import { BackButton } from '@/components/BackButton'
 import { useToastify } from '@/hooks/useToastify'
 import { api } from '@/services/api'
+import { useAtomValue } from 'jotai'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FaPencilAlt } from 'react-icons/fa'
@@ -15,7 +18,7 @@ type Option = {
 
 export default function LendRegistration(): JSX.Element {
     const [users, setUsers] = useState<User[]>([])
-    const [books, setBooks] = useState<Book[]>([])
+    const books = useAtomValue<Book[]>(booksAtom)
     const [userSelected, setUserSelected] = useState<User | Record<string, never>>({})
     const [options, setOptions] = useState<Option[]>([])
     const [bookSelected, setBookSelected] = useState<Option | Record<string, never>>({})
@@ -65,10 +68,6 @@ export default function LendRegistration(): JSX.Element {
         })
 
         api.sheet.books.getIndexed().then(data => {
-            setBooks(data)
-        })
-
-        api.sheet.books.getIndexed().then(data => {
             const opts = data.map(d => ({
                 label: d.title,
                 value: d.id
@@ -80,6 +79,7 @@ export default function LendRegistration(): JSX.Element {
 
     return (
         <div className="w-full max-w-[740px] mx-auto">
+            <BackButton classNameContainer="ml-4 mb-8" />
             {!userSelected?.id &&
                 users.map(user => {
                     return (

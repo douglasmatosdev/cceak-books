@@ -1,6 +1,8 @@
 'use client'
+import { booksAtom, lendsAtom } from '@/atoms/atoms'
+import { BackButton } from '@/components/BackButton'
 import { api } from '@/services/api'
-import { useEffect, useState } from 'react'
+import { useAtom, useAtomValue } from 'jotai'
 
 interface LendViewProps {
     params: {
@@ -9,14 +11,10 @@ interface LendViewProps {
 }
 export default function LendView(props: LendViewProps): JSX.Element {
     const { params } = props
-    const [lend, setLend] = useState<Lend | Record<string, never>>({})
-    const [books, setBooks] = useState<Book[]>([])
 
-    useEffect(() => {
-        api.sheet.lends.getByRowIndex(params.rowIndex).then(data => setLend(data))
-
-        api.sheet.books.getIndexed().then(data => setBooks(data))
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    const books = useAtomValue(booksAtom)
+    const [lends, setLends] = useAtom(lendsAtom)
+    const lend = lends.find((_, i) => +params.rowIndex === i) as Lend
 
     const handleDelete = async (rowIndex: string): Promise<void> => {
         await api.sheet.lends.delete(rowIndex).then(response => {
@@ -29,6 +27,7 @@ export default function LendView(props: LendViewProps): JSX.Element {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 api.sheet.books.putByColumn('id', bookId, updatedBook)
+                setLends(lends.filter((_, i) => +rowIndex === i))
             }
         })
     }
@@ -36,6 +35,7 @@ export default function LendView(props: LendViewProps): JSX.Element {
     return (
         <div className="w-full max-w-[740px] mx-auto">
             <div className="flex flex-col px-4">
+                <BackButton classNameContainer="mb-8" />
                 <h1 className="text-2xl">Emprestimo</h1>
 
                 <span className="mt-2 text-xl">

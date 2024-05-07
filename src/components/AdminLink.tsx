@@ -30,11 +30,11 @@ const AdminLink = ({ className, href, children, afterNavigate, beforeNavigate }:
 
     return (
         <>
-            result && (
-            <Link href={result?.path as string} className={className}>
-                {result?.label}
-            </Link>
-            )
+            {result && (
+                <Link href={result?.path as string} className={className}>
+                    {result?.label}
+                </Link>
+            )}
         </>
     )
 }

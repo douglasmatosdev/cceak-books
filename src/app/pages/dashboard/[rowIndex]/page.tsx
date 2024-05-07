@@ -1,7 +1,8 @@
 'use client'
-import { api } from '@/services/api'
 import BookEditForm from '@/components/BookEditForm'
-import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
+import { booksAtom } from '@/atoms/atoms'
+import { BackButton } from '@/components/BackButton'
 
 interface EditBookProps {
     params: {
@@ -9,27 +10,23 @@ interface EditBookProps {
     }
 }
 export default function EditBook({ params }: EditBookProps): JSX.Element {
-    const [book, setBook] = useState<Book | Record<string, never>>({})
-
-    useEffect(() => {
-        ;(async () => {
-            await api.sheet.books.getByRowIndex(params.rowIndex).then(data => {
-                setBook(data)
-            })
-        })()
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    const books = useAtomValue(booksAtom)
+    const book = books.find((_, i) => +params.rowIndex === i) as Book
 
     return (
-        <BookEditForm
-            rowIndex={`${params.rowIndex}`}
-            isbn={book.isbn}
-            title={book.title}
-            subtitle={book.subtitle}
-            author={book.author}
-            description={book.description}
-            image={book.image}
-            amount={book.amount}
-            category={book.category}
-        />
+        <>
+            <BackButton classNameContainer="ml-8" />
+            <BookEditForm
+                rowIndex={`${params.rowIndex}`}
+                isbn={book.isbn}
+                title={book.title}
+                subtitle={book.subtitle}
+                author={book.author}
+                description={book.description}
+                image={book.image}
+                amount={book.amount}
+                category={book.category}
+            />
+        </>
     )
 }

@@ -1,7 +1,6 @@
 'use client'
 import { services } from '@/services/api'
 import { Empty } from '@/components/Empty'
-import { GoogleApiBooks } from '@/types/google-api-book'
 import { useEffect, useState } from 'react'
 import BookCreateForm from '@/components/BookCreateForm'
 import { Img } from '@/components/Img'
@@ -50,8 +49,8 @@ export default function SearchPage({ params }: SearchPageProps): JSX.Element {
                         .then(bookDetails => {
                             setBookInfo({
                                 ...bookDetails,
-                                image: bookDetails?.cover_url,
-                                categories: bookDetails?.subjects
+                                image: bookDetails?.cover_url as string,
+                                categories: bookDetails?.subjects as string[]
                             })
                             setLoading(false)
                             toast('Livro encontrado!', 'success')

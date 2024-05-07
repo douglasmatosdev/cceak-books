@@ -6,11 +6,13 @@ import ReactPaginate from 'react-paginate'
 import styled from 'styled-components'
 import AllBooks from './AllBooks'
 import { Empty } from './Empty'
+import { useAtom } from 'jotai'
+import { booksAtom } from '@/atoms/atoms'
 
 export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }): JSX.Element => {
     const [itemOffset, setItemOffset] = useState(0)
 
-    const [books, setBooks] = useState<Book[]>([])
+    const [books, setBooks] = useAtom(booksAtom)
 
     const endOffset = itemOffset + itemsPerPage
     const currentItems = books.slice(itemOffset, endOffset)
@@ -25,7 +27,7 @@ export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }): JSX.
         api.sheet.books.get().then(data => {
             setBooks(data)
         })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <StyledDiv>

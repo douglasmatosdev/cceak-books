@@ -8,8 +8,6 @@ import dynamic from 'next/dynamic'
 import { RxExit } from 'react-icons/rx'
 
 import { ToastContainer } from 'react-toastify'
-import { Provider } from 'jotai'
-import { store } from './context/store'
 
 const AdminLink = dynamic(() => import('@/components/AdminLink'), { ssr: false })
 
@@ -20,43 +18,36 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }): JSX.Element {
     return (
-        <Provider store={store}>
-            <html suppressHydrationWarning={true} lang="en">
-                <body>
-                    <ToastContainer />
-                    <header className="w-full mb-10">
-                        <ul className="flex items-center bg-primary w-full px-8 py-4">
-                            <li className="flex-1">
-                                <Link href={'/'}>
-                                    <Image
-                                        src={'/images/cceak-books.png'}
-                                        width={60}
-                                        height={60}
-                                        alt={'CCAK Books logo'}
-                                    />
-                                </Link>
-                            </li>
+        <html suppressHydrationWarning={true} lang="en">
+            <body>
+                <ToastContainer />
+                <header className="w-full mb-10">
+                    <ul className="flex items-center bg-primary w-full px-8 py-4">
+                        <li className="flex-1">
+                            <Link href={'/'}>
+                                <Image src={'/images/cceak-books.png'} width={60} height={60} alt={'CCAK Books logo'} />
+                            </Link>
+                        </li>
 
-                            <li className="text-white uppercase hover:underline">
-                                <AdminLink
-                                    beforeNavigate={{
-                                        label: 'Administração',
-                                        path: '/pages/dashboard'
-                                    }}
-                                    afterNavigate={{
-                                        label: <RxExit className="text-2xl" title="Sair" />,
-                                        path: '/'
-                                    }}
-                                />
-                            </li>
-                        </ul>
-                    </header>
+                        <li className="text-white uppercase hover:underline">
+                            <AdminLink
+                                beforeNavigate={{
+                                    label: 'Administração',
+                                    path: '/pages/dashboard'
+                                }}
+                                afterNavigate={{
+                                    label: <RxExit className="text-2xl" title="Sair" />,
+                                    path: '/'
+                                }}
+                            />
+                        </li>
+                    </ul>
+                </header>
 
-                    <div className="flex flex-col flex-1">{children}</div>
+                <div className="flex flex-col flex-1">{children}</div>
 
-                    <footer className="w-full h-16  flex flex-col justify-center items-center bg-primary "></footer>
-                </body>
-            </html>
-        </Provider>
+                <footer className="w-full h-16  flex flex-col justify-center items-center bg-primary "></footer>
+            </body>
+        </html>
     )
 }
