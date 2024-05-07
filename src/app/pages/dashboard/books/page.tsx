@@ -4,24 +4,24 @@ import { Empty } from '@/components/Empty'
 import { PaginatedBookItems } from '@/components/PaginatedBookItems'
 import Link from 'next/link'
 import { ChangeEvent, useEffect, useState } from 'react'
+import { useAtom } from 'jotai'
+import { booksAtom } from '@/atoms/atoms'
+import { BackButton } from '@/components/BackButton'
 
 export default function Books(): JSX.Element {
-    const [books, setBooks] = useState<Book[]>([])
+    const [books, setBooks] = useAtom(booksAtom)
     const [filteredBooks, setFilteredBooks] = useState<Book[]>(books)
-    // const [search, setSearch] = useState('')
 
     const handleDelete = async (rowIndex: string): Promise<void> => {
         await api.sheet.books.delete(rowIndex).then(response => {
             if (response.status === 200) {
-                setFilteredBooks(prev => prev.filter((_, i) => `${i}` !== rowIndex))
+                setBooks(prev => prev.filter((_, i) => `${i}` !== rowIndex))
             }
         })
     }
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const value = e.target.value
-
-        // setSearch(value)
 
         if (value) {
             setFilteredBooks(books.filter(book => book.title.match(value)))
@@ -31,14 +31,12 @@ export default function Books(): JSX.Element {
     }
 
     useEffect(() => {
-        api.sheet.books.getIndexed().then(data => {
-            setBooks(data)
-            setFilteredBooks(data)
-        })
-    }, [])
+        setFilteredBooks(books)
+    }, [books])
 
     return (
         <div className="w-full max-w-[740px] mx-auto">
+            <BackButton classNameContainer="ml-4 mb-8" />
             <div className="w-full flex justify-center items-center mb-8">
                 <Link
                     href={'/pages/dashboard/book-registration'}
@@ -58,17 +56,6 @@ export default function Books(): JSX.Element {
                             className="border-2 border-gray-300 w-full h-10 p-2"
                             onChange={handleChange}
                         />
-                        {/* <button
-                                className="py-2 px-4 bg-primary text-white rounded-lg ml-2"
-                                onClick={() => {
-                                    api.sheet.search(search)
-                                        .then(data => {
-                                            setBooks([data])
-                                        })
-                                }}
-                            >
-                                pesquisar
-                            </button> */}
                     </div>
                     <PaginatedBookItems itemsPerPage={10} books={filteredBooks} onDelete={handleDelete} />
                 </div>

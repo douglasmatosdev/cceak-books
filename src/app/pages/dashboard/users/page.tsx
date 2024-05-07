@@ -1,26 +1,29 @@
 'use client'
+import { usersAtom } from '@/atoms/atoms'
+import { BackButton } from '@/components/BackButton'
 import { Empty } from '@/components/Empty'
 import { PaginatedUserItems } from '@/components/PaginatedUserItems'
 import { api } from '@/services/api'
+import { useAtom } from 'jotai'
 import Link from 'next/link'
 import { ChangeEvent, useEffect, useState } from 'react'
 
 export default function Users(): JSX.Element {
-    const [users, setUsers] = useState<User[]>([])
+    const [users, setUsers] = useAtom<User[]>(usersAtom)
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users)
 
     const handleDelete = async (rowIndex: string): Promise<void> => {
         await api.sheet.users.delete(rowIndex).then(response => {
             if (response.status === 200) {
-                setFilteredUsers(prev => prev.filter((_, i) => `${i}` !== rowIndex))
+                const filtered = users.filter((_, i) => `${i}` !== rowIndex)
+                setUsers(filtered)
+                setFilteredUsers(filtered)
             }
         })
     }
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const value = e.target.value
-
-        // setSearch(value)
 
         if (value) {
             setFilteredUsers(users.filter(user => user.first_name.match(value)))
@@ -34,10 +37,11 @@ export default function Users(): JSX.Element {
             setUsers(data)
             setFilteredUsers(data)
         })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className="w-full max-w-[740px] mx-auto">
+            <BackButton classNameContainer="ml-4 mb-8" />
             <div className="w-full flex justify-center items-center mb-8">
                 <Link
                     href={'/pages/dashboard/users/user-registration'}

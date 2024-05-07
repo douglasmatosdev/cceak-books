@@ -1,8 +1,11 @@
+'use client'
+import { BackButton } from '@/components/BackButton'
 import Link from 'next/link'
 
 export default function BookRegistration(): JSX.Element {
     return (
         <div className="w-full h-full flex flex-col justify-center items-center">
+            <BackButton />
             <div className="flex flex-col justify-center items-center w-[max-content]">
                 <Link
                     href={'/pages/dashboard/book-registration/manual'}

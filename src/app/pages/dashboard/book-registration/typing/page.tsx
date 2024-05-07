@@ -1,4 +1,5 @@
 'use client'
+import { BackButton } from '@/components/BackButton'
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -7,6 +8,7 @@ export default function Typing(): JSX.Element {
 
     return (
         <div className="flex flex-col justify-center items-center p-8 w-full max-w-[740px] mx-auto">
+            <BackButton classNameContainer="mb-8" />
             <h2>Digite o código ISBN</h2>
             <input
                 type="number"

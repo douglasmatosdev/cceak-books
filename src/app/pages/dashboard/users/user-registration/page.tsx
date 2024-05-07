@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { api } from '@/services/api'
 import { useToastify } from '@/hooks/useToastify'
 import { v4 as uuidv4 } from 'uuid'
+import { BackButton } from '@/components/BackButton'
 
 const initialState: User = {
     first_name: '',
@@ -41,6 +42,7 @@ export default function UserRegister(): JSX.Element {
 
     return (
         <div className="p-8 w-full max-w-[740px] mx-auto">
+            <BackButton classNameContainer="mb-8" />
             <h2 className="text-2xl">Cadastro de usuário</h2>
             <form className="mt-4">
                 <label htmlFor="first_name">
