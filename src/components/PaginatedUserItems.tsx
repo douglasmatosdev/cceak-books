@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import ReactPaginate from 'react-paginate'
-import styled from 'styled-components'
 import Link from 'next/link'
 import { FaPencilAlt, FaTrash } from 'react-icons/fa'
 import { useToastify } from '@/hooks/useToastify'
+import { PaginatedContainer } from './styles'
 
 export const PaginatedUserItems = ({
     itemsPerPage,
@@ -30,7 +30,7 @@ export const PaginatedUserItems = ({
     }
 
     return (
-        <StyledDiv>
+        <PaginatedContainer disabled={currentItems.length <= itemsPerPage}>
             <div className="flex flex-col">
                 {currentItems?.map((user, index) => {
                     return (
@@ -71,30 +71,6 @@ export const PaginatedUserItems = ({
                 previousLabel="< anterior"
                 renderOnZeroPageCount={null}
             />
-        </StyledDiv>
+        </PaginatedContainer>
     )
 }
-
-const StyledDiv = styled.div`
-    ul[role='navigation'] {
-        display: flex;
-        max-width: 600px;
-        margin: 2rem auto;
-
-        li {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        li.next,
-        li.previous {
-            background-color: #0b8ec2;
-            padding: 4px 8px;
-            color: #fff;
-            width: 100px;
-            border-radius: 4px;
-        }
-    }
-`

@@ -37,6 +37,6 @@ declare type PanelizationSummary = {
 }
 
 declare type ImageLinks = {
-    smallThumbnail: string
-    thumbnail: string
+    smallThumbnail?: string
+    thumbnail?: string
 }

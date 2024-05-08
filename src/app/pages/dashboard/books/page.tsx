@@ -4,12 +4,10 @@ import { Empty } from '@/components/Empty'
 import { PaginatedBookItems } from '@/components/PaginatedBookItems'
 import Link from 'next/link'
 import { ChangeEvent, useEffect, useState } from 'react'
-import { useAtom } from 'jotai'
-import { booksAtom } from '@/atoms/atoms'
 import { BackButton } from '@/components/BackButton'
 
 export default function Books(): JSX.Element {
-    const [books, setBooks] = useAtom(booksAtom)
+    const [books, setBooks] = useState<Book[]>([])
     const [filteredBooks, setFilteredBooks] = useState<Book[]>(books)
 
     const handleDelete = async (rowIndex: string): Promise<void> => {
@@ -31,8 +29,11 @@ export default function Books(): JSX.Element {
     }
 
     useEffect(() => {
-        setFilteredBooks(books)
-    }, [books])
+        api.sheet.books.getIndexed().then(data => {
+            setBooks(data)
+            setFilteredBooks(data)
+        })
+    }, [])
 
     return (
         <div className="w-full max-w-[740px] mx-auto">

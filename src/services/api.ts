@@ -33,7 +33,7 @@ export const api = {
                     })
                 const data = response!.data
 
-                return Object.keys(data).map(key => data[key])
+                return Object.keys(data).map(key => data[key]) as Book[]
             },
             get: async (): Promise<Book[]> => {
                 const response = await axios.get<Record<string, Book>>(`${sheet_url}/tabs/books`).catch(error => {
@@ -176,7 +176,7 @@ export const api = {
 
                 return Object.keys(data)
                     .map(key => ({ ...data[key], rowIndex: key }))
-                    .filter(d => d.first_name)
+                    .filter(d => d.first_name) as Lend[]
             },
             get: async (): Promise<Lend[]> => {
                 const response = await axios.get<Record<string, Lend>>(`${sheet_url}/tabs/lends`).catch(error => {

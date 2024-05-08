@@ -1,8 +1,7 @@
 'use client'
-import { booksAtom, lendsAtom } from '@/atoms/atoms'
 import { BackButton } from '@/components/BackButton'
 import { api } from '@/services/api'
-import { useAtom, useAtomValue } from 'jotai'
+import { useEffect, useState } from 'react'
 
 interface LendViewProps {
     params: {
@@ -12,8 +11,8 @@ interface LendViewProps {
 export default function LendView(props: LendViewProps): JSX.Element {
     const { params } = props
 
-    const books = useAtomValue(booksAtom)
-    const [lends, setLends] = useAtom(lendsAtom)
+    const [books, setBooks] = useState<Book[]>([])
+    const [lends, setLends] = useState<Lend[]>([])
     const lend = lends.find((_, i) => +params.rowIndex === i) as Lend
 
     const handleDelete = async (rowIndex: string): Promise<void> => {
@@ -32,6 +31,15 @@ export default function LendView(props: LendViewProps): JSX.Element {
         })
     }
 
+    useEffect(() => {
+        api.sheet.books.getIndexed().then(data => {
+            setBooks(data)
+        })
+        api.sheet.lends.getIndexed().then(data => {
+            setLends(data)
+        })
+    }, [])
+
     return (
         <div className="w-full max-w-[740px] mx-auto">
             <div className="flex flex-col px-4">
@@ -39,17 +47,17 @@ export default function LendView(props: LendViewProps): JSX.Element {
                 <h1 className="text-2xl">Emprestimo</h1>
 
                 <span className="mt-2 text-xl">
-                    <span className="font-semibold">Nome:</span> {lend.first_name}
+                    <span className="font-semibold">Nome:</span> {lend?.first_name}
                 </span>
                 <span className="mt-2 text-xl">
-                    <span className="font-semibold">Sobrenome:</span> {lend.last_name}
+                    <span className="font-semibold">Sobrenome:</span> {lend?.last_name}
                 </span>
                 <span className="mt-2 text-xl">
-                    <span className="font-semibold">Livro:</span> {lend.book_title}
+                    <span className="font-semibold">Livro:</span> {lend?.book_title}
                 </span>
                 <span className="mt-2 text-xl">
                     <span className="font-semibold">Data do empéstimo:</span>{' '}
-                    {new Date(lend.created).toLocaleDateString()}
+                    {lend?.created && new Date(lend?.created).toLocaleDateString()}
                 </span>
 
                 <button

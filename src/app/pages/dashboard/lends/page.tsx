@@ -1,17 +1,15 @@
 'use client'
-import { booksAtom, lendsAtom } from '@/atoms/atoms'
 import { BackButton } from '@/components/BackButton'
 import { Empty } from '@/components/Empty'
 import { PaginatedLendsItems } from '@/components/PaginatedLendsItems'
 import { api } from '@/services/api'
-import { useAtom, useAtomValue } from 'jotai'
 import Link from 'next/link'
 import { ChangeEvent, useEffect, useState } from 'react'
 
 export default function Lends(): JSX.Element {
-    const books = useAtomValue(booksAtom)
+    const [books, setBooks] = useState<Book[]>([])
+    const [lends, setLends] = useState<Lend[]>([])
 
-    const [lends, setLends] = useAtom(lendsAtom)
     const [filteredLends, setFilteredLends] = useState<Lend[]>(lends)
 
     const handleDelete = async (rowIndex: string): Promise<void> => {
@@ -42,6 +40,9 @@ export default function Lends(): JSX.Element {
     }
 
     useEffect(() => {
+        api.sheet.books.getIndexed().then(data => {
+            setBooks(data)
+        })
         api.sheet.lends.getIndexed().then(data => {
             setLends(data)
             setFilteredLends(data)
