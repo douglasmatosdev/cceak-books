@@ -11,12 +11,10 @@ export default function Users(): JSX.Element {
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users)
 
     const handleDelete = async (rowIndex: string): Promise<void> => {
-        await api.sheet.users.delete(rowIndex).then(response => {
-            if (response.status === 200) {
-                const filtered = users.filter((_, i) => `${i}` !== rowIndex)
-                setUsers(filtered)
-                setFilteredUsers(filtered)
-            }
+        await api.sheet.users.delete(rowIndex).then(() => {
+            const filtered = users.filter((_, i) => `${i}` !== rowIndex)
+            setUsers(filtered)
+            setFilteredUsers(filtered)
         })
     }
 

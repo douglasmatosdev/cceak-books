@@ -13,19 +13,19 @@ export default function Lends(): JSX.Element {
     const [filteredLends, setFilteredLends] = useState<Lend[]>(lends)
 
     const handleDelete = async (rowIndex: string): Promise<void> => {
-        await api.sheet.lends.delete(rowIndex).then(response => {
-            if (response.status === 200) {
-                setFilteredLends(prev => prev.filter((_, i) => `${i}` !== rowIndex))
-                const bookId = lends[+rowIndex].book_id
-                const book = books.find(b => b.id === bookId)
-                const updatedBook = {
-                    ...book,
-                    status: 'avaiable'
-                }
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                api.sheet.books.putByColumn('id', bookId, updatedBook)
+        await api.sheet.lends.delete(rowIndex).then(() => {
+            const filtered = lends.filter((_, i) => `${i}` !== rowIndex)
+            setFilteredLends(filtered)
+            setLends(filtered)
+            const bookId = lends[+rowIndex].book_id
+            const book = books.find(b => b.id === bookId)
+            const updatedBook = {
+                ...book,
+                status: 'avaiable'
             }
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            api.sheet.books.putByColumn('id', bookId, updatedBook)
         })
     }
 

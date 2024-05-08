@@ -11,10 +11,10 @@ export default function Books(): JSX.Element {
     const [filteredBooks, setFilteredBooks] = useState<Book[]>(books)
 
     const handleDelete = async (rowIndex: string): Promise<void> => {
-        await api.sheet.books.delete(rowIndex).then(response => {
-            if (response.status === 200) {
-                setBooks(prev => prev.filter((_, i) => `${i}` !== rowIndex))
-            }
+        await api.sheet.books.delete(rowIndex).then(() => {
+            const filtered = books.filter((_, i) => `${i}` !== rowIndex)
+            setBooks(filtered)
+            setFilteredBooks(filtered)
         })
     }
 
