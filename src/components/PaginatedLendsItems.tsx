@@ -54,7 +54,7 @@ export const PaginatedLendsItems = ({
 
                                     if (answer?.toLocaleUpperCase() === 'EXCLUIR') {
                                         onDelete(`${index}`)
-                                        toast('Emrpéstiom foi excluído com sucesso!', 'success')
+                                        toast('Empréstimo foi excluído com sucesso!', 'success')
                                     }
                                 }}
                             >

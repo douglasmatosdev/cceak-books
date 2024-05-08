@@ -25,7 +25,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
                     <ul className="flex items-center bg-primary w-full px-8 py-4">
                         <li className="flex-1">
                             <Link href={'/'}>
-                                <Image src={'/images/cceak-books.png'} width={60} height={60} alt={'CCAK Books logo'} />
+                                <Image
+                                    src={'/images/cceak-logo.png'}
+                                    width={60}
+                                    height={60}
+                                    alt={'CCAK Books logo'}
+                                    className="rounded-full"
+                                />
                             </Link>
                         </li>
 

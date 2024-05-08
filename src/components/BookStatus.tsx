@@ -1,32 +1,31 @@
+import { cn } from '@/lib/tailwindMerge'
+
 interface BookStatusProps {
-    label: Book['status']
+    label: Book['status'] | 'default'
     className?: string
 }
-export const BookStatus = ({ label, className }: BookStatusProps): JSX.Element => {
-    const status = {
-        label: {
-            avaiable: 'disponível',
-            borrowed: 'emprestado'
-        },
-        color: {
-            avaiable: 'green-500',
-            borrowed: 'red-500'
-        }
+export const BookStatus = ({ label = 'default', className = '' }: BookStatusProps): JSX.Element => {
+    const statusLabel = {
+        avaiable: 'disponível',
+        borrowed: 'emprestado',
+        default: ''
     }
 
-    return (
-        <>
-            {label && (
-                <span
-                    className={`
-                        text-${status.color[label]}
-                        border-${status.color[label]}
-                        font-semibold border-2  rounded-md p-2 ${className}
-                    `}
-                >
-                    {label ? status.label[label] : ''}
-                </span>
-            )}
-        </>
-    )
+    const components = {
+        avaiable: (
+            <span className={cn('font-semibold border-2 rounded-md p-2 text-green-500 border-green-500', className)}>
+                {statusLabel[label]}
+            </span>
+        ),
+        borrowed: (
+            <span className={cn('font-semibold border-2 rounded-md p-2 text-red-500 border-red-500', className)}>
+                {statusLabel[label]}
+            </span>
+        ),
+        default: <></>
+    }
+
+    const renderComponent = components[label]
+
+    return <>{renderComponent}</>
 }

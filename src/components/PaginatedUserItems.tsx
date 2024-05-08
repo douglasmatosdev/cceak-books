@@ -52,7 +52,7 @@ export const PaginatedUserItems = ({
 
                                     if (answer?.toLocaleUpperCase() === 'EXCLUIR') {
                                         onDelete(`${index}`)
-                                        toast('Livro foi excluído com sucesso!', 'success')
+                                        toast('Usuário foi excluído com sucesso!', 'success')
                                     }
                                 }}
                             >
