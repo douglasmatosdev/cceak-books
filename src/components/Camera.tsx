@@ -18,13 +18,18 @@ export const Camera = ({ onCancel, onSave }: CameraProps): JSX.Element => {
 
     const handleDevices = useCallback(
         (mediaDevices: Device[]) => {
+            console.log(mediaDevices)
             setDevices(mediaDevices.filter(({ kind }) => kind === 'videoinput'))
         },
         [setDevices]
     )
 
     useEffect(() => {
-        navigator.mediaDevices.enumerateDevices().then(handleDevices)
+        if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(r => {
+                navigator.mediaDevices.enumerateDevices().then(handleDevices)
+            })
+        }
     }, [handleDevices])
 
     const capture = useCallback(() => {
