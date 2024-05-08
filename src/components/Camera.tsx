@@ -26,7 +26,7 @@ export const Camera = ({ onCancel, onSave }: CameraProps): JSX.Element => {
 
     useEffect(() => {
         if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-            navigator.mediaDevices.getUserMedia({ video: true }).then(r => {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(() => {
                 navigator.mediaDevices.enumerateDevices().then(handleDevices)
             })
         }
