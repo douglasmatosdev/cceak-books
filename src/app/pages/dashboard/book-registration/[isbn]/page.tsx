@@ -104,7 +104,7 @@ export default function SearchPage({ params }: SearchPageProps): JSX.Element {
                         subtitle={bookInfo?.subtitle}
                         author={bookInfo?.authors?.map(a => a)?.join(', ')}
                         description={bookInfo?.description}
-                        image={bookInfo?.imageLinks?.thumbnail}
+                        image={bookInfo?.imageLinks?.thumbnail as string}
                         amount={1}
                         category={bookInfo?.categories?.map(c => c)?.join(', ')}
                     />
