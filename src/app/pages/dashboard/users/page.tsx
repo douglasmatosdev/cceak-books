@@ -1,15 +1,13 @@
 'use client'
-import { usersAtom } from '@/atoms/atoms'
 import { BackButton } from '@/components/BackButton'
 import { Empty } from '@/components/Empty'
 import { PaginatedUserItems } from '@/components/PaginatedUserItems'
 import { api } from '@/services/api'
-import { useAtom } from 'jotai'
 import Link from 'next/link'
 import { ChangeEvent, useEffect, useState } from 'react'
 
 export default function Users(): JSX.Element {
-    const [users, setUsers] = useAtom<User[]>(usersAtom)
+    const [users, setUsers] = useState<User[]>([])
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users)
 
     const handleDelete = async (rowIndex: string): Promise<void> => {

@@ -1,9 +1,7 @@
 'use client'
-import { booksAtom } from '@/atoms/atoms'
 import { BackButton } from '@/components/BackButton'
 import { useToastify } from '@/hooks/useToastify'
 import { api } from '@/services/api'
-import { useAtomValue } from 'jotai'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FaPencilAlt } from 'react-icons/fa'
@@ -18,7 +16,7 @@ type Option = {
 
 export default function LendRegistration(): JSX.Element {
     const [users, setUsers] = useState<User[]>([])
-    const books = useAtomValue<Book[]>(booksAtom)
+    const [books, setBooks] = useState<Book[]>([])
     const [userSelected, setUserSelected] = useState<User | Record<string, never>>({})
     const [options, setOptions] = useState<Option[]>([])
     const [bookSelected, setBookSelected] = useState<Option | Record<string, never>>({})
@@ -63,6 +61,10 @@ export default function LendRegistration(): JSX.Element {
     }, [bookSelected?.label, bookSelected?.value, userSelected?.first_name, userSelected?.id, userSelected?.last_name])
 
     useEffect(() => {
+        api.sheet.books.getIndexed().then(data => {
+            setBooks(data)
+        })
+
         api.sheet.users.getIndexed().then(data => {
             setUsers(data)
         })

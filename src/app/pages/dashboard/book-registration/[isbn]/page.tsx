@@ -47,11 +47,14 @@ export default function SearchPage({ params }: SearchPageProps): JSX.Element {
                     await services
                         .brasilapi(code)
                         .then(bookDetails => {
-                            setBookInfo({
+                            const parsed = {
                                 ...bookDetails,
-                                image: bookDetails?.cover_url as string,
-                                categories: bookDetails?.subjects as string[]
-                            })
+                                imageLinks: {
+                                    thumbnail: bookDetails?.cover_url
+                                },
+                                categories: bookDetails?.subjects
+                            } as unknown as GoogleApiBooks
+                            setBookInfo(parsed)
                             setLoading(false)
                             toast('Livro encontrado!', 'success')
                         })

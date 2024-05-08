@@ -1,5 +1,6 @@
 import { IoMdClose } from 'react-icons/io'
 import { Img } from './Img'
+import { BookStatus } from './BookStatus';
 
 export const BookModal = (props: { book: Book | Record<string, never>; onClose: () => void }): JSX.Element => {
     const { book, onClose } = props
@@ -22,6 +23,9 @@ export const BookModal = (props: { book: Book | Record<string, never>; onClose: 
                     </span>
                     <h2>{book.subtitle}</h2>
                     <span>Categoria: {book.category}</span>
+                    <h4 className="mt-2">
+                        <BookStatus label={book?.status} />
+                    </h4>
                 </div>
             </div>
         </div>
