@@ -1,6 +1,7 @@
 'use client'
 import { BackButton } from '@/components/BackButton'
 import { Empty } from '@/components/Empty'
+import { Loading } from '@/components/Loading'
 import { PaginatedLendsItems } from '@/components/PaginatedLendsItems'
 import { api } from '@/services/api'
 import Link from 'next/link'
@@ -9,6 +10,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 export default function Lends(): JSX.Element {
     const [books, setBooks] = useState<Book[]>([])
     const [lends, setLends] = useState<Lend[]>([])
+    const [loading, setLoading] = useState(true)
 
     const [filteredLends, setFilteredLends] = useState<Lend[]>(lends)
 
@@ -43,10 +45,15 @@ export default function Lends(): JSX.Element {
         api.sheet.books.getIndexed().then(data => {
             setBooks(data)
         })
-        api.sheet.lends.getIndexed().then(data => {
-            setLends(data)
-            setFilteredLends(data)
-        })
+        api.sheet.lends
+            .getIndexed()
+            .then(data => {
+                setLends(data)
+                setFilteredLends(data)
+            })
+            .finally(() => {
+                setLoading(false)
+            })
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
@@ -60,7 +67,9 @@ export default function Lends(): JSX.Element {
                     Registrar um empréstimo
                 </Link>
             </div>
-            {!filteredLends?.length ? (
+            {loading ? (
+                <Loading />
+            ) : !filteredLends?.length ? (
                 <Empty />
             ) : (
                 <div className="px-4">

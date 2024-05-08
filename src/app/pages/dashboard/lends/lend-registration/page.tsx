@@ -1,5 +1,6 @@
 'use client'
 import { BackButton } from '@/components/BackButton'
+import { Loading } from '@/components/Loading'
 import { useToastify } from '@/hooks/useToastify'
 import { api } from '@/services/api'
 import { useRouter } from 'next/navigation'
@@ -20,6 +21,7 @@ export default function LendRegistration(): JSX.Element {
     const [userSelected, setUserSelected] = useState<User | Record<string, never>>({})
     const [options, setOptions] = useState<Option[]>([])
     const [bookSelected, setBookSelected] = useState<Option | Record<string, never>>({})
+    const [loading, setLoading] = useState(true)
 
     const router = useRouter()
     const { toast } = useToastify()
@@ -61,12 +63,16 @@ export default function LendRegistration(): JSX.Element {
     }, [bookSelected?.label, bookSelected?.value, userSelected?.first_name, userSelected?.id, userSelected?.last_name])
 
     useEffect(() => {
+        api.sheet.users
+            .getIndexed()
+            .then(data => {
+                setUsers(data)
+            })
+            .finally(() => {
+                setLoading(false)
+            })
         api.sheet.books.getIndexed().then(data => {
             setBooks(data)
-        })
-
-        api.sheet.users.getIndexed().then(data => {
-            setUsers(data)
         })
 
         api.sheet.books.getIndexed().then(data => {
@@ -82,7 +88,10 @@ export default function LendRegistration(): JSX.Element {
     return (
         <div className="w-full max-w-[740px] mx-auto">
             <BackButton classNameContainer="ml-4 mb-8" />
-            {!userSelected?.id &&
+            {loading ? (
+                <Loading />
+            ) : (
+                !userSelected?.id &&
                 users.map(user => {
                     return (
                         <div
@@ -102,7 +111,8 @@ export default function LendRegistration(): JSX.Element {
                             </button>
                         </div>
                     )
-                })}
+                })
+            )}
 
             {userSelected?.id && (
                 <>

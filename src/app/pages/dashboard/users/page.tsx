@@ -1,6 +1,7 @@
 'use client'
 import { BackButton } from '@/components/BackButton'
 import { Empty } from '@/components/Empty'
+import { Loading } from '@/components/Loading'
 import { PaginatedUserItems } from '@/components/PaginatedUserItems'
 import { api } from '@/services/api'
 import Link from 'next/link'
@@ -9,6 +10,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 export default function Users(): JSX.Element {
     const [users, setUsers] = useState<User[]>([])
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users)
+    const [loading, setLoading] = useState(true)
 
     const handleDelete = async (rowIndex: string): Promise<void> => {
         await api.sheet.users.delete(rowIndex).then(() => {
@@ -29,10 +31,15 @@ export default function Users(): JSX.Element {
     }
 
     useEffect(() => {
-        api.sheet.users.getIndexed().then(data => {
-            setUsers(data)
-            setFilteredUsers(data)
-        })
+        api.sheet.users
+            .getIndexed()
+            .then(data => {
+                setUsers(data)
+                setFilteredUsers(data)
+            })
+            .finally(() => {
+                setLoading(false)
+            })
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
@@ -46,7 +53,9 @@ export default function Users(): JSX.Element {
                     Cadastrar usuário
                 </Link>
             </div>
-            {!filteredUsers?.length ? (
+            {loading ? (
+                <Loading />
+            ) : !filteredUsers?.length ? (
                 <Empty />
             ) : (
                 <div className="px-4">

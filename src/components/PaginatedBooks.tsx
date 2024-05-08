@@ -6,9 +6,11 @@ import ReactPaginate from 'react-paginate'
 import AllBooks from './AllBooks'
 import { Empty } from './Empty'
 import { PaginatedContainer } from './styles'
+import { Loading } from './Loading'
 
 export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }): JSX.Element => {
     const [itemOffset, setItemOffset] = useState(0)
+    const [loading, setLoating] = useState(true)
 
     const [books, setBooks] = useState<Book[]>([])
 
@@ -22,15 +24,19 @@ export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }): JSX.
     }
 
     useEffect(() => {
-        api.sheet.books.get().then(data => {
-            setBooks(data)
-        })
+        api.sheet.books
+            .get()
+            .then(data => {
+                setBooks(data)
+            })
+            .finally(() => {
+                setLoating(false)
+            })
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <PaginatedContainer disabled={currentItems.length <= itemsPerPage}>
-            {!books?.length ? <Empty /> : <AllBooks books={currentItems} />}
-
+            {loading ? <Loading /> : !books?.length ? <Empty /> : <AllBooks books={currentItems} />}
             <ReactPaginate
                 breakLabel="..."
                 nextLabel="próximo >"

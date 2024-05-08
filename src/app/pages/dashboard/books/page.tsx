@@ -5,10 +5,12 @@ import { PaginatedBookItems } from '@/components/PaginatedBookItems'
 import Link from 'next/link'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { BackButton } from '@/components/BackButton'
+import { Loading } from '@/components/Loading'
 
 export default function Books(): JSX.Element {
     const [books, setBooks] = useState<Book[]>([])
     const [filteredBooks, setFilteredBooks] = useState<Book[]>(books)
+    const [loading, setLoading] = useState(true)
 
     const handleDelete = async (rowIndex: string): Promise<void> => {
         await api.sheet.books.delete(rowIndex).then(() => {
@@ -29,10 +31,15 @@ export default function Books(): JSX.Element {
     }
 
     useEffect(() => {
-        api.sheet.books.getIndexed().then(data => {
-            setBooks(data)
-            setFilteredBooks(data)
-        })
+        api.sheet.books
+            .getIndexed()
+            .then(data => {
+                setBooks(data)
+                setFilteredBooks(data)
+            })
+            .finally(() => {
+                setLoading(false)
+            })
     }, [])
 
     return (
@@ -46,7 +53,9 @@ export default function Books(): JSX.Element {
                     Cadastrar livro
                 </Link>
             </div>
-            {!filteredBooks?.length ? (
+            {loading ? (
+                <Loading />
+            ) : !filteredBooks?.length ? (
                 <Empty />
             ) : (
                 <div className="px-4">
