@@ -7,6 +7,8 @@ import { FaPencilAlt, FaTrash } from 'react-icons/fa'
 import { useToastify } from '@/hooks/useToastify'
 import { Img } from './Img'
 import { PaginatedContainer } from './styles'
+import { BookStatus } from './BookStatus'
+import { TextElipsis } from './TextElipsis'
 
 export const PaginatedBookItems = ({
     itemsPerPage,
@@ -42,7 +44,11 @@ export const PaginatedBookItems = ({
                             <div className="mr-4">
                                 <Img width={20} src={book.image} alt={book.title} />
                             </div>
-                            <h2 className="flex-1 text-gray-500 font-semibold">{book.title}</h2>
+                            <h2 className="flex-1 text-gray-500 font-semibold">
+                                {/* {book.title} */}
+                                <TextElipsis text={book?.title} width={'100%'} height={16} />
+                            </h2>
+                            <BookStatus label={book?.status} className="p-0 mr-2 text-sm md:p-2 md:text-md" />
 
                             <Link href={`/pages/dashboard/${index}`} className="mr-8 text-primary">
                                 <FaPencilAlt />
