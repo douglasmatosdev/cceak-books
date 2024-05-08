@@ -1,14 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import { useState } from "react";
-import { BookModal } from "./BookModal";
-import { Img } from "./Img";
-
+import { useState } from 'react'
+import { BookModal } from './BookModal'
+import { Img } from './Img'
+import { BookStatus } from './BookStatus'
 
 interface AllBooksProps {
     books: Book[]
 }
-export default function AllBooks({ books }: AllBooksProps) {
+export default function AllBooks({ books }: AllBooksProps): JSX.Element {
     const [openModal, setOpenModal] = useState<Book | Record<string, never>>({})
 
     return (
@@ -19,21 +19,17 @@ export default function AllBooks({ books }: AllBooksProps) {
                 return (
                     <div
                         key={index}
-                        className="bg-white w-40 p-2 mx-auto rounded-md flex flex-col justify-center cursor-pointer"
+                        className="bg-white w-40 p-2 mx-auto rounded-md flex flex-col justify-end cursor-pointer"
                         onClick={() => {
                             setOpenModal(book)
                         }}
                     >
-                        <Img
-                            src={book?.image}
-                            alt={book.title}
-                            width={150}
-                            height={250}
-                        />
-                        <h2 className="font-semibold mt-2 mb-2">
-                            {book.title}
-                        </h2>
+                        <Img src={book?.image} alt={book.title} width={150} height={250} />
+                        <h2 className="font-semibold mt-2 mb-2">{book.title}</h2>
                         <h3>{book.author}</h3>
+                        <h4 className="mt-2">
+                            <BookStatus label={book?.status} />
+                        </h4>
                     </div>
                 )
             })}

@@ -1,7 +1,7 @@
 'use client'
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { ReactNode } from "react"
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { ReactNode } from 'react'
 
 interface AdminLinkProps {
     className?: string
@@ -16,7 +16,7 @@ interface AdminLinkProps {
         path: string
     }
 }
-const AdminLink = ({ className, href, children, afterNavigate, beforeNavigate }: AdminLinkProps) => {
+const AdminLink = ({ className, href, children, afterNavigate, beforeNavigate }: AdminLinkProps): JSX.Element => {
     const pathname = usePathname()
     const key = pathname.includes('/dashboard') ? 'after' : 'before'
 
@@ -28,14 +28,13 @@ const AdminLink = ({ className, href, children, afterNavigate, beforeNavigate }:
 
     const result = content[key]
 
-    return result && (
+    return (
         <>
-            <Link
-                href={result.path as string}
-                className={className}
-            >
-                {result.label}
-            </Link>
+            {result && (
+                <Link href={result?.path as string} className={className}>
+                    {result?.label}
+                </Link>
+            )}
         </>
     )
 }

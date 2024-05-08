@@ -1,32 +1,33 @@
 'use client'
-import { api } from "@/services/api"
-import { useEffect, useState } from "react"
-import UserEditForm from "@/components/UserEditForm"
+import UserEditForm from '@/components/UserEditForm'
+import { BackButton } from '@/components/BackButton'
+import { useEffect, useState } from 'react'
+import { api } from '@/services/api'
 
 interface EditUserProps {
     params: {
         rowIndex: string
     }
 }
-export default function EditUser({ params }: EditUserProps) {
-    const [user, setUser] = useState<User | Record<string, never>>({})
+export default function EditUser({ params }: EditUserProps): JSX.Element {
+    const [users, setUsers] = useState<User[]>([])
+    const user = users.find((_, i) => +params.rowIndex === i) as User
 
     useEffect(() => {
-        (async () => {
-            await api.sheet.users.getByRowIndex(params.rowIndex)
-                .then(data => {
-
-                    setUser(data)
-                })
-        })()
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+        api.sheet.users.getIndexed().then(data => {
+            setUsers(data)
+        })
+    }, [])
 
     return (
-        <UserEditForm
-            rowIndex={params.rowIndex}
-            first_name={user.first_name}
-            last_name={user.last_name}
-            phone={user.phone}
-        />
+        <>
+            <BackButton classNameContainer="ml-8 mb-8" />
+            <UserEditForm
+                rowIndex={params?.rowIndex}
+                first_name={user?.first_name}
+                last_name={user?.last_name}
+                phone={user?.phone}
+            />
+        </>
     )
 }

@@ -1,19 +1,19 @@
 'use client'
-import { services } from "@/services/api";
-import { Empty } from "@/components/Empty";
-import { GoogleApiBooks } from "@/types/google-api-book";
-import { useEffect, useState } from "react";
-import BookCreateForm from "@/components/BookCreateForm";
-import { Img } from "@/components/Img";
-import { useToastify } from "@/hooks/useToastify";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { services } from '@/services/api'
+import { Empty } from '@/components/Empty'
+import { useEffect, useState } from 'react'
+import BookCreateForm from '@/components/BookCreateForm'
+import { Img } from '@/components/Img'
+import { useToastify } from '@/hooks/useToastify'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { useRouter } from 'next/navigation'
 
 interface SearchPageProps {
     params: {
         isbn: string
     }
 }
-export default function SearchPage({ params }: SearchPageProps) {
+export default function SearchPage({ params }: SearchPageProps): JSX.Element {
     const [bookInfo, setBookInfo] = useState<GoogleApiBooks | Record<string, never>>({})
     const [loading, setLoading] = useState(true)
 
@@ -22,32 +22,18 @@ export default function SearchPage({ params }: SearchPageProps) {
         brasilapi: false
     })
 
+    const router = useRouter()
+
     const { toast } = useToastify()
 
-    const search = async (code: string) => {
-        await services.google(code)
+    const search = async (code: string): Promise<void> => {
+        await services
+            .google(code)
             .then(async bookDetails => {
                 if (bookDetails?.title) {
                     setBookInfo(bookDetails)
                     toast('Livro encontrado!', 'success')
-                } else {
-                    toast('Livro não encontrado!', 'warning')
-                    setApiSelected({
-                        google: false,
-                        brasilapi: true
-                    })
-
-                    await setTimeout(async () => {
-                        await services.brasilapi(code)
-                            .then(bookDetails => {
-                                setBookInfo({ ...bookDetails, image: bookDetails?.cover_url, categories: bookDetails?.subjects })
-                                setLoading(false)
-                            })
-                    }, 3000);
                 }
-
-                setLoading(false)
-
             })
             .catch(async error => {
                 console.error('Error trying search book', error)
@@ -58,12 +44,31 @@ export default function SearchPage({ params }: SearchPageProps) {
                 })
 
                 await setTimeout(async () => {
-                    await services.brasilapi(code)
+                    await services
+                        .brasilapi(code)
                         .then(bookDetails => {
-                            setBookInfo({ ...bookDetails, image: bookDetails?.cover_url, categories: bookDetails?.subjects })
+                            const parsed = {
+                                ...bookDetails,
+                                imageLinks: {
+                                    thumbnail: bookDetails?.cover_url
+                                },
+                                categories: bookDetails?.subjects
+                            } as unknown as GoogleApiBooks
+                            setBookInfo(parsed)
                             setLoading(false)
+                            toast('Livro encontrado!', 'success')
                         })
-                }, 3000);
+                        .catch(error => {
+                            setApiSelected({
+                                brasilapi: false,
+                                google: false
+                            })
+                            setLoading(false)
+                            router.push('/pages/dashboard/book-registration/typing')
+                            console.error('Error trying fetch brasilapi ', error)
+                            toast('Erro ao tentar pesquisar livro', 'error')
+                        })
+                }, 3000)
             })
     }
 
@@ -79,14 +84,6 @@ export default function SearchPage({ params }: SearchPageProps) {
         return <Empty />
     }
 
-    // if (!params.isbn || !bookInfo?.title) {
-    //     return (
-    //         <div className="w-full h-full p-8 max-w-[740px] max-auto">
-    //             <Empty />
-    //         </div>
-    //     )
-    // }
-
     if (bookInfo?.title) {
         return (
             <div className="w-full h-full p-8 max-w-[740px] mx-auto">
@@ -95,7 +92,7 @@ export default function SearchPage({ params }: SearchPageProps) {
                 <div className="flex flex-col">
                     <div className="p-8">
                         <Img
-                            src={`${bookInfo?.imageLinks?.thumbnail}`}
+                            src={`${bookInfo?.imageLinks?.thumbnail ?? '/images/empty-book.png'}`}
                             alt="capa do livro"
                             width={250}
                             className="mb-4"
@@ -125,9 +122,11 @@ export default function SearchPage({ params }: SearchPageProps) {
                     `}
                 >
                     Google API
-                    {apiSelected.google && <div className="ml-4">
-                        <AiOutlineLoading3Quarters className="animate-spin text-white text-2xl" />
-                    </div>}
+                    {apiSelected.google && (
+                        <div className="ml-4">
+                            <AiOutlineLoading3Quarters className="animate-spin text-white text-2xl" />
+                        </div>
+                    )}
                 </button>
 
                 <button
@@ -137,11 +136,13 @@ export default function SearchPage({ params }: SearchPageProps) {
                     `}
                 >
                     Brasil API
-                    {apiSelected.brasilapi && <div className="ml-4">
-                        <AiOutlineLoading3Quarters className="animate-spin text-white text-2xl" />
-                    </div>}
+                    {apiSelected.brasilapi && (
+                        <div className="ml-4">
+                            <AiOutlineLoading3Quarters className="animate-spin text-white text-2xl" />
+                        </div>
+                    )}
                 </button>
             </div>
         </div>
     )
-} 
+}

@@ -1,4 +1,5 @@
 declare type Book = {
+    id?: string
     rowIndex?: string
     isbn: number
     title: string
@@ -8,4 +9,5 @@ declare type Book = {
     image: string
     amount: number
     category: string
+    status?: 'borrowed' | 'avaiable'
 }

@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react';
+import { useState } from 'react'
 import ReactPaginate from 'react-paginate'
-import styled from 'styled-components';
-import Link from 'next/link';
-import { FaPencilAlt, FaTrash } from 'react-icons/fa';
-import { useToastify } from '@/hooks/useToastify';
+import Link from 'next/link'
+import { FaPencilAlt, FaTrash } from 'react-icons/fa'
+import { useToastify } from '@/hooks/useToastify'
+import { PaginatedContainer } from './styles'
 
 export const PaginatedUserItems = ({
     itemsPerPage,
@@ -15,22 +15,22 @@ export const PaginatedUserItems = ({
     itemsPerPage: number
     users: User[]
     onDelete: (index: string) => void
-}) => {
-    const [itemOffset, setItemOffset] = useState(0);
+}): JSX.Element => {
+    const [itemOffset, setItemOffset] = useState(0)
 
     const { toast } = useToastify()
 
-    const endOffset = itemOffset + itemsPerPage;
-    const currentItems = users.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(users.length / itemsPerPage);
+    const endOffset = itemOffset + itemsPerPage
+    const currentItems = users.slice(itemOffset, endOffset)
+    const pageCount = Math.ceil(users.length / itemsPerPage)
 
-    const handlePageClick = (event: { selected: number }) => {
-        const newOffset = (event.selected * itemsPerPage) % users.length;
-        setItemOffset(newOffset);
-    };
+    const handlePageClick = (event: { selected: number }): void => {
+        const newOffset = (event.selected * itemsPerPage) % users.length
+        setItemOffset(newOffset)
+    }
 
     return (
-        <StyledDiv>
+        <PaginatedContainer disabled={currentItems.length <= itemsPerPage}>
             <div className="flex flex-col">
                 {currentItems?.map((user, index) => {
                     return (
@@ -38,16 +38,11 @@ export const PaginatedUserItems = ({
                             key={`${user.phone} - ${index}`}
                             className="flex items-center w-full h-12 border-b-2 p-4 even:bg-slate-100 hover:bg-slate-200"
                         >
-                            <h2
-                                className="flex-1 text-gray-500 font-semibold"
-                            >
+                            <h2 className="flex-1 text-gray-500 font-semibold">
                                 {user.first_name} {user.last_name}
                             </h2>
 
-                            <Link
-                                href={`/pages/dashboard/users/${index}`}
-                                className="mr-8 text-primary"
-                            >
+                            <Link href={`/pages/dashboard/users/${index}`} className="mr-8 text-primary">
                                 <FaPencilAlt />
                             </Link>
                             <button
@@ -76,31 +71,6 @@ export const PaginatedUserItems = ({
                 previousLabel="< anterior"
                 renderOnZeroPageCount={null}
             />
-        </StyledDiv>
+        </PaginatedContainer>
     )
 }
-
-const StyledDiv = styled.div`
-    ul[role=navigation] {
-        display: flex;
-        max-width: 600px;
-        margin: 2rem auto;
-
-        li {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        li.next,
-        li.previous {
-            background-color: #0B8EC2;
-            padding: 4px 8px;
-            color: #fff;
-            width: 100px;
-            border-radius: 4px;
-           
-        }
-    }
-`
