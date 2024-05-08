@@ -50,7 +50,7 @@ export const PaginatedUserItems = ({
                                 onClick={() => {
                                     const answer = prompt('Digite EXCLUIR para confirmar')
 
-                                    if (answer?.toLocaleUpperCase() === 'EXCLUIR') {
+                                    if (answer?.trim()?.toLocaleUpperCase() === 'EXCLUIR') {
                                         onDelete(`${index}`)
                                         toast('Usuário foi excluído com sucesso!', 'success')
                                     }

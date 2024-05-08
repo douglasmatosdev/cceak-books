@@ -52,7 +52,7 @@ export const PaginatedLendsItems = ({
                                 onClick={() => {
                                     const answer = prompt('Digite EXCLUIR para confirmar')
 
-                                    if (answer?.toLocaleUpperCase() === 'EXCLUIR') {
+                                    if (answer?.trim()?.toLocaleUpperCase() === 'EXCLUIR') {
                                         onDelete(`${index}`)
                                         toast('Empréstimo foi excluído com sucesso!', 'success')
                                     }

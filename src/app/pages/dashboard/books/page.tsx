@@ -22,7 +22,7 @@ export default function Books(): JSX.Element {
         const value = e.target.value
 
         if (value) {
-            setFilteredBooks(books.filter(book => book.title.match(value)))
+            setFilteredBooks(books.filter(book => book.title.toLowerCase().match(value.toLowerCase())))
         } else {
             setFilteredBooks(books)
         }

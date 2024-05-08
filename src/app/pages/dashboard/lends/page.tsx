@@ -33,7 +33,7 @@ export default function Lends(): JSX.Element {
         const value = e.target.value
 
         if (value) {
-            setFilteredLends(lends.filter(user => user.first_name.match(value)))
+            setFilteredLends(lends.filter(user => user.first_name.toLowerCase().match(value.toLowerCase())))
         } else {
             setFilteredLends(lends)
         }

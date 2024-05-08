@@ -24,7 +24,7 @@ export default function Users(): JSX.Element {
         const value = e.target.value
 
         if (value) {
-            setFilteredUsers(users.filter(user => user.first_name.match(value)))
+            setFilteredUsers(users.filter(user => user.first_name.toLowerCase().match(value.toLowerCase())))
         } else {
             setFilteredUsers(users)
         }
@@ -59,17 +59,6 @@ export default function Users(): JSX.Element {
                             className="border-2 border-gray-300 w-full h-10 p-2"
                             onChange={handleChange}
                         />
-                        {/* <button
-                                className="py-2 px-4 bg-primary text-white rounded-lg ml-2"
-                                onClick={() => {
-                                    api.sheet.search(search)
-                                        .then(data => {
-                                            setBooks([data])
-                                        })
-                                }}
-                            >
-                                pesquisar
-                            </button> */}
                     </div>
                     <PaginatedUserItems itemsPerPage={10} users={filteredUsers} onDelete={handleDelete} />
                 </div>
