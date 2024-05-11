@@ -26,9 +26,12 @@ export const Camera = ({ onCancel, onSave }: CameraProps): JSX.Element => {
 
     useEffect(() => {
         if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-            navigator.mediaDevices.getUserMedia({ video: true }).then(() => {
-                navigator.mediaDevices.enumerateDevices().then(handleDevices)
+            navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+                // Após obter permissão, paramos o stream para não bloquear a câmera
+                stream.getTracks().forEach(track => track.stop())
             })
+
+            navigator.mediaDevices.enumerateDevices().then(handleDevices)
         }
     }, [handleDevices])
 
