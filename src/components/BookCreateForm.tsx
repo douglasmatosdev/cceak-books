@@ -12,9 +12,19 @@ import { v4 as uuidv4 } from 'uuid'
 type BookCreateFormProps = Book
 
 export default function BookCreateForm(props: BookCreateFormProps): JSX.Element {
-    const { isbn, title, subtitle, author, description, image, amount, category } = props
+    const { isbn, title, subtitle, author, description, image, amount, category, place } = props
 
-    const [value, setValue] = useState({ isbn, title, subtitle, author, description, image, amount, category })
+    const [value, setValue] = useState({
+        isbn,
+        title,
+        subtitle,
+        author,
+        description,
+        image,
+        amount,
+        category,
+        place
+    })
     const [getPhoto, setGetPhoto] = useState<boolean>(false)
 
     const router = useRouter()
@@ -192,6 +202,23 @@ export default function BookCreateForm(props: BookCreateFormProps): JSX.Element 
                             setValue({
                                 ...value,
                                 amount: +e.target.value
+                            })
+                        }
+                        className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
+                    />
+                </label>
+                <label htmlFor="place">
+                    Local
+                    <input
+                        type="text"
+                        name="place"
+                        id="place"
+                        placeholder="Local/ estante/ prateleira"
+                        value={value.place}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                place: e.target.value
                             })
                         }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"

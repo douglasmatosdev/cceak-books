@@ -19,7 +19,7 @@ export default function AllBooks({ books }: AllBooksProps): JSX.Element {
                 return (
                     <div
                         key={index}
-                        className="bg-white w-40 p-2 mx-auto rounded-md flex flex-col justify-end cursor-pointer"
+                        className="bg-white w-64 p-2 mx-auto rounded-md flex flex-col items-center justify-end cursor-pointer"
                         onClick={() => {
                             setOpenModal(book)
                         }}

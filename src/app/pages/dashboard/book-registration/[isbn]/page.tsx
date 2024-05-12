@@ -107,6 +107,7 @@ export default function SearchPage({ params }: SearchPageProps): JSX.Element {
                         image={bookInfo?.imageLinks?.thumbnail as string}
                         amount={1}
                         category={bookInfo?.categories?.map(c => c)?.join(', ')}
+                        place=""
                     />
                 </div>
             </div>

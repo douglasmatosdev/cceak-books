@@ -10,4 +10,5 @@ declare type Book = {
     amount: number
     category: string
     status?: 'borrowed' | 'avaiable'
+    place?: string
 }

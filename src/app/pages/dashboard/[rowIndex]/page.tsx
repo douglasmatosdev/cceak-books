@@ -32,6 +32,7 @@ export default function EditBook({ params }: EditBookProps): JSX.Element {
                 image={book?.image}
                 amount={book?.amount}
                 category={book?.category}
+                place={book?.place}
             />
         </>
     )

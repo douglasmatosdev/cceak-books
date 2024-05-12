@@ -12,8 +12,18 @@ type BookEditFormProps = {
 } & Book
 
 export default function BookEditForm(props: BookEditFormProps): JSX.Element {
-    const { rowIndex, isbn, title, subtitle, author, description, image, amount, category } = props
-    const [value, setValue] = useState({ isbn, title, subtitle, author, description, image, amount, category })
+    const { rowIndex, isbn, title, subtitle, author, description, image, amount, category, place } = props
+    const [value, setValue] = useState({
+        isbn,
+        title,
+        subtitle,
+        author,
+        description,
+        image,
+        amount,
+        category,
+        place
+    })
     const [getPhoto, setGetPhoto] = useState<boolean>(false)
 
     const router = useRouter()
@@ -47,8 +57,8 @@ export default function BookEditForm(props: BookEditFormProps): JSX.Element {
     }
 
     useEffect(() => {
-        setValue({ isbn, title, subtitle, author, description, image, amount, category })
-    }, [amount, author, category, description, image, isbn, props, subtitle, title])
+        setValue({ isbn, title, subtitle, author, description, image, amount, category, place })
+    }, [amount, author, category, description, image, isbn, place, props, subtitle, title])
 
     return (
         <div className="p-8">
@@ -197,6 +207,23 @@ export default function BookEditForm(props: BookEditFormProps): JSX.Element {
                             setValue({
                                 ...value,
                                 amount: +e.target.value
+                            })
+                        }
+                        className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
+                    />
+                </label>
+                <label htmlFor="place">
+                    Local
+                    <input
+                        type="text"
+                        name="place"
+                        id="place"
+                        placeholder="Local/ estante/ prateleira"
+                        value={value.place}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                place: e.target.value
                             })
                         }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"

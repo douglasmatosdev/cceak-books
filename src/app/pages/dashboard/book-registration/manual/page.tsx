@@ -18,7 +18,8 @@ const initialState: Book = {
     description: '',
     category: '',
     image: '',
-    amount: 1
+    amount: 1,
+    place: ''
 }
 
 export default function ManualRegister(): JSX.Element {
@@ -206,6 +207,23 @@ export default function ManualRegister(): JSX.Element {
                             setValue({
                                 ...value,
                                 amount: +e.target.value
+                            })
+                        }
+                        className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
+                    />
+                </label>
+                <label htmlFor="place">
+                    Local
+                    <input
+                        type="text"
+                        name="place"
+                        id="place"
+                        placeholder="Local/ estante/ prateleira"
+                        value={value.place}
+                        onChange={e =>
+                            setValue({
+                                ...value,
+                                place: e.target.value
                             })
                         }
                         className="border-2 border-gray-400 rounded-md p-2 w-full h-10 mb-4"
