@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { FaPencilAlt, FaTrash } from 'react-icons/fa'
 import { useToastify } from '@/hooks/useToastify'
 import { PaginatedContainer } from './styles'
+import { DeleteModal } from './DeleteModal'
 
 export const PaginatedUserItems = ({
     itemsPerPage,
@@ -17,6 +18,7 @@ export const PaginatedUserItems = ({
     onDelete: (index: string) => void
 }): JSX.Element => {
     const [itemOffset, setItemOffset] = useState(0)
+    const [deleting, setDeleting] = useState('')
 
     const { toast } = useToastify()
 
@@ -29,8 +31,19 @@ export const PaginatedUserItems = ({
         setItemOffset(newOffset)
     }
 
+    const onConfirm = (): void => {
+        onDelete(`${deleting}`)
+        setDeleting('')
+        toast('Usuário foi excluído com sucesso!', 'success')
+    }
+
+    const onCancel = (): void => {
+        setDeleting('')
+    }
+
     return (
         <PaginatedContainer disabled={currentItems.length <= itemsPerPage}>
+            {deleting && <DeleteModal onCancel={onCancel} onConfirm={onConfirm} />}
             <div className="flex flex-col">
                 {currentItems?.map((user, index) => {
                     return (
@@ -45,17 +58,7 @@ export const PaginatedUserItems = ({
                             <Link href={`/pages/dashboard/users/${index}`} className="mr-8 text-primary">
                                 <FaPencilAlt />
                             </Link>
-                            <button
-                                className="text-red-500"
-                                onClick={() => {
-                                    const answer = prompt('Digite EXCLUIR para confirmar')
-
-                                    if (answer?.trim()?.toLocaleUpperCase() === 'EXCLUIR') {
-                                        onDelete(`${index}`)
-                                        toast('Usuário foi excluído com sucesso!', 'success')
-                                    }
-                                }}
-                            >
+                            <button className="text-red-500" onClick={() => setDeleting(`${index}`)}>
                                 <FaTrash />
                             </button>
                         </div>
