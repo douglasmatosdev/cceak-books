@@ -26,7 +26,10 @@ Esta aplicação usa as planilhas do Google(Google sheets) como banco de dados.
 
 
 ## Requisitos
-[Template da planilha](./sheets_template.xlsx)
+
+<a href="./sheets_template.xlsx" download>
+    Sheet template
+</a>
     
 1. Criar planilha com a mesma estrutura do 
 2. Compartilhar a planilha com link público

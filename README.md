@@ -29,7 +29,10 @@ This application uses Google sheets as a database.
 
 
 ## Requirements
-[Sheet template](./sheets_template.xlsx)
+
+<a href="./docs/sheets_template.xlsx" download>
+    Sheet template
+</a>
 
 1. Create a spreadsheet with the same structure as
 2. Share the spreadsheet with a public link
