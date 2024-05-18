@@ -12,21 +12,22 @@ export const BookModal = (props: { book: Book | Record<string, never>; onClose: 
                     <IoMdClose />
                 </button>
 
-                <div className="flex justify-center items-center px-8 py-10">
+                <div className="flex justify-center items-center px-8 pt-10">
                     <Img src={book.image} alt={book.title} width={250} height={350} />
                 </div>
 
-                <div className="px-8">
-                    <h1 className="text-xl text-gray-500">{book.title}</h1>
-                    <span className="mb-4">
-                        Por <span className="text-emerald-900">{book.author}</span>
+                <div className="px-8 mt-6">
+                    <h1 className="text-md text-gray-500">{book.title}</h1>
+                    <span className="block mt-2">
+                        Por: <span className="text-emerald-900">{book.author}</span>
                     </span>
-                    {/* <h2>{book.subtitle}</h2> */}
-                    <span>Categoria: {book.category}</span>
-                    <span className="block">
+                    <span className="block mt-2">
+                        Categoria: <span className="text-emerald-900">{book.category}</span>
+                    </span>
+                    <span className="block mt-2">
                         Local: <span className="text-emerald-900">{book.place}</span>
                     </span>
-                    <h4 className="mt-2">
+                    <h4 className="mt-6">
                         <BookStatus label={book?.status} />
                     </h4>
                 </div>
