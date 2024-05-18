@@ -42,7 +42,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
                                     path: '/pages/dashboard'
                                 }}
                                 afterNavigate={{
-                                    label: <RxExit className="text-2xl" title="Sair" />,
+                                    label: (
+                                        <div className="flex">
+                                            <span className="mr-2">Sair</span>{' '}
+                                            <RxExit className="text-2xl" title="Sair" />
+                                        </div>
+                                    ),
                                     path: '/'
                                 }}
                             />
