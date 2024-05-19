@@ -6,9 +6,7 @@ import BookCreateForm from '@/components/BookCreateForm'
 import { Img } from '@/components/Img'
 import { useToastify } from '@/hooks/useToastify'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
-import { useRouter } from 'next/navigation'
-import { validateIsbnFromGoogleApiItems } from '@/lib/validateIsbnFromGoogleApiItems'
-import { isEmpty } from '@/lib/isEmpty'
+import { BackButton } from '@/components/BackButton'
 
 interface SearchPageProps {
     params: {
@@ -24,84 +22,52 @@ export default function SearchPage({ params }: SearchPageProps): JSX.Element {
         brasilapi: false
     })
 
-    const router = useRouter()
-
     const { toast } = useToastify()
 
-    const search = async (code: string): Promise<void> => {
+    useEffect(() => {
+        setApiSelected({
+            google: false,
+            brasilapi: true
+        })
+        setLoading(true)
+        searchFromBrasilApi(params.isbn)
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    const searchFromBrasilApi = async (code: string): Promise<void> => {
         await services
-            .google(code)
-            .then(response => {
-                const { data } = response
-
-                if (data?.items) {
-                    const info = validateIsbnFromGoogleApiItems(data.items, code)
-
-                    if (isEmpty(info as unknown as Record<string, never>)) {
-                        return Promise.reject(info)
-                    }
-
-                    return info
-                }
+            .brasilapi(code)
+            .then(bookDetails => {
+                const parsed = {
+                    ...bookDetails,
+                    imageLinks: {
+                        thumbnail: bookDetails?.cover_url
+                    },
+                    categories: bookDetails?.subjects
+                } as unknown as GoogleApiBooks
+                setBookInfo(parsed)
+                setLoading(false)
+                toast('Livro encontrado!', 'success')
             })
-            .then(async bookDetails => {
-                if (bookDetails?.title) {
-                    setBookInfo(bookDetails)
-                    toast('Livro encontrado!', 'success')
-                }
-            })
-            .catch(async error => {
-                console.error('Error trying search book', error)
+            .catch(error => {
+                setLoading(false)
+                console.error('Error trying fetch brasilapi ', error)
                 toast('Erro ao tentar pesquisar livro', 'error')
-                setApiSelected({
-                    google: false,
-                    brasilapi: true
-                })
-
-                await setTimeout(async () => {
-                    await services
-                        .brasilapi(code)
-                        .then(bookDetails => {
-                            const parsed = {
-                                ...bookDetails,
-                                imageLinks: {
-                                    thumbnail: bookDetails?.cover_url
-                                },
-                                categories: bookDetails?.subjects
-                            } as unknown as GoogleApiBooks
-                            setBookInfo(parsed)
-                            setLoading(false)
-                            toast('Livro encontrado!', 'success')
-                        })
-                        .catch(error => {
-                            setApiSelected({
-                                brasilapi: false,
-                                google: false
-                            })
-                            setLoading(false)
-                            router.push('/pages/dashboard/book-registration/typing')
-                            console.error('Error trying fetch brasilapi ', error)
-                            toast('Erro ao tentar pesquisar livro', 'error')
-                        })
-                }, 3000)
             })
     }
 
-    useEffect(() => {
-        search(params.isbn)
-        setApiSelected({
-            ...apiSelected,
-            google: true
-        })
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-    if (!bookInfo) {
-        return <Empty />
+    if (!bookInfo?.title && !loading) {
+        return (
+            <>
+                <BackButton classNameContainer="ml-8" />
+                <Empty />
+            </>
+        )
     }
 
     if (bookInfo?.title) {
         return (
             <div className="w-full h-full p-8 max-w-[740px] mx-auto">
+                <BackButton classNameContainer="mb-8" />
                 <h2>Resultado da pesquisa</h2>
                 <span>Verifique se está correto antes de cadastrar</span>
                 <div className="flex flex-col">
@@ -134,21 +100,7 @@ export default function SearchPage({ params }: SearchPageProps): JSX.Element {
             <div className="flex flex-col justify-center items-center">
                 <button
                     className={`
-                        ${apiSelected.google && loading ? 'border-4 border-green-500' : ''} w-80 bg-primary text-white py-2 px-4 hover:bg-white hover:text-primary border-2 border-primary text-xl flex justify-center items-center opacity-${apiSelected.google ? '100' : '50'}
-                    `}
-                >
-                    Google API
-                    {apiSelected.google && (
-                        <div className="ml-4">
-                            <AiOutlineLoading3Quarters className="animate-spin text-white text-2xl" />
-                        </div>
-                    )}
-                </button>
-
-                <button
-                    disabled={!apiSelected.brasilapi}
-                    className={`
-                        mt-4 ${apiSelected.brasilapi && loading ? 'border-4 border-green-500' : ''} w-80 bg-primary text-white py-2 px-4 hover:bg-white hover:text-primary border-2 border-primary text-xl flex justify-center items-center opacity-${apiSelected.brasilapi ? '100' : '50'}
+                        mt-4 ${apiSelected.brasilapi && loading ? 'border-4 border-green-500' : ''} w-80 bg-primary text-white py-2 px-4 hover:bg-white hover:text-primary border-2 border-primary text-xl flex justify-center items-center}
                     `}
                 >
                     Brasil API
