@@ -43,7 +43,10 @@
                 <a href="#registrar-um-emprestimo">3.1 Registrar um empréstimo</a>
             </li>
             <li>
-                <a href="#removendo-um-emprestimo">3.2 Removendo um empréstimo</a>
+                <a href="#visualizando-um-emprestimo">3.2 Visualizar um empréstimo</a>
+            </li>
+            <li>
+                <a href="#removendo-um-emprestimo">3.3 Removendo um empréstimo</a>
             </li>
         </ul>
     </li>
@@ -216,12 +219,61 @@ Na lista de usuários clique no ícone de "`Lixeira`"
 > Cadastrando e removendo empréstimos
 
 <h3 id="registrar-um-emprestimo">Registrar um empréstimo</h3>
+Quando há livros cadastrados e não estão emprestados, podemos ver na parte inferior de cada Livro o status em cor verde escrito "disponível"
+
+Obs.: Para devolver um livro, ou  desfazer um empréstimo, basta excluir o empréstimo.
+
+![Livro disponíve](./images/manual-021.png)
+
+Agora , vamos realizar um empréstimo.
 Na tela inicial, clique no botão "`Administração`" no canto superior direito.
 
-![Administração](./images/manual-001.png)
+Clique no botão "`Empréstimos`"
+
+![Empréstimos](./images/manual-022.png)
+
+Clique no botão "`Registrar um Empréstimo`"
+
+![Registrar um Empréstimo](./images/manual-023.png)
+
+
+Procure pelo usuário que deseja emprestar, e clique no ícone do "`Lápis`"
+
+![Registrar um Empréstimo usuário](./images/manual-024.png)
+
+Agora nesta tela tem um campo para buscar o livro que deseja emprestar ao este usuário.
+
+![Registrar um Empréstimo usuário livro](./images/manual-025.png)
+
+
+Ao digitar o nome irá aparecer em uma lista, selecione o nome do livro e clique em salvar
+
+![Registrar um Empréstimo usuário livro](./images/manual-026.png)
+
+Voltando a tela inicial, veremos que agora o `status` do livro mudou de `disponível` para `emprestado`
+
+![Livro emprestado](./images/manual-027.png)
+
+
+<h3 id="visualizando-um-emprestimo">Visualizando um empréstimo</h3>
+
+Acesse a área de administração -> clique no botão empréstimos -> clique no `ícone de lupa`
+
+![Visualizando um empréstimo](./images/manual-030.png)
+
+
 
 <h3 id="removendo-um-emprestimo">Removendo um empréstimo</h3>
 
-Na tela inicial, clique no botão "`Administração`" no canto superior direito.
+1°. forma:
+Acesse a área de administração -> clique no botão empréstimos -> clique no `ícone de lixeira`
 
-![Administração](./images/manual-001.png)
+![excluindo um empréstimo](./images/manual-028.png)
+
+
+2°. forma
+Acesse a área de administração -> clique no botão empréstimos -> clique no `ícone de lupa`
+
+![Visualizando um empréstimo](./images/manual-030.png)
+
+![excluindo um empréstimo](./images/manual-029.png)
