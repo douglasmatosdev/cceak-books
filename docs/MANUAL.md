@@ -20,6 +20,7 @@
             </li>
         </ul>
     </li>
+    <br />
     <li>
         <a href="#usuarios">Cadastrando, editando e removendo usuários</a>
         <ul>
@@ -34,6 +35,7 @@
             </li>
         </ul>
     </li>
+    <br />
     <li>
         <a href="#emprestimos">Cadastrando e removendo empréstimos</a>
         <ul>
@@ -53,8 +55,97 @@
 > Cadastrando, editando e removendo livros
 
 <h3 id="cadastro-de-livros-manualmente">Cadastro de livros manualmente</h3>
+
+Na tela inicial, clique no botão "`Administração`" no canto superior direito.
+
+![Administração](./manual-001.png)
+
+Em seguida clique no botão "`Livros`"
+
+![Livros](./manual-002.png)
+
+Agora clique no botão "`Cadastrar Livro`"
+
+![Cadastrar Livro](./manual-003.png)
+
+Clique no botão "`Cadastro manual`"
+
+![Cadatro Manual](./manual-004.png)
+
+Preencha o formulário e clique no botão "`Cadastrar`" que está no final da tela
+
+![Cadastrar](./manual-005.png)
+
 <h3 id="cadastro-de-livros-digitando-codido-isbn">Cadastro de livros digitando códido ISBN</h3>
+
+![Administração](./manual-001.png)
+
+Em seguida clique no botão "`Livros`"
+
+![Livros](./manual-002.png)
+
+Agora clique no botão "`Cadastrar Livro`"
+
+![Cadastrar Livro](./manual-003.png)
+
+Clique no botão "`Digitar código ISBN`"
+
+![Digitar código ISBN](./manual-006.png)
+
+Digite o código ISBN e clique em pesquisar
+
+![Pesquisar código ISBN](./manual-007.png)
+
+Verifique se o resultado está correto 
+
+![Verificando resultado](./manual-008.png)
+
+Clique no botão "`Cadastrar`" que está no final da tela
+
+![Cadastrando resultado](./manual-009.png)
+
+
 <h3 id="cadastro-de-livros-escaneando-codigo-isbn">Cadastro de livros escaneando código ISBN</h3>
+
+![Administração](./manual-001.png)
+
+Em seguida clique no botão "`Livros`"
+
+![Livros](./manual-002.png)
+
+Agora clique no botão "`Cadastrar Livro`"
+
+![Cadastrar Livro](./manual-003.png)
+
+Clique no botão "`Escanear código ISBN`"
+
+![Botão escanear](./manual-010.png)
+
+Se for o primeiro acesso, será necessário clicar no botão "`Request Camera Permissions`" para dar acesso a camera do dispositivo
+
+![Request Camera Permissions](./manual-011.png)
+
+Vai aparecer um "popup", clique em permitir
+
+![Request Camera Permissions popup](./manual-012.png)
+
+Selecione a camera
+
+Obs.: No celular é indicado a camera traseira(facing back)
+
+![Facing back](./manual-013.png)
+
+Após escanerar o código, clique em pesquisar
+
+![Pesquisar](./manual-014.png)
+
+Verifique se o resultado está correto 
+
+![Verificando resultado](./manual-008.png)
+
+Clique no botão "`Cadastrar`" que está no final da tela
+
+![Cadastrando resultado](./manual-009.png)
 
 <br />
 <h2 id="usuarios">Usuários</h2>
