@@ -58,98 +58,98 @@
 
 Na tela inicial, clique no botão "`Administração`" no canto superior direito.
 
-![Administração](./manual-001.png)
+![Administração](./images/manual-001.png)
 
 Em seguida clique no botão "`Livros`"
 
-![Livros](./manual-002.png)
+![Livros](./images/manual-002.png)
 
 Agora clique no botão "`Cadastrar Livro`"
 
-![Cadastrar Livro](./manual-003.png)
+![Cadastrar Livro](./images/manual-003.png)
 
 Clique no botão "`Cadastro manual`"
 
-![Cadatro Manual](./manual-004.png)
+![Cadatro Manual](./images/manual-004.png)
 
 Preencha o formulário e clique no botão "`Cadastrar`" que está no final da tela
 
-![Cadastrar](./manual-005.png)
+![Cadastrar](./images/manual-005.png)
 
 <h3 id="cadastro-de-livros-digitando-codido-isbn">Cadastro de livros digitando códido ISBN</h3>
 
 Na tela inicial, clique no botão "`Administração`" no canto superior direito.
 
-![Administração](./manual-001.png)
+![Administração](./images/manual-001.png)
 
 Em seguida clique no botão "`Livros`"
 
-![Livros](./manual-002.png)
+![Livros](./images/manual-002.png)
 
 Agora clique no botão "`Cadastrar Livro`"
 
-![Cadastrar Livro](./manual-003.png)
+![Cadastrar Livro](./images/manual-003.png)
 
 Clique no botão "`Digitar código ISBN`"
 
-![Digitar código ISBN](./manual-006.png)
+![Digitar código ISBN](./images/manual-006.png)
 
 Digite o código ISBN e clique em pesquisar
 
-![Pesquisar código ISBN](./manual-007.png)
+![Pesquisar código ISBN](./images/manual-007.png)
 
 Verifique se o resultado está correto 
 
-![Verificando resultado](./manual-008.png)
+![Verificando resultado](./images/manual-008.png)
 
 Clique no botão "`Cadastrar`" que está no final da tela
 
-![Cadastrando resultado](./manual-009.png)
+![Cadastrando resultado](./images/manual-009.png)
 
 
 <h3 id="cadastro-de-livros-escaneando-codigo-isbn">Cadastro de livros escaneando código ISBN</h3>
 
 Na tela inicial, clique no botão "`Administração`" no canto superior direito.
 
-![Administração](./manual-001.png)
+![Administração](./images/manual-001.png)
 
 Em seguida clique no botão "`Livros`"
 
-![Livros](./manual-002.png)
+![Livros](./images/manual-002.png)
 
 Agora clique no botão "`Cadastrar Livro`"
 
-![Cadastrar Livro](./manual-003.png)
+![Cadastrar Livro](./images/manual-003.png)
 
 Clique no botão "`Escanear código ISBN`"
 
-![Botão escanear](./manual-010.png)
+![Botão escanear](./images/manual-010.png)
 
 Se for o primeiro acesso, será necessário clicar no botão "`Request Camera Permissions`" para dar acesso a camera do dispositivo
 
-![Request Camera Permissions](./manual-011.png)
+![Request Camera Permissions](./images/manual-011.png)
 
 Vai aparecer um "popup", clique em permitir
 
-![Request Camera Permissions popup](./manual-012.png)
+![Request Camera Permissions popup](./images/manual-012.png)
 
 Selecione a camera
 
 Obs.: No celular é indicado a camera traseira(facing back)
 
-![Facing back](./manual-013.png)
+![Facing back](./images/manual-013.png)
 
 Após escanerar o código, clique em pesquisar
 
-![Pesquisar](./manual-014.png)
+![Pesquisar](./images/manual-014.png)
 
 Verifique se o resultado está correto 
 
-![Verificando resultado](./manual-008.png)
+![Verificando resultado](./images/manual-008.png)
 
 Clique no botão "`Cadastrar`" que está no final da tela
 
-![Cadastrando resultado](./manual-009.png)
+![Cadastrando resultado](./images/manual-009.png)
 
 <br />
 <h2 id="usuarios">Usuários</h2>
@@ -160,19 +160,19 @@ Clique no botão "`Cadastrar`" que está no final da tela
 
 Na tela inicial, clique no botão "`Administração`" no canto superior direito.
 
-![Administração](./manual-001.png)
+![Administração](./images/manual-001.png)
 
 Clique no botão "`Usuários`"
 
-![Usuários](./manual-015.png)
+![Usuários](./images/manual-015.png)
 
 Clique no botão "`Cadastrar usuário`"
 
-![Cadastrar usuário](./manual-016.png)
+![Cadastrar usuário](./images/manual-016.png)
 
 Preencha os campos e clique no botão "`Cadastrar`"
 
-![Cadastrar usuário botão](./manual-017.png)
+![Cadastrar usuário botão](./images/manual-017.png)
 
 <br />
 
@@ -180,19 +180,19 @@ Preencha os campos e clique no botão "`Cadastrar`"
 
 Na tela inicial, clique no botão "`Administração`" no canto superior direito.
 
-![Administração](./manual-001.png)
+![Administração](./images/manual-001.png)
 
 Clique no botão "`Usuários`"
 
-![Usuários](./manual-015.png)
+![Usuários](./images/manual-015.png)
 
 Na lista de usuários, clique no ícode de "`Lápis`"
 
-![Lapis](./manual-018.png)
+![Lapis](./images/manual-018.png)
 
 Edite os campos e depois clique em salvar
 
-![Edição de usuário](./manual-019.png)
+![Edição de usuário](./images/manual-019.png)
 
 <br />
 
@@ -200,15 +200,15 @@ Edite os campos e depois clique em salvar
 
 Na tela inicial, clique no botão "`Administração`" no canto superior direito.
 
-![Administração](./manual-001.png)
+![Administração](./images/manual-001.png)
 
 Clique no botão "`Usuários`"
 
-![Usuários](./manual-015.png)
+![Usuários](./images/manual-015.png)
 
 Na lista de usuários clique no ícone de "`Lixeira`"
 
-![Lixeira](./manual-020.png)
+![Lixeira](./images/manual-020.png)
 
 <br />
 <h2 id="emprestimos">Empréstimos</h2>
@@ -218,10 +218,10 @@ Na lista de usuários clique no ícone de "`Lixeira`"
 <h3 id="registrar-um-emprestimo">Registrar um empréstimo</h3>
 Na tela inicial, clique no botão "`Administração`" no canto superior direito.
 
-![Administração](./manual-001.png)
+![Administração](./images/manual-001.png)
 
 <h3 id="removendo-um-emprestimo">Removendo um empréstimo</h3>
 
 Na tela inicial, clique no botão "`Administração`" no canto superior direito.
 
-![Administração](./manual-001.png)
+![Administração](./images/manual-001.png)
