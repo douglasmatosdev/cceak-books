@@ -4,10 +4,10 @@ import axios, { AxiosResponse } from 'axios'
 const sheet_url = `https://sheet.best/api/sheets/${process.env.NEXT_PUBLIC_SHEET_KEY}`
 
 export const services = {
-    google: async (isbn: string): Promise<GoogleApiBooks> => {
+    google: async (isbn: string): Promise<AxiosResponse> => {
         const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${isbn}`)
 
-        return response?.data?.items[0]?.volumeInfo
+        return response
     },
     brasilapi: async (isbn: string): Promise<BrasilapiBook> => {
         const response = await axios.get(`https://brasilapi.com.br/api/isbn/v1/${isbn}`)

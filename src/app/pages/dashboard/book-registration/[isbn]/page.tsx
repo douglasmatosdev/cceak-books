@@ -7,6 +7,8 @@ import { Img } from '@/components/Img'
 import { useToastify } from '@/hooks/useToastify'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { useRouter } from 'next/navigation'
+import { validateIsbnFromGoogleApiItems } from '@/lib/validateIsbnFromGoogleApiItems'
+import { isEmpty } from '@/lib/isEmpty'
 
 interface SearchPageProps {
     params: {
@@ -29,6 +31,19 @@ export default function SearchPage({ params }: SearchPageProps): JSX.Element {
     const search = async (code: string): Promise<void> => {
         await services
             .google(code)
+            .then(response => {
+                const { data } = response
+
+                if (data?.items) {
+                    const info = validateIsbnFromGoogleApiItems(data.items, code)
+
+                    if (isEmpty(info as unknown as Record<string, never>)) {
+                        return Promise.reject(info)
+                    }
+
+                    return info
+                }
+            })
             .then(async bookDetails => {
                 if (bookDetails?.title) {
                     setBookInfo(bookDetails)
