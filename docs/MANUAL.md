@@ -78,6 +78,8 @@ Preencha o formulário e clique no botão "`Cadastrar`" que está no final da te
 
 <h3 id="cadastro-de-livros-digitando-codido-isbn">Cadastro de livros digitando códido ISBN</h3>
 
+Na tela inicial, clique no botão "`Administração`" no canto superior direito.
+
 ![Administração](./manual-001.png)
 
 Em seguida clique no botão "`Livros`"
@@ -106,6 +108,8 @@ Clique no botão "`Cadastrar`" que está no final da tela
 
 
 <h3 id="cadastro-de-livros-escaneando-codigo-isbn">Cadastro de livros escaneando código ISBN</h3>
+
+Na tela inicial, clique no botão "`Administração`" no canto superior direito.
 
 ![Administração](./manual-001.png)
 
@@ -153,8 +157,58 @@ Clique no botão "`Cadastrar`" que está no final da tela
 > Cadastrando, editando e removendo usuários
 
 <h3 id="cadastro-de-usuario">Cadastro de usuário</h3>
+
+Na tela inicial, clique no botão "`Administração`" no canto superior direito.
+
+![Administração](./manual-001.png)
+
+Clique no botão "`Usuários`"
+
+![Usuários](./manual-015.png)
+
+Clique no botão "`Cadastrar usuário`"
+
+![Cadastrar usuário](./manual-016.png)
+
+Preencha os campos e clique no botão "`Cadastrar`"
+
+![Cadastrar usuário botão](./manual-017.png)
+
+<br />
+
 <h3 id="edicao-de-usuario">Edição de usuário</h3>
+
+Na tela inicial, clique no botão "`Administração`" no canto superior direito.
+
+![Administração](./manual-001.png)
+
+Clique no botão "`Usuários`"
+
+![Usuários](./manual-015.png)
+
+Na lista de usuários, clique no ícode de "`Lápis`"
+
+![Lapis](./manual-018.png)
+
+Edite os campos e depois clique em salvar
+
+![Edição de usuário](./manual-019.png)
+
+<br />
+
 <h3 id="exclusao-de-usuario">Exclusão de usuário</h3>
+
+Na tela inicial, clique no botão "`Administração`" no canto superior direito.
+
+![Administração](./manual-001.png)
+
+Clique no botão "`Usuários`"
+
+![Usuários](./manual-015.png)
+
+Na lista de usuários clique no ícone de "`Lixeira`"
+
+![Lixeira](./manual-020.png)
 
 <br />
 <h2 id="emprestimos">Empréstimos</h2>
@@ -162,4 +216,12 @@ Clique no botão "`Cadastrar`" que está no final da tela
 > Cadastrando e removendo empréstimos
 
 <h3 id="registrar-um-emprestimo">Registrar um empréstimo</h3>
+Na tela inicial, clique no botão "`Administração`" no canto superior direito.
+
+![Administração](./manual-001.png)
+
 <h3 id="removendo-um-emprestimo">Removendo um empréstimo</h3>
+
+Na tela inicial, clique no botão "`Administração`" no canto superior direito.
+
+![Administração](./manual-001.png)
