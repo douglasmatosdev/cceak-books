@@ -24,8 +24,8 @@ export default function BookCreateForm(props: BookCreateFormProps): JSX.Element 
         place = ''
     } = props
 
-    const [value, setValue] = useState({
-        isbn,
+    const [value, setValue] = useState<Book>({
+        isbn: +isbn,
         title,
         subtitle,
         author,
