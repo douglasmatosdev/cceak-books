@@ -12,7 +12,17 @@ import { v4 as uuidv4 } from 'uuid'
 type BookCreateFormProps = Book
 
 export default function BookCreateForm(props: BookCreateFormProps): JSX.Element {
-    const { isbn, title, subtitle, author, description, image, amount, category, place } = props
+    const {
+        isbn = '',
+        title = '',
+        subtitle = '',
+        author = '',
+        description = '',
+        image = '',
+        amount,
+        category = '',
+        place = ''
+    } = props
 
     const [value, setValue] = useState({
         isbn,
