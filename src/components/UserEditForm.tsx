@@ -32,7 +32,7 @@ export default function UserEditForm(props: UserEditFormProps): JSX.Element {
             })
             .catch(error => {
                 toast('Erro ao tentar salvar as alterações', 'error')
-                console.log('Error trying save changes', error)
+                console.error('Error trying save changes', error)
             })
     }
 

@@ -38,7 +38,6 @@ export async function reduceImageFileSize(base64Str: string, MAX_WIDTH = 450, MA
 
                     fr.addEventListener('load', () => {
                         const dataUrl = fr.result
-                        // console.log('a: ', calcImageSize(dataUrl))
                         resolve(dataUrl)
                     })
                 },

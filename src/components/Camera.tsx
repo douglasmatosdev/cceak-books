@@ -18,7 +18,6 @@ export const Camera = ({ onCancel, onSave }: CameraProps): JSX.Element => {
 
     const handleDevices = useCallback(
         (mediaDevices: Device[]) => {
-            console.log(mediaDevices)
             setDevices(mediaDevices.filter(({ kind }) => kind === 'videoinput'))
         },
         [setDevices]
