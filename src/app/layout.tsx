@@ -57,7 +57,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
 
                 <div className="flex flex-col flex-1">{children}</div>
 
-                <footer className="w-full h-16  flex flex-col justify-center items-center bg-primary "></footer>
+                <footer className="w-full h-16  flex flex-col justify-center items-center bg-primary ">
+                    <Link
+                        href={'https://github.com/douglasmatosdev/cceak-books/blob/main/docs/MANUAL_PT_BR.md'}
+                        target="__blank"
+                        className="underline text-white text-xl"
+                    >
+                        Manual
+                    </Link>
+                </footer>
             </body>
         </html>
     )
