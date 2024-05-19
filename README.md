@@ -5,6 +5,8 @@
 
 🇧🇷 [Documentation in Portuguese](./docs/README_PT_BR.md)
 
+🇧🇷 [Manual in Portuguese](./docs/MANUAL_PT_BR.md)
+
 
 ## Overview
 

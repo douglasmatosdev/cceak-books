@@ -3,6 +3,8 @@
 
 > 📚 Livros da Casa de Cultura Espirita Allan Kardec
 
+🇧🇷 [Manual em Português](./MANUAL_PT_BR.md)
+
 ## Visão geral 
 
 CCEAK Books é uma aplicação simples para cadastrar e gerenciar livros, usuários e empréstimos de livros.
