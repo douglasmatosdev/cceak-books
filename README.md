@@ -70,32 +70,32 @@ yarn lint
     <tbody>
         <tr>
             <td>
-                <img src="./docs/books-list.png" />
+                <img src="./docs/images/books-list.png" />
             </td>
             <td>
-                <img src="./docs/admin.png" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <img src="./docs/admin-books.png" />
-            </td>
-            <td>
-                <img src="./docs/admin-users.png" />
+                <img src="./docs/images/admin.png" />
             </td>
         </tr>
         <tr>
             <td>
-                <img src="./docs/admin-lends.png" />
+                <img src="./docs/images/admin-books.png" />
             </td>
             <td>
-                <img src="./docs/books-registration.png" />
+                <img src="./docs/images/admin-users.png" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="./docs/images/admin-lends.png" />
+            </td>
+            <td>
+                <img src="./docs/images/books-registration.png" />
             </td>
             </tr>
         </td>
         <td>
              <td>
-                <img src="./docs/scanner.gif" />
+                <img src="./docs/images/scanner.gif" />
             </td>
         </tr>
     </tbody>
