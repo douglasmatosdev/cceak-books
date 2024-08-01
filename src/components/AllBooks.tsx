@@ -8,8 +8,6 @@ import { TextElipsis } from './TextElipsis'
 
 interface AllBooksProps {
     books: Book[]
-
-    // apens um comentário
 }
 export default function AllBooks({ books }: AllBooksProps): JSX.Element {
     const [openModal, setOpenModal] = useState<Book | Record<string, never>>({})
