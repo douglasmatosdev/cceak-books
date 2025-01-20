@@ -18,7 +18,7 @@ export const getRowIndexById = async (
         const rowId = row.get('id')
 
         if (rowId === id) {
-            rowIndex = row._rowNumber
+            rowIndex = String(row.rowNumber)
         }
     })
 
@@ -28,20 +28,11 @@ export const getRowIndexById = async (
 export const rawRowsToRows = async (spreadsheet: GoogleSpreadsheetWorksheet): Promise<Row[]> => {
     const rawRows = await spreadsheet.getRows()
 
-    const rows = rawRows.map(row => {
-        const header = row._worksheet.headerValues
-        const data = row._rawData
-
-        return header.reduce((acc: Row, headerName: string, index: number) => {
-            acc[headerName] = data[index]
-            acc.rowIndex = row._rowNumber
-
-            return acc
-        }, {})
-    })
+    const rows = rawRows.map(row => row.toObject())
 
     return rows
 }
+
 export const fetchGoogleSheets = async (): Promise<SpreadsheetResponse> => {
     try {
         const doc = await getGoogleSpreadsheet()
@@ -77,7 +68,7 @@ export const fetchGoogleSheets = async (): Promise<SpreadsheetResponse> => {
                 return
             }
             const rows = await rawSheets[sheet].getRows()
-            const row = rows.find(row => row._rowNumber === rowIndex)
+            const row = rows.find(row => String(row.rowNumber) === String(rowIndex))
 
             if (row) {
                 await row.delete()
@@ -90,7 +81,7 @@ export const fetchGoogleSheets = async (): Promise<SpreadsheetResponse> => {
                 return
             }
             const rows = await rawSheets[sheet].getRows()
-            const row = rows.find(row => row._rowNumber === rowIndex)
+            const row = rows.find(row => String(row.rowNumber) === String(rowIndex))
 
             if (row) {
                 row.assign(data)
