@@ -40,15 +40,18 @@ export const fetchGoogleSheets = async (): Promise<SpreadsheetResponse> => {
         const rawBooksSpreadSheet = doc.sheetsByTitle[Sheet.books]
         const rawUsersSpreadSheet = doc.sheetsByTitle[Sheet.users]
         const rawLendsSpreadSheet = doc.sheetsByTitle[Sheet.lends]
+        const rawAuthSpreadSheet = doc.sheetsByTitle.auth
 
         const books = await rawRowsToRows(rawBooksSpreadSheet)
         const users = await rawRowsToRows(rawUsersSpreadSheet)
         const lends = await rawRowsToRows(rawLendsSpreadSheet)
+        const auth = (await rawAuthSpreadSheet.getRows()).map(row => row.toObject())
 
         const sheets = {
             books,
             users,
-            lends
+            lends,
+            auth: auth[0] as { username: string; password: string }
         }
 
         const rawSheets = {
@@ -119,6 +122,7 @@ export const fetchGoogleSheets = async (): Promise<SpreadsheetResponse> => {
 
     return {
         get: {
+            auth: { username: '', password: '' },
             books: [],
             users: [],
             lends: []

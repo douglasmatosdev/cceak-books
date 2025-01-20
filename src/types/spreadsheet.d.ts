@@ -2,6 +2,7 @@ export type Row = Record<string, string>
 
 export type SpreadsheetResponse = {
     get: {
+        auth: { username: string; password: string }
         books: Row[]
         users: Row[]
         lends: Row[]

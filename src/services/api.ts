@@ -29,6 +29,24 @@ export const services = {
 }
 
 export const api = {
+    auth: {
+        post: async (auth: { username: string; password: string }): Promise<AxiosResponse> => {
+            const response = await ax
+                .post<{ username: string; password: string }>('/api/auth', JSON.stringify(auth), {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => {
+                    return res
+                })
+                .catch(error => {
+                    console.error('[Sheet] - Error login:', error)
+                })
+
+            return response as AxiosResponse
+        }
+    },
     sheet: {
         books: {
             get: async (): Promise<Book[]> => {

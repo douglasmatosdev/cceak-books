@@ -16,7 +16,7 @@ export const metadata = {
     description: 'Uma simples aplicação para gerenciar livros'
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }): JSX.Element {
+export default async function RootLayout({ children }: { children: React.ReactNode }): Promise<JSX.Element> {
     return (
         <html suppressHydrationWarning={true} lang="en">
             <body>
