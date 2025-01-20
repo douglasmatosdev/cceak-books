@@ -3,6 +3,9 @@ import { Sheet } from '@/enums/sheets'
 import { Row, SpreadsheetResponse } from '@/types/spreadsheet'
 import { getGoogleSpreadsheet } from './google-spreadsheet'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RawRowData = any
+
 export const getRowIndexById = async (
     spreadsheet: GoogleSpreadsheetWorksheet,
     id: string
