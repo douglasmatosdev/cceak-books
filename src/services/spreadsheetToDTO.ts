@@ -1,4 +1,4 @@
-import { GoogleSpreadsheetWorksheet, RawRowData } from 'google-spreadsheet'
+import { GoogleSpreadsheetWorksheet } from 'google-spreadsheet'
 import { Sheet } from '@/enums/sheets'
 import { Row, SpreadsheetResponse } from '@/types/spreadsheet'
 import { getGoogleSpreadsheet } from './google-spreadsheet'
