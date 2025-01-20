@@ -60,7 +60,7 @@ export const PaginatedLendsItems = ({
                             <Link href={`/pages/dashboard/lends/${index}`} className="mr-8 text-primary">
                                 <VscOpenPreview className="text-xl" />
                             </Link>
-                            <button className="text-red-500" onClick={() => setDeleting(`${index}`)}>
+                            <button className="text-red-500" onClick={() => setDeleting(`${lend?.id}`)}>
                                 <FaTrash />
                             </button>
                         </div>

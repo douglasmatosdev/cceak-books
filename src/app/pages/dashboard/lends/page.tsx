@@ -14,20 +14,23 @@ export default function Lends(): JSX.Element {
 
     const [filteredLends, setFilteredLends] = useState<Lend[]>(lends)
 
-    const handleDelete = async (rowIndex: string): Promise<void> => {
-        await api.sheet.lends.delete(rowIndex).then(() => {
-            const filtered = lends.filter((_, i) => `${i}` !== rowIndex)
+    const handleDelete = async (id: string): Promise<void> => {
+        await api.sheet.lends.delete(id).then(() => {
+            const filtered = lends.filter(lend => lend?.id !== id)
             setFilteredLends(filtered)
             setLends(filtered)
-            const bookId = lends[+rowIndex].book_id
+            
+            const lend = lends.find(lend => lend.id === id)
+            if (!lend) return
+            
+            const bookId = lend.book_id
             const book = books.find(b => b.id === bookId)
             const updatedBook = {
                 ...book,
                 status: 'avaiable'
-            }
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            api.sheet.books.putByColumn('id', bookId, updatedBook)
+            } as Book
+
+            api.sheet.books.put(bookId, updatedBook)
         })
     }
 
@@ -42,11 +45,11 @@ export default function Lends(): JSX.Element {
     }
 
     useEffect(() => {
-        api.sheet.books.getIndexed().then(data => {
+        api.sheet.books.get().then(data => {
             setBooks(data)
         })
         api.sheet.lends
-            .getIndexed()
+            .get()
             .then(data => {
                 setLends(data)
                 setFilteredLends(data)

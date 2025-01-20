@@ -12,9 +12,9 @@ export default function Books(): JSX.Element {
     const [filteredBooks, setFilteredBooks] = useState<Book[]>(books)
     const [loading, setLoading] = useState(true)
 
-    const handleDelete = async (rowIndex: string): Promise<void> => {
-        await api.sheet.books.delete(rowIndex).then(() => {
-            const filtered = books.filter((_, i) => `${i}` !== rowIndex)
+    const handleDelete = async (id: string): Promise<void> => {
+        await api.sheet.books.delete(id).then(() => {
+            const filtered = books.filter(book => book?.id !== id)
             setBooks(filtered)
             setFilteredBooks(filtered)
         })
@@ -32,7 +32,7 @@ export default function Books(): JSX.Element {
 
     useEffect(() => {
         api.sheet.books
-            .getIndexed()
+            .get()
             .then(data => {
                 setBooks(data)
                 setFilteredBooks(data)

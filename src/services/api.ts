@@ -1,16 +1,37 @@
 /* eslint-disable camelcase */
+import { Sheet } from '@/enums/sheets';
+import { Row, SpreadsheetResponse } from '@/types/spreadsheet';
 import axios, { AxiosResponse } from 'axios'
 
-const sheet_url = `https://sheet.best/api/sheets/${process.env.NEXT_PUBLIC_SHEET_KEY}`
+const env = process.env.NODE_ENV || 'development'
+console.log(env);
+
+if (env === 'development') {
+    process.env.BASE_URL = 'http://localhost:3000'
+} else {
+    process.env.BASE_URL = process.env.NEXT_PUBLIC_HOST
+}
+
+const ax = axios.create({
+    baseURL: process.env.BASE_URL
+})
+
+const spreadsheet_url = '/api/spreadsheet'
+
+const spreadsheet_url_sheet = {
+    books: `${spreadsheet_url}?sheet=${Sheet.books}`,
+    users: `${spreadsheet_url}?sheet=${Sheet.users}`,
+    lends: `${spreadsheet_url}?sheet=${Sheet.lends}`
+}
 
 export const services = {
     google: async (isbn: string): Promise<AxiosResponse> => {
-        const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${isbn}`)
+        const response = await ax.get(`https://www.googleapis.com/books/v1/volumes?q=${isbn}`)
 
         return response
     },
     brasilapi: async (isbn: string): Promise<BrasilapiBook> => {
-        const response = await axios.get(`https://brasilapi.com.br/api/isbn/v1/${isbn}`)
+        const response = await ax.get(`https://brasilapi.com.br/api/isbn/v1/${isbn}`)
 
         return response?.data
     }
@@ -19,71 +40,38 @@ export const services = {
 export const api = {
     sheet: {
         books: {
-            search: async (term: string): Promise<Book> => {
-                const response = await axios.get(`${sheet_url}/tabs/books/search?title=*${term}*`)
-                const [data] = await response.data
-
-                return data
-            },
-            getIndexed: async (): Promise<Book[]> => {
-                const response = await axios
-                    .get<Record<string, Book>>(`${sheet_url}/tabs/books?_format=index`)
-                    .catch(error => {
-                        console.error('[Sheet] - Error fetching getIndexed:', error)
-                    })
-                const data = response!.data
-
-                return Object.keys(data).map(key => data[key]) as Book[]
-            },
             get: async (): Promise<Book[]> => {
-                const response = await axios.get<Record<string, Book>>(`${sheet_url}/tabs/books`).catch(error => {
+                const response = await ax.get<SpreadsheetResponse>(spreadsheet_url_sheet.books).then(res => {
+                    return res.data as unknown as Book[]
+                }).catch(error => {
                     console.error('[Sheet] - Error fetching books:', error)
                 })
 
-                return response!.data as unknown as Promise<Book[]>
-            },
-            getByRowIndex: async (rowIndex: string): Promise<Book> => {
-                const response = await axios.get(`${sheet_url}/tabs/books/${rowIndex}`)
-                const [data] = await response.data
-
-                return data
+                return response as unknown as Promise<Book[]>
             },
             post: async (book: Book): Promise<AxiosResponse> => {
-                const response = await axios
-                    .post(`${sheet_url}/tabs/books`, JSON.stringify(book), {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .catch(error => {
-                        console.error(`[Sheet] - Error register book:`, error)
-                    })
-
-                return response as AxiosResponse
-            },
-            delete: async (rowIndex: string): Promise<AxiosResponse> => {
-                const response = await axios.delete(`${sheet_url}/tabs/books/${rowIndex}`).catch(error => {
-                    console.error(`[Sheet] - Error deleting rowIndex ${rowIndex}:`, error)
+                const response = await ax.post<SpreadsheetResponse>(spreadsheet_url_sheet.books, JSON.stringify(book), {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(res => {
+                    return res
+                }).catch(error => {
+                    console.error('[Sheet] - Error fetching books:', error)
                 })
 
                 return response as AxiosResponse
             },
-            put: async (rowIndex: string, book: Book): Promise<AxiosResponse> => {
-                const response = await axios
-                    .put(`${sheet_url}/tabs/books/${rowIndex}`, JSON.stringify(book), {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .catch(error => {
-                        console.error(`[Sheet] - Error update book:`, error)
-                    })
+            delete: async (id: string): Promise<AxiosResponse> => {
+                const response = await ax.delete(`${spreadsheet_url_sheet.books}&id=${id}`).catch(error => {
+                    console.error(`[Sheet] - Error deleting id ${id}:`, error)
+                })
 
                 return response as AxiosResponse
             },
-            putByColumn: async (colmunName: string, value: string, book: Book): Promise<AxiosResponse> => {
-                const response = await axios
-                    .put(`${sheet_url}/tabs/books/${colmunName}/${value}`, JSON.stringify(book), {
+            put: async (id: string, book: Book): Promise<AxiosResponse> => {
+                const response = await ax
+                    .put(`${spreadsheet_url_sheet.books}&id=${id}`, JSON.stringify(book), {
                         headers: {
                             'Content-Type': 'application/json'
                         }
@@ -96,130 +84,88 @@ export const api = {
             }
         },
         users: {
-            search: async (term: string): Promise<User> => {
-                const response = await axios.get(`${sheet_url}/tabs/users/search?title=*${term}*`)
-                const [data] = await response.data
-
-                return data
-            },
-            getIndexed: async (): Promise<User[]> => {
-                const response = await axios
-                    .get<Record<string, User>>(`${sheet_url}/tabs/users?_format=index`)
-                    .catch(error => {
-                        console.error('[Sheet] - Error fetching getIndexed:', error)
-                    })
-                const data = response!.data
-
-                return Object.keys(data).map(key => ({ ...data[key], rowIndex: key }))
-            },
             get: async (): Promise<User[]> => {
-                const response = await axios.get<Record<string, User>>(`${sheet_url}/tabs/users`).catch(error => {
+                const response = await ax.get<SpreadsheetResponse>(spreadsheet_url_sheet.users).then(res => {
+                    return res.data as unknown as User[]
+                }).catch(error => {
                     console.error('[Sheet] - Error fetching Users:', error)
                 })
 
-                return response!.data as unknown as Promise<User[]>
-            },
-            getByRowIndex: async (rowIndex: string): Promise<User> => {
-                const response = await axios.get(`${sheet_url}/tabs/users/${rowIndex}`)
-                const [data] = await response.data
-
-                return data
+                return response as unknown as Promise<User[]>
             },
             post: async (user: User): Promise<AxiosResponse> => {
-                const response = await axios
-                    .post(`${sheet_url}/tabs/users`, JSON.stringify(user), {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .catch(error => {
-                        console.error(`[Sheet] - Error register book:`, error)
-                    })
-
-                return response as AxiosResponse
-            },
-            delete: async (rowIndex: string): Promise<AxiosResponse> => {
-                const response = await axios.delete(`${sheet_url}/tabs/users/${rowIndex}`).catch(error => {
-                    console.error(`[Sheet] - Error deleting rowIndex ${rowIndex}:`, error)
+                const response = await ax.post<SpreadsheetResponse>(spreadsheet_url_sheet.users, JSON.stringify(user), {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(res => {
+                    return res
+                }).catch(error => {
+                    console.error('[Sheet] - Error fetching users:', error)
                 })
 
                 return response as AxiosResponse
             },
-            put: async (rowIndex: string, user: User): Promise<AxiosResponse> => {
-                const response = await axios
-                    .put(`${sheet_url}/tabs/users/${rowIndex}`, JSON.stringify(user), {
+            delete: async (id: string): Promise<AxiosResponse> => {
+                const response = await ax.delete(`${spreadsheet_url_sheet.users}&id=${id}`).catch(error => {
+                    console.error(`[Sheet] - Error deleting id ${id}:`, error)
+                })
+
+                return response as AxiosResponse
+            },
+            put: async (id: string, user: User): Promise<AxiosResponse> => {
+                const response = await ax
+                    .put(`${spreadsheet_url_sheet.users}&id=${id}`, JSON.stringify(user), {
                         headers: {
                             'Content-Type': 'application/json'
                         }
                     })
                     .catch(error => {
-                        console.error(`[Sheet] - Error update book:`, error)
+                        console.error(`[Sheet] - Error update user:`, error)
                     })
 
                 return response as AxiosResponse
             }
         },
         lends: {
-            search: async (term: string): Promise<Lend> => {
-                const response = await axios.get(`${sheet_url}/tabs/lends/search?title=*${term}*`)
-                const [data] = await response.data
-
-                return data
-            },
-            getIndexed: async (): Promise<Lend[]> => {
-                const response = await axios
-                    .get<Record<string, Lend>>(`${sheet_url}/tabs/lends?_format=index`)
-                    .catch(error => {
-                        console.error('[Sheet] - Error fetching getIndexed:', error)
-                    })
-                const data = response!.data
-
-                return Object.keys(data)
-                    .map(key => ({ ...data[key], rowIndex: key }))
-                    .filter(d => d.first_name) as Lend[]
-            },
             get: async (): Promise<Lend[]> => {
-                const response = await axios.get<Record<string, Lend>>(`${sheet_url}/tabs/lends`).catch(error => {
-                    console.error('[Sheet] - Error fetching Lends:', error)
+                const response = await ax.get<SpreadsheetResponse>(spreadsheet_url_sheet.lends).then(res => {
+                    return res.data as unknown as Lend[]
+                }).catch(error => {
+                    console.error('[Sheet] - Error fetching lends:', error)
                 })
 
-                return response!.data as unknown as Promise<Lend[]>
-            },
-            getByRowIndex: async (rowIndex: string): Promise<Lend> => {
-                const response = await axios.get(`${sheet_url}/tabs/lends/${rowIndex}`)
-                const [data] = await response.data
-
-                return data
+                return response as unknown as Promise<Lend[]>
             },
             post: async (lend: Lend): Promise<AxiosResponse> => {
-                const response = await axios
-                    .post(`${sheet_url}/tabs/lends`, JSON.stringify(lend), {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .catch(error => {
-                        console.error(`[Sheet] - Error register book:`, error)
-                    })
-
-                return response as AxiosResponse
-            },
-            delete: async (rowIndex: string): Promise<AxiosResponse> => {
-                const response = await axios.delete(`${sheet_url}/tabs/lends/${rowIndex}`).catch(error => {
-                    console.error(`[Sheet] - Error deleting rowIndex ${rowIndex}:`, error)
+                const response = await ax.post<SpreadsheetResponse>(spreadsheet_url_sheet.lends, JSON.stringify(lend), {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(res => {
+                    return res
+                }).catch(error => {
+                    console.error('[Sheet] - Error fetching lend:', error)
                 })
 
                 return response as AxiosResponse
             },
-            put: async (rowIndex: string, lend: Lend): Promise<AxiosResponse> => {
-                const response = await axios
-                    .put(`${sheet_url}/tabs/lends/${rowIndex}`, JSON.stringify(lend), {
+            delete: async (id: string): Promise<AxiosResponse> => {
+                const response = await ax.delete(`${spreadsheet_url_sheet.lends}&id=${id}`).catch(error => {
+                    console.error(`[Sheet] - Error deleting id ${id}:`, error)
+                })
+
+                return response as AxiosResponse
+            },
+            put: async (id: string, lend: Lend): Promise<AxiosResponse> => {
+                const response = await ax
+                    .put(`${spreadsheet_url_sheet.lends}&id=${id}`, JSON.stringify(lend), {
                         headers: {
                             'Content-Type': 'application/json'
                         }
                     })
                     .catch(error => {
-                        console.error(`[Sheet] - Error update book:`, error)
+                        console.error(`[Sheet] - Error update lend:`, error)
                     })
 
                 return response as AxiosResponse

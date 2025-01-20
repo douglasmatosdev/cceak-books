@@ -27,7 +27,7 @@ export default function LendRegistration(): JSX.Element {
     const { toast } = useToastify()
 
     const handleSubmit = useCallback(async () => {
-        const allLends = await api.sheet.lends.getIndexed()
+        const allLends = await api.sheet.lends.get()
         const alreadyLend = allLends?.filter(al => al.book_id === bookSelected.value)
 
         if (alreadyLend.length) {
@@ -50,10 +50,9 @@ export default function LendRegistration(): JSX.Element {
                         const updatedBook = {
                             ...book,
                             status: 'borrowed'
-                        }
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        api.sheet.books.putByColumn('id', bookSelected.value, updatedBook)
+                        } as Book
+
+                        api.sheet.books.put(`${book?.id}`, updatedBook)
                         router.push('/pages/dashboard/lends')
                         router.refresh()
                     }
@@ -64,18 +63,18 @@ export default function LendRegistration(): JSX.Element {
 
     useEffect(() => {
         api.sheet.users
-            .getIndexed()
+            .get()
             .then(data => {
                 setUsers(data)
             })
             .finally(() => {
                 setLoading(false)
             })
-        api.sheet.books.getIndexed().then(data => {
+        api.sheet.books.get().then(data => {
             setBooks(data)
         })
 
-        api.sheet.books.getIndexed().then(data => {
+        api.sheet.books.get().then(data => {
             const opts = data.map(d => ({
                 label: d.title,
                 value: d.id

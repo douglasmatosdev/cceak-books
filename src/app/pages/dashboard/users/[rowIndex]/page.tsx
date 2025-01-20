@@ -14,7 +14,7 @@ export default function EditUser({ params }: EditUserProps): JSX.Element {
     const user = users.find((_, i) => +params.rowIndex === i) as User
 
     useEffect(() => {
-        api.sheet.users.getIndexed().then(data => {
+        api.sheet.users.get().then(data => {
             setUsers(data)
         })
     }, [])
@@ -23,6 +23,7 @@ export default function EditUser({ params }: EditUserProps): JSX.Element {
         <>
             <BackButton classNameContainer="ml-8 mb-8" />
             <UserEditForm
+                id={user?.id}
                 rowIndex={params?.rowIndex}
                 first_name={user?.first_name}
                 last_name={user?.last_name}
