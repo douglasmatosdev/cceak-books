@@ -3,15 +3,6 @@ import { Sheet } from '@/enums/sheets'
 import { SpreadsheetResponse } from '@/types/spreadsheet'
 import axios, { AxiosResponse } from 'axios'
 
-const env = process.env.NODE_ENV || 'development'
-console.log(env)
-
-if (env === 'development') {
-    process.env.BASE_URL = 'http://localhost:3000'
-} else {
-    process.env.BASE_URL = process.env.NEXT_PUBLIC_HOST
-}
-
 const ax = axios.create({
     baseURL: process.env.BASE_URL
 })
