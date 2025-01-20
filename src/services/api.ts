@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
-import { Sheet } from '@/enums/sheets';
-import { Row, SpreadsheetResponse } from '@/types/spreadsheet';
+import { Sheet } from '@/enums/sheets'
+import { SpreadsheetResponse } from '@/types/spreadsheet'
 import axios, { AxiosResponse } from 'axios'
 
 const env = process.env.NODE_ENV || 'development'
-console.log(env);
+console.log(env)
 
 if (env === 'development') {
     process.env.BASE_URL = 'http://localhost:3000'
@@ -41,24 +41,30 @@ export const api = {
     sheet: {
         books: {
             get: async (): Promise<Book[]> => {
-                const response = await ax.get<SpreadsheetResponse>(spreadsheet_url_sheet.books).then(res => {
-                    return res.data as unknown as Book[]
-                }).catch(error => {
-                    console.error('[Sheet] - Error fetching books:', error)
-                })
+                const response = await ax
+                    .get<SpreadsheetResponse>(spreadsheet_url_sheet.books)
+                    .then(res => {
+                        return res.data as unknown as Book[]
+                    })
+                    .catch(error => {
+                        console.error('[Sheet] - Error fetching books:', error)
+                    })
 
                 return response as unknown as Promise<Book[]>
             },
             post: async (book: Book): Promise<AxiosResponse> => {
-                const response = await ax.post<SpreadsheetResponse>(spreadsheet_url_sheet.books, JSON.stringify(book), {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then(res => {
-                    return res
-                }).catch(error => {
-                    console.error('[Sheet] - Error fetching books:', error)
-                })
+                const response = await ax
+                    .post<SpreadsheetResponse>(spreadsheet_url_sheet.books, JSON.stringify(book), {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(res => {
+                        return res
+                    })
+                    .catch(error => {
+                        console.error('[Sheet] - Error fetching books:', error)
+                    })
 
                 return response as AxiosResponse
             },
@@ -85,24 +91,30 @@ export const api = {
         },
         users: {
             get: async (): Promise<User[]> => {
-                const response = await ax.get<SpreadsheetResponse>(spreadsheet_url_sheet.users).then(res => {
-                    return res.data as unknown as User[]
-                }).catch(error => {
-                    console.error('[Sheet] - Error fetching Users:', error)
-                })
+                const response = await ax
+                    .get<SpreadsheetResponse>(spreadsheet_url_sheet.users)
+                    .then(res => {
+                        return res.data as unknown as User[]
+                    })
+                    .catch(error => {
+                        console.error('[Sheet] - Error fetching Users:', error)
+                    })
 
                 return response as unknown as Promise<User[]>
             },
             post: async (user: User): Promise<AxiosResponse> => {
-                const response = await ax.post<SpreadsheetResponse>(spreadsheet_url_sheet.users, JSON.stringify(user), {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then(res => {
-                    return res
-                }).catch(error => {
-                    console.error('[Sheet] - Error fetching users:', error)
-                })
+                const response = await ax
+                    .post<SpreadsheetResponse>(spreadsheet_url_sheet.users, JSON.stringify(user), {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(res => {
+                        return res
+                    })
+                    .catch(error => {
+                        console.error('[Sheet] - Error fetching users:', error)
+                    })
 
                 return response as AxiosResponse
             },
@@ -129,24 +141,30 @@ export const api = {
         },
         lends: {
             get: async (): Promise<Lend[]> => {
-                const response = await ax.get<SpreadsheetResponse>(spreadsheet_url_sheet.lends).then(res => {
-                    return res.data as unknown as Lend[]
-                }).catch(error => {
-                    console.error('[Sheet] - Error fetching lends:', error)
-                })
+                const response = await ax
+                    .get<SpreadsheetResponse>(spreadsheet_url_sheet.lends)
+                    .then(res => {
+                        return res.data as unknown as Lend[]
+                    })
+                    .catch(error => {
+                        console.error('[Sheet] - Error fetching lends:', error)
+                    })
 
                 return response as unknown as Promise<Lend[]>
             },
             post: async (lend: Lend): Promise<AxiosResponse> => {
-                const response = await ax.post<SpreadsheetResponse>(spreadsheet_url_sheet.lends, JSON.stringify(lend), {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then(res => {
-                    return res
-                }).catch(error => {
-                    console.error('[Sheet] - Error fetching lend:', error)
-                })
+                const response = await ax
+                    .post<SpreadsheetResponse>(spreadsheet_url_sheet.lends, JSON.stringify(lend), {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(res => {
+                        return res
+                    })
+                    .catch(error => {
+                        console.error('[Sheet] - Error fetching lend:', error)
+                    })
 
                 return response as AxiosResponse
             },

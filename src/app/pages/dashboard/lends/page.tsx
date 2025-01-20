@@ -19,10 +19,10 @@ export default function Lends(): JSX.Element {
             const filtered = lends.filter(lend => lend?.id !== id)
             setFilteredLends(filtered)
             setLends(filtered)
-            
+
             const lend = lends.find(lend => lend.id === id)
             if (!lend) return
-            
+
             const bookId = lend.book_id
             const book = books.find(b => b.id === bookId)
             const updatedBook = {

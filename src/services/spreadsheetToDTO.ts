@@ -3,10 +3,13 @@ import { Sheet } from '@/enums/sheets'
 import { Row, SpreadsheetResponse } from '@/types/spreadsheet'
 import { getGoogleSpreadsheet } from './google-spreadsheet'
 
-export const getRowIndexById = async (spreadsheet: GoogleSpreadsheetWorksheet, id: string): Promise<number | undefined> => {
+export const getRowIndexById = async (
+    spreadsheet: GoogleSpreadsheetWorksheet,
+    id: string
+): Promise<number | undefined> => {
     const rawRows = await spreadsheet.getRows()
 
-    let rowIndex = undefined
+    let rowIndex
 
     rawRows.forEach(row => {
         const rowId = row.get('id')
@@ -29,6 +32,7 @@ export const rawRowsToRows = async (spreadsheet: GoogleSpreadsheetWorksheet): Pr
         return header.reduce((acc: Row, headerName: string, index: number) => {
             acc[headerName] = data[index]
             acc.rowIndex = row._rowNumber
+
             return acc
         }, {})
     })
@@ -42,7 +46,6 @@ export const fetchGoogleSheets = async (): Promise<SpreadsheetResponse> => {
         const rawBooksSpreadSheet = doc.sheetsByTitle[Sheet.books]
         const rawUsersSpreadSheet = doc.sheetsByTitle[Sheet.users]
         const rawLendsSpreadSheet = doc.sheetsByTitle[Sheet.lends]
-
 
         const books = await rawRowsToRows(rawBooksSpreadSheet)
         const users = await rawRowsToRows(rawUsersSpreadSheet)
@@ -60,11 +63,12 @@ export const fetchGoogleSheets = async (): Promise<SpreadsheetResponse> => {
             lends: rawLendsSpreadSheet
         }
 
-        const getRowById = async (id: string, sheet: Sheet): Promise<Row> => sheets[sheet].find(book => book.id === id) ?? {}
+        const getRowById = async (id: string, sheet: Sheet): Promise<Row> =>
+            sheets[sheet].find(book => book.id === id) ?? {}
         const addRow = async (sheet: Sheet, rowData: RawRowData): Promise<void> => {
             await rawSheets[sheet].addRow(rowData, { insert: true, raw: true })
         }
-        const deleteRow = async (id: string, sheet: Sheet) => {
+        const deleteRow = async (id: string, sheet: Sheet): Promise<void> => {
             const rowIndex = await getRowIndexById(rawSheets[sheet], id)
             if (rowIndex === undefined) {
                 return
@@ -77,7 +81,7 @@ export const fetchGoogleSheets = async (): Promise<SpreadsheetResponse> => {
             }
         }
 
-        const updateRow = async (id: string, sheet: Sheet, data: Row) => {
+        const updateRow = async (id: string, sheet: Sheet, data: Row): Promise<void> => {
             const rowIndex = await getRowIndexById(rawSheets[sheet], id)
             if (rowIndex === undefined) {
                 return
@@ -87,7 +91,7 @@ export const fetchGoogleSheets = async (): Promise<SpreadsheetResponse> => {
 
             if (row) {
                 row.assign(data)
-                
+
                 row.save()
             }
         }
@@ -115,8 +119,6 @@ export const fetchGoogleSheets = async (): Promise<SpreadsheetResponse> => {
                 lends: (id: string, data: Row) => updateRow(id, Sheet.lends, data)
             }
         }
-
-
     } catch (error) {
         console.error('Error fetching Google Sheets data:', error)
     }
@@ -133,19 +135,19 @@ export const fetchGoogleSheets = async (): Promise<SpreadsheetResponse> => {
             lends: async () => ({})
         },
         add: {
-            books: async () => { },
-            users: async () => { },
-            lends: async () => { }
+            books: async () => {},
+            users: async () => {},
+            lends: async () => {}
         },
         delete: {
-            books: async () => { },
-            users: async () => { },
-            lends: async () => { }
+            books: async () => {},
+            users: async () => {},
+            lends: async () => {}
         },
         update: {
-            books: async () => { },
-            users: async () => { },
-            lends: async () => { }
+            books: async () => {},
+            users: async () => {},
+            lends: async () => {}
         }
     }
 }
