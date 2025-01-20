@@ -12,9 +12,9 @@ export default function Users(): JSX.Element {
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users)
     const [loading, setLoading] = useState(true)
 
-    const handleDelete = async (rowIndex: string): Promise<void> => {
-        await api.sheet.users.delete(rowIndex).then(() => {
-            const filtered = users.filter((_, i) => `${i}` !== rowIndex)
+    const handleDelete = async (id: string): Promise<void> => {
+        await api.sheet.users.delete(id).then(() => {
+            const filtered = users.filter(user => user.id !== id)
             setUsers(filtered)
             setFilteredUsers(filtered)
         })
@@ -31,8 +31,10 @@ export default function Users(): JSX.Element {
     }
 
     useEffect(() => {
+        window.location.reload()
+
         api.sheet.users
-            .getIndexed()
+            .get()
             .then(data => {
                 setUsers(data)
                 setFilteredUsers(data)

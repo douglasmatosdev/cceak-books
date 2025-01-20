@@ -12,7 +12,7 @@ type BookEditFormProps = {
 } & Book
 
 export default function BookEditForm(props: BookEditFormProps): JSX.Element {
-    const { rowIndex, isbn, title, subtitle, author, description, image, amount, category, place } = props
+    const { id, isbn, title, subtitle, author, description, image, amount, category, place } = props
     const [value, setValue] = useState({
         isbn,
         title,
@@ -31,8 +31,10 @@ export default function BookEditForm(props: BookEditFormProps): JSX.Element {
     const { toast } = useToastify()
 
     const handleSubmit = async (book: Book): Promise<void> => {
+        if (!id) return
+
         await api.sheet.books
-            .put(rowIndex, book)
+            .put(id, book)
             .then(response => {
                 if (response?.status === 200) {
                     toast('Alterações salvas com sucesso!', 'success')

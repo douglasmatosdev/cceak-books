@@ -58,7 +58,7 @@ export const PaginatedUserItems = ({
                             <Link href={`/pages/dashboard/users/${index}`} className="mr-8 text-primary">
                                 <FaPencilAlt />
                             </Link>
-                            <button className="text-red-500" onClick={() => setDeleting(`${index}`)}>
+                            <button className="text-red-500" onClick={() => setDeleting(`${user?.id}`)}>
                                 <FaTrash />
                             </button>
                         </div>

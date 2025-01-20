@@ -14,7 +14,7 @@ export default function EditBook({ params }: EditBookProps): JSX.Element {
     const book = books.find((_, i) => +params.rowIndex === i) as Book
 
     useEffect(() => {
-        api.sheet.books.getIndexed().then(data => {
+        api.sheet.books.get().then(data => {
             setBooks(data)
         })
     }, [])
@@ -23,6 +23,7 @@ export default function EditBook({ params }: EditBookProps): JSX.Element {
         <>
             <BackButton classNameContainer="ml-8" />
             <BookEditForm
+                id={book?.id}
                 rowIndex={`${params.rowIndex}`}
                 isbn={book?.isbn}
                 title={book?.title}

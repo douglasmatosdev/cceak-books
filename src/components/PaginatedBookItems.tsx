@@ -66,7 +66,7 @@ export const PaginatedBookItems = ({
                             <Link href={`/pages/dashboard/${index}`} className="mr-8 text-primary">
                                 <FaPencilAlt />
                             </Link>
-                            <button className="text-red-500" onClick={() => setDeleting(`${index}`)}>
+                            <button className="text-red-500" onClick={() => setDeleting(`${book?.id}`)}>
                                 <FaTrash />
                             </button>
                         </div>

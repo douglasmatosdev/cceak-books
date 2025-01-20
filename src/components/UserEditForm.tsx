@@ -12,7 +12,7 @@ type UserEditFormProps = {
 } & User
 
 export default function UserEditForm(props: UserEditFormProps): JSX.Element {
-    const { rowIndex, first_name, last_name, phone } = props
+    const { id, first_name, last_name, phone } = props
     const [value, setValue] = useState({ first_name, last_name, phone })
 
     const router = useRouter()
@@ -20,8 +20,10 @@ export default function UserEditForm(props: UserEditFormProps): JSX.Element {
     const { toast } = useToastify()
 
     const handleSubmit = async (user: User): Promise<void> => {
+        if (!id) return
+
         await api.sheet.users
-            .put(rowIndex, user)
+            .put(id, user)
             .then(response => {
                 if (response?.status === 200) {
                     toast('Alterações salvas com sucesso!', 'success')

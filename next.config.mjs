@@ -9,6 +9,17 @@ const nextConfig = {
                 pathname: '/books/content?id=KYarDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api'
             }
         ]
+    },
+
+    webpack: config => {
+        config.resolve.fallback = {
+            fs: false,
+            net: false,
+            tls: false,
+            child_process: false
+        }
+
+        return config
     }
 }
 

@@ -15,27 +15,25 @@ export default function LendView(props: LendViewProps): JSX.Element {
     const [lends, setLends] = useState<Lend[]>([])
     const lend = lends.find((_, i) => +params.rowIndex === i) as Lend
 
-    const handleDelete = async (rowIndex: string): Promise<void> => {
-        await api.sheet.lends.delete(rowIndex).then(response => {
+    const handleDelete = async (id: string): Promise<void> => {
+        await api.sheet.lends.delete(id).then(response => {
             if (response.status === 200) {
                 const book = books.find(b => b.id === lend.book_id)
                 const updatedBook = {
                     ...book,
                     status: 'avaiable'
-                }
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                api.sheet.books.putByColumn('id', bookId, updatedBook)
-                setLends(lends.filter((_, i) => +rowIndex === i))
+                } as Book
+                api.sheet.books.put(`${book?.id}`, updatedBook)
+                setLends(lends.filter(lend => lend?.id === id))
             }
         })
     }
 
     useEffect(() => {
-        api.sheet.books.getIndexed().then(data => {
+        api.sheet.books.get().then(data => {
             setBooks(data)
         })
-        api.sheet.lends.getIndexed().then(data => {
+        api.sheet.lends.get().then(data => {
             setLends(data)
         })
     }, [])
@@ -61,7 +59,7 @@ export default function LendView(props: LendViewProps): JSX.Element {
                 </span>
 
                 <button
-                    onClick={() => handleDelete(params.rowIndex)}
+                    onClick={() => handleDelete(`${lend?.id}`)}
                     className="py-2 px-4 rounded-md text-white bg-red-500 mt-8 text-xl font-semibold"
                 >
                     Excluir
