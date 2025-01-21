@@ -23,7 +23,7 @@ export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }): JSX.
         setItemOffset(newOffset)
     }
 
-    useEffect(() => {
+    const getBooks = async (): Promise<void> => {
         api.sheet.books
             .get()
             .then(data => {
@@ -32,6 +32,10 @@ export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }): JSX.
             .finally(() => {
                 setLoating(false)
             })
+    }
+
+    useEffect(() => {
+        getBooks()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
