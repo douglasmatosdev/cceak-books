@@ -42,6 +42,16 @@ export default function BookCreateForm(props: BookCreateFormProps): JSX.Element 
     const { toast } = useToastify()
 
     const handleSubmit = async (book: Book): Promise<void> => {
+        const booksSaved = await api.sheet.books.get()
+        if (booksSaved?.length > 0) {
+            const bookExists = booksSaved?.some(b => +b?.isbn === +book?.isbn)
+
+            if (bookExists) {
+                toast('Livro com o mesmo código ISBN já cadastrado!', 'error')
+
+                return
+            }
+        }
         await api.sheet.books
             .post({
                 ...book,
