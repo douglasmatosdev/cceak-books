@@ -38,14 +38,15 @@ This application uses Google sheets as a database.
 
 1. Create a spreadsheet with the same structure as
 2. Share the spreadsheet with a public link
-3. Create an account at https://sheet.best/
-4. Create a new connection
-5. In this new connection, add the spreadsheet link
-6. After creating the connection, a connection URL will be generated something like this https://sheet.best/api/sheets/00aaaa00-0aa0-0aa0-aaa0-00aa00a0a00a
-7. Only copy the code at the end of the URL 00aaaa00-0aa0-0aa0-aaa0-00aa00a0a00a
-8. Rename the `env.template` file to `.env`
-9. In the `.env` file add the code copied to the environment variable `NEXT_PUBLIC_SHEET_KEY=00aaaa00-0aa0-0aa0-aaa0-00aa00a0a00a`
-
+3. Create an account Google Console
+4. Create a Project and add Google Spreadshet API
+5. Create all credentials (private key, email account)
+6. Fill the env variable
+```.env
+NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_EMAIL='your account email here'
+NEXT_PUBLIC_GOOGLE_PRIVATE_KEY='your private key here'
+NEXT_PUBLIC_GOOGLE_SHEET_ID='your sheet id here'
+```
 
 ## 🚀 Running development mode
 ```bash
