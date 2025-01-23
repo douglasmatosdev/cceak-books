@@ -15,7 +15,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         }
 
         if (userAdmin.username === body.username && userAdmin.password === body.password) {
-            return NextResponse.json({ cceakLogged: 'yes' }, { status: 200 })
+            return NextResponse.json({ cceakLogged: 'yes', status: 200 }, { status: 200 })
         }
     }
 
