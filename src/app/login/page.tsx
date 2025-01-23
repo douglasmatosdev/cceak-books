@@ -35,8 +35,9 @@ export default function Auth(): JSX.Element {
                 if (res.status === 200) {
                     document.cookie = 'cceak-logged=yes'
 
-                    router.refresh()
-                    router.push('/')
+                    // router.refresh()
+                    // router.push('/')
+                    window.location.href = '/'
 
                     toast('Você está logado', 'success')
                 } else {
