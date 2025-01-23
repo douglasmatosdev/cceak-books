@@ -1,5 +1,7 @@
 'use client'
 
+import { Loading } from '@/components/Loading'
+import { useToastify } from '@/hooks/useToastify'
 import { api } from '@/services/api'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -8,8 +10,11 @@ import styled from 'styled-components'
 export default function Auth(): JSX.Element {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const router = useRouter()
+
+    const { toast } = useToastify()
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target
@@ -22,40 +27,61 @@ export default function Auth(): JSX.Element {
     }
 
     const handleLogin = async (): Promise<void> => {
-        api.auth.post({ username, password }).then(res => {
-            if (res.status === 200) {
-                document.cookie = 'cceak-logged=yes'
+        setLoading(true)
 
-                router.push('/')
-            }
-        })
+        api.auth
+            .post({ username, password })
+            .then(res => {
+                if (res.status === 200) {
+                    document.cookie = 'cceak-logged=yes'
+
+                    router.push('/')
+
+                    toast('Você está logado', 'success')
+                } else {
+                    toast('Usuário ou senha inválidos', 'error')
+                }
+            })
+            .catch(error => {
+                console.error('[Auth] - Error login:', error)
+                toast('Erro ao tentar logar', 'error')
+            })
+            .finally(() => {
+                setLoading(false)
+            })
     }
 
     return (
         <AuthForm>
             <div>
-                <h1>Acessar</h1>
-                <h3>Gerenciamento de livros</h3>
-                <input
-                    value={username}
-                    type="text"
-                    placeholder="Usuário"
-                    name="username"
-                    id="username"
-                    onChange={onChange}
-                />
-                <input
-                    value={password}
-                    type="text"
-                    placeholder="Senha"
-                    name="password"
-                    id="password"
-                    onChange={onChange}
-                />
+                {loading ? (
+                    <Loading />
+                ) : (
+                    <>
+                        <h1>Acessar</h1>
+                        <h3>Gerenciamento de livros</h3>
+                        <input
+                            value={username}
+                            type="text"
+                            placeholder="Usuário"
+                            name="username"
+                            id="username"
+                            onChange={onChange}
+                        />
+                        <input
+                            value={password}
+                            type="text"
+                            placeholder="Senha"
+                            name="password"
+                            id="password"
+                            onChange={onChange}
+                        />
 
-                <button disabled={!username || !password} onClick={handleLogin} type="button">
-                    Entrar
-                </button>
+                        <button disabled={!username || !password} onClick={handleLogin} type="button">
+                            Entrar
+                        </button>
+                    </>
+                )}
             </div>
         </AuthForm>
     )
@@ -78,6 +104,7 @@ const AuthForm = styled.form`
     right: 0;
     bottom: 0;
     z-index: 100;
+    padding: 0 16px;
 
     & > div {
         border-radius: 8px;
@@ -91,7 +118,7 @@ const AuthForm = styled.form`
         font-size: 16px;
         font-weight: 400;
         line-height: 1.5;
-        padding: 20px;
+        padding: 36px 20px;
 
         h1 {
             font-size: 24px;

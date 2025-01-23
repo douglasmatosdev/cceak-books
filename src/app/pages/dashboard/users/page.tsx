@@ -31,8 +31,6 @@ export default function Users(): JSX.Element {
     }
 
     useEffect(() => {
-        window.location.reload()
-
         api.sheet.users
             .get()
             .then(data => {

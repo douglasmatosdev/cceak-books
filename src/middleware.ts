@@ -5,11 +5,11 @@ export async function middleware(request: NextRequest): Promise<NextResponse<unk
     const cceakLogged = request.cookies.get('cceak-logged')
 
     if (!cceakLogged) {
-        return NextResponse.redirect(new URL('/auth', request.url))
+        return NextResponse.redirect(new URL('/login', request.url))
     }
 
     return NextResponse.next()
 }
 export const config = {
-    matcher: ['/((?!auth|_next/static|_next/image|favicon.ico|images|icons|scripts).*)']
+    matcher: ['/((?!api/auth|login|_next/static|_next/image|favicon.ico|images|icons|scripts).*)']
 }

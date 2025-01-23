@@ -32,13 +32,19 @@ export const api = {
     auth: {
         post: async (auth: { username: string; password: string }): Promise<AxiosResponse> => {
             const response = await ax
-                .post<{ username: string; password: string }>('/api/auth', JSON.stringify(auth), {
+                .post<AxiosResponse>('/api/auth', JSON.stringify(auth), {
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 })
                 .then(res => {
-                    return res
+                    if (res?.status === 200) {
+                        return res
+                    } else {
+                        res.status = 401
+
+                        return res
+                    }
                 })
                 .catch(error => {
                     console.error('[Sheet] - Error login:', error)
