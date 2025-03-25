@@ -1,18 +1,17 @@
 'use client'
 
-import { api } from '@/services/api'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import ReactPaginate from 'react-paginate'
 import AllBooks from './AllBooks'
 import { Empty } from './Empty'
 import { PaginatedContainer } from './styles'
 import { Loading } from './Loading'
+import { useEntities } from '@/hooks/useEntities'
 
 export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }): JSX.Element => {
     const [itemOffset, setItemOffset] = useState(0)
-    const [loading, setLoating] = useState(true)
 
-    const [books, setBooks] = useState<Book[]>([])
+    const { lends, books, loadingBooks } = useEntities(['lends', 'books'])
 
     const endOffset = itemOffset + itemsPerPage
     const currentItems = books.slice(itemOffset, endOffset)
@@ -23,24 +22,9 @@ export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }): JSX.
         setItemOffset(newOffset)
     }
 
-    const getBooks = async (): Promise<void> => {
-        api.sheet.books
-            .get()
-            .then(data => {
-                setBooks(data)
-            })
-            .finally(() => {
-                setLoating(false)
-            })
-    }
-
-    useEffect(() => {
-        getBooks()
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
     return (
         <PaginatedContainer disabled={currentItems.length <= itemsPerPage}>
-            {loading ? <Loading /> : !books?.length ? <Empty /> : <AllBooks books={currentItems} />}
+            {loadingBooks ? <Loading /> : !books?.length ? <Empty /> : <AllBooks lends={lends} books={currentItems} />}
             <ReactPaginate
                 breakLabel="..."
                 nextLabel="próximo >"

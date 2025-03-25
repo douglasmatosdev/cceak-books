@@ -1,15 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { BookModal } from './BookModal'
 import { Img } from './Img'
 import { BookStatus } from './BookStatus'
 import { TextElipsis } from './TextElipsis'
+import { getBookAmountAndAvailable } from '@/hooks/getBookAmountAndAvailable'
 
 interface AllBooksProps {
     books: Book[]
+    lends: Lend[]
 }
-export default function AllBooks({ books }: AllBooksProps): JSX.Element {
+function AllBooks({ books, lends }: AllBooksProps): JSX.Element {
     const [openModal, setOpenModal] = useState<Book | Record<string, never>>({})
 
     return (
@@ -17,6 +19,8 @@ export default function AllBooks({ books }: AllBooksProps): JSX.Element {
             {openModal?.title && <BookModal onClose={() => setOpenModal({})} book={openModal} />}
 
             {books?.map((book, index) => {
+                const bookAmountAndAvailable = getBookAmountAndAvailable(String(book?.id), books, lends)
+
                 return (
                     <div
                         key={index}
@@ -32,6 +36,16 @@ export default function AllBooks({ books }: AllBooksProps): JSX.Element {
                         <h3 className="text-sm">
                             <TextElipsis text={book.author} width={144} height={16} />
                         </h3>
+                        <h3 className="text-sm mt-2">
+                            <TextElipsis text={`Quantidade: ${book.amount}`} width={144} height={16} />
+                        </h3>
+                        <h3 className="text-sm mt-2">
+                            <TextElipsis
+                                text={`Disponíveis: ${bookAmountAndAvailable?.booksAvailable}`}
+                                width={144}
+                                height={16}
+                            />
+                        </h3>
                         <h4 className="mt-6 text-sm w-full inline-block">
                             <BookStatus label={book?.status} className="w-full inline-block text-center" />
                         </h4>
@@ -41,3 +55,5 @@ export default function AllBooks({ books }: AllBooksProps): JSX.Element {
         </div>
     )
 }
+
+export default memo(AllBooks)

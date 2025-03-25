@@ -2,6 +2,7 @@
 import { BackButton } from '@/components/BackButton'
 import { Loading } from '@/components/Loading'
 import { useToastify } from '@/hooks/useToastify'
+import { getBookAmountAndAvailable } from '@/hooks/getBookAmountAndAvailable'
 import { api } from '@/services/api'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
@@ -9,28 +10,33 @@ import { FaPencilAlt } from 'react-icons/fa'
 import Select from 'react-select'
 
 import { v4 as uuidv4 } from 'uuid'
-
-type Option = {
-    label: string
-    value: string
-}
+import { useEntities } from '@/hooks/useEntities'
 
 export default function LendRegistration(): JSX.Element {
-    const [users, setUsers] = useState<User[]>([])
-    const [books, setBooks] = useState<Book[]>([])
     const [userSelected, setUserSelected] = useState<User | Record<string, never>>({})
-    const [options, setOptions] = useState<Option[]>([])
     const [bookSelected, setBookSelected] = useState<Option | Record<string, never>>({})
-    const [loading, setLoading] = useState(true)
+    const [alreadyLent, setAlreadyLent] = useState(false)
 
     const router = useRouter()
     const { toast } = useToastify()
 
-    const handleSubmit = useCallback(async () => {
-        const allLends = await api.sheet.lends.get()
-        const alreadyLend = allLends?.filter(al => al.book_id === bookSelected.value)
+    const { books, optionsBooks, lends, users, loadingUsers } = useEntities(['books', 'users', 'lends'])
 
-        if (alreadyLend.length) {
+    const { booksAvailable, selectedBookAmount } = getBookAmountAndAvailable(String(bookSelected?.value), books, lends)
+
+    useEffect(() => {
+        if (bookSelected?.value && lends?.length && userSelected?.first_name) {
+            const lend = lends.find(l => l.book_id === bookSelected.value)
+            if (lend?.first_name === userSelected.first_name && lend?.last_name === userSelected.last_name) {
+                setAlreadyLent(true)
+                toast('Usuário já está com este livro!', 'warning')
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [bookSelected, lends, userSelected.first_name, userSelected.last_name])
+
+    const handleSubmit = useCallback(async () => {
+        if (!booksAvailable) {
             toast('Este livro já está emprestado!', 'error')
         } else {
             await api.sheet.lends
@@ -46,48 +52,33 @@ export default function LendRegistration(): JSX.Element {
                 .then(response => {
                     if (response?.status === 200) {
                         toast('Empréstimo registrado com sucesso!', 'success')
+                        const status = booksAvailable - 1 <= 0 ? 'borrowed' : 'available'
                         const book = books.find(b => b.id === bookSelected.value)
+
+                        if (status === book?.status) {
+                            return
+                        }
+
                         const updatedBook = {
                             ...book,
-                            status: 'borrowed'
+                            status
                         } as Book
 
                         api.sheet.books.put(`${book?.id}`, updatedBook)
-                        router.push('/pages/dashboard/lends')
-                        router.refresh()
                     }
+                })
+                .finally(() => {
+                    router.push('/pages/dashboard/lends')
+                    router.refresh()
                 })
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bookSelected?.label, bookSelected?.value, userSelected?.first_name, userSelected?.id, userSelected?.last_name])
 
-    useEffect(() => {
-        api.sheet.users
-            .get()
-            .then(data => {
-                setUsers(data)
-            })
-            .finally(() => {
-                setLoading(false)
-            })
-        api.sheet.books.get().then(data => {
-            setBooks(data)
-        })
-
-        api.sheet.books.get().then(data => {
-            const opts = data.map(d => ({
-                label: d.title,
-                value: d.id
-            })) as Option[]
-
-            setOptions(opts)
-        })
-    }, [])
-
     return (
         <div className="w-full max-w-[740px] mx-auto">
             <BackButton classNameContainer="ml-4 mb-8" />
-            {loading ? (
+            {loadingUsers ? (
                 <Loading />
             ) : (
                 !userSelected?.id &&
@@ -121,18 +112,27 @@ export default function LendRegistration(): JSX.Element {
                         <span className="mb-4">Telefone: {userSelected.phone}</span>
 
                         <div>
+                            <h2>Selecione o livro:</h2>
                             <Select
                                 name="books"
-                                options={options}
+                                options={optionsBooks}
                                 onChange={e => {
                                     setBookSelected(e as Option)
                                 }}
                             />
                         </div>
+                        <span className="mt-2">{`Quantidade: ${selectedBookAmount}`}</span>
+                        <span className="mt-2">{`Quantidade disponível: ${booksAvailable}`}</span>
                     </div>
+
                     <div className="p-4">
                         <button
-                            className="py-2 px-4 rounded-md bg-primary text-white"
+                            disabled={!booksAvailable || alreadyLent}
+                            className={
+                                booksAvailable
+                                    ? 'py-2 px-4 rounded-md bg-primary text-white'
+                                    : 'py-2 px-4 rounded-md bg-gray-300 text-gray-500'
+                            }
                             onClick={() => {
                                 handleSubmit()
                             }}

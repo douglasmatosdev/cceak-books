@@ -9,6 +9,6 @@ declare type Book = {
     image: string
     amount: number
     category: string
-    status?: 'borrowed' | 'avaiable'
+    status?: 'borrowed' | 'available'
     place?: string
 }

@@ -27,6 +27,9 @@ export const BookModal = (props: { book: Book | Record<string, never>; onClose: 
                     <span className="block mt-2">
                         Local: <span className="text-emerald-900">{book.place}</span>
                     </span>
+                    <span className="block mt-2">
+                        Quantidade: <span className="text-emerald-900">{book.amount}</span>
+                    </span>
                     <h4 className="mt-6">
                         <BookStatus label={book?.status} />
                     </h4>

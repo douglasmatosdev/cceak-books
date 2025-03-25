@@ -56,7 +56,7 @@ export default function BookCreateForm(props: BookCreateFormProps): JSX.Element 
             .post({
                 ...book,
                 id: uuidv4(),
-                status: 'avaiable'
+                status: 'available'
             })
             .then(response => {
                 if (response.status === 200) {

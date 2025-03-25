@@ -21,7 +21,7 @@ export default function LendView(props: LendViewProps): JSX.Element {
                 const book = books.find(b => b.id === lend.book_id)
                 const updatedBook = {
                     ...book,
-                    status: 'avaiable'
+                    status: 'available'
                 } as Book
                 api.sheet.books.put(`${book?.id}`, updatedBook)
                 setLends(lends.filter(lend => lend?.id === id))
