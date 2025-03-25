@@ -35,7 +35,7 @@ export default function ManualRegister(): JSX.Element {
             .post({
                 ...value,
                 id: uuidv4(),
-                status: 'avaiable'
+                status: 'available'
             })
             .then(response => {
                 if (response.status === 200) {

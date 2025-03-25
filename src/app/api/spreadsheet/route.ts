@@ -1,12 +1,15 @@
 import { Sheet } from '@/enums/sheets'
 import { fetchGoogleSheets } from '@/services/spreadsheetToDTO'
-import { Row } from '@/types/spreadsheet'
+import { Row, SpreadsheetResponse } from '@/types/spreadsheet'
 import { NextRequest, NextResponse } from 'next/server'
 
+let spreadsheet = null as unknown as SpreadsheetResponse
+
 export async function GET(req: NextRequest): Promise<NextResponse> {
-    const spreadsheet = await fetchGoogleSheets()
+    spreadsheet = await fetchGoogleSheets()
 
     const { searchParams } = new URL(req.url)
+
     const sheet = searchParams.get('sheet') as Sheet
 
     const data = await spreadsheet.get[sheet]
@@ -15,8 +18,6 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-    const spreadsheet = await fetchGoogleSheets()
-
     const body = await req.json()
 
     const { searchParams } = new URL(req.url)
@@ -28,8 +29,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function PUT(req: NextRequest): Promise<NextResponse> {
-    const spreadsheet = await fetchGoogleSheets()
-
     const body = (await req.json()) as Book
 
     const { searchParams } = new URL(req.url)
@@ -44,8 +43,6 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function DELETE(req: NextRequest): Promise<NextResponse> {
-    const spreadsheet = await fetchGoogleSheets()
-
     const { searchParams } = new URL(req.url)
     const id = searchParams.get('id')
     const sheet = searchParams.get('sheet') as Sheet

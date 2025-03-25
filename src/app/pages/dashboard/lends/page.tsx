@@ -3,19 +3,18 @@ import { BackButton } from '@/components/BackButton'
 import { Empty } from '@/components/Empty'
 import { Loading } from '@/components/Loading'
 import { PaginatedLendsItems } from '@/components/PaginatedLendsItems'
+import { useEntities } from '@/hooks/useEntities'
 import { api } from '@/services/api'
 import Link from 'next/link'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent } from 'react'
 
 export default function Lends(): JSX.Element {
-    const [books, setBooks] = useState<Book[]>([])
-    const [lends, setLends] = useState<Lend[]>([])
-    const [loading, setLoading] = useState(true)
-
-    const [filteredLends, setFilteredLends] = useState<Lend[]>(lends)
+    const { books, lends, setLends, filteredLends, setFilteredLends, loadingLends } = useEntities(['books', 'lends'])
 
     const handleDelete = async (id: string): Promise<void> => {
         await api.sheet.lends.delete(id).then(() => {
+            if (!lends || !setLends || !books || !setFilteredLends) return
+
             const filtered = lends.filter(lend => lend?.id !== id)
             setFilteredLends(filtered)
             setLends(filtered)
@@ -27,7 +26,7 @@ export default function Lends(): JSX.Element {
             const book = books.find(b => b.id === bookId)
             const updatedBook = {
                 ...book,
-                status: 'avaiable'
+                status: 'available'
             } as Book
 
             api.sheet.books.put(bookId, updatedBook)
@@ -35,6 +34,8 @@ export default function Lends(): JSX.Element {
     }
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        if (!lends || !setFilteredLends) return
+
         const value = e.target.value
 
         if (value) {
@@ -43,21 +44,6 @@ export default function Lends(): JSX.Element {
             setFilteredLends(lends)
         }
     }
-
-    useEffect(() => {
-        api.sheet.books.get().then(data => {
-            setBooks(data)
-        })
-        api.sheet.lends
-            .get()
-            .then(data => {
-                setLends(data)
-                setFilteredLends(data)
-            })
-            .finally(() => {
-                setLoading(false)
-            })
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className="w-full max-w-[740px] mx-auto">
@@ -70,7 +56,7 @@ export default function Lends(): JSX.Element {
                     Registrar um empréstimo
                 </Link>
             </div>
-            {loading ? (
+            {loadingLends ? (
                 <Loading />
             ) : !filteredLends?.length ? (
                 <Empty />

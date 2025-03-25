@@ -6,13 +6,13 @@ interface BookStatusProps {
 }
 export const BookStatus = ({ label = 'default', className = '' }: BookStatusProps): JSX.Element => {
     const statusLabel = {
-        avaiable: 'disponível',
+        available: 'disponível',
         borrowed: 'emprestado',
         default: ''
     }
 
     const components = {
-        avaiable: (
+        available: (
             <span className={cn('font-semibold border-2 rounded-md p-2 text-green-500 border-green-500', className)}>
                 {statusLabel[label]}
             </span>
