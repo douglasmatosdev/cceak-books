@@ -37,8 +37,8 @@ export default function LayoutMenu(): JSX.Element {
                 >
                     <ul className="flex flex-col md:flex-row items-start md:gap-4 md:justify-end md:items-end md:w-full p-4 space-y-4 mt-16 md:mt-0">
                         <li>
-                            <Link onClick={() => setShow(false)} className="text-xl hover:underline" href={'/'}>
-                                Início
+                            <Link onClick={() => setShow(false)} href={'/'} className="text-white hover:underline">
+                                INÍCIO
                             </Link>
                         </li>
                         <li>
