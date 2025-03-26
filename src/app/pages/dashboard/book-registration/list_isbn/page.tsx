@@ -175,9 +175,11 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
                     <div className="w-full md:w-max flex justify-end items-end lg:mr-8">
                         <button
                             onClick={handleRegisterAll}
-                            className="w-full md:w-60 mt-4 bg-blue-500 text-white py-2 px-4 hover:bg-white hover:text-blue-500 border-2 border-blue-500 text-xl"
+                            className="w-full md:w-max mt-4 bg-blue-500 text-white py-2 px-4 hover:bg-white hover:text-blue-500 border-2 border-blue-500 text-xl"
                         >
-                            CADASTRAR TODOS
+                            {booksInformations?.length} (
+                            {booksInformations?.length > 1 ? 'livros encontrados' : 'livro encontrado'}) - CADASTRAR
+                            TODOS
                         </button>
                     </div>
                     <div className="w-full md:w-max  flex justify-end items-end">
@@ -192,9 +194,11 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
                                     a.click()
                                     URL.revokeObjectURL(url)
                                 }}
-                                className="w-full md:w-60 md:min-w-96 mt-4 bg-red-500 text-white py-2 px-4 hover:bg-white hover:text-red-500 border-2 border-red-500 text-xl"
+                                className="w-full md:w-max md:min-w-96 mt-4 bg-red-500 text-white py-2 px-4 hover:bg-white hover:text-red-500 border-2 border-red-500 text-xl"
                             >
-                                BAIXAR CÓDIGOS COM ERROS
+                                {codesWithErrors?.length} (
+                                {codesWithErrors?.length > 1 ? 'códigos com erro' : 'código com erros'}) - BAIXAR
+                                CÓDIGOS COM ERROS
                             </button>
                         ) : null}
                     </div>
