@@ -7,6 +7,7 @@ interface AdminLinkProps {
     className?: string
     href?: string
     children?: ReactNode
+    onClick?: () => void
     beforeNavigate?: {
         label: ReactNode
         path: string
@@ -16,7 +17,14 @@ interface AdminLinkProps {
         path: string
     }
 }
-const AdminLink = ({ className, href, children, afterNavigate, beforeNavigate }: AdminLinkProps): JSX.Element => {
+const AdminLink = ({
+    className,
+    href,
+    children,
+    onClick,
+    afterNavigate,
+    beforeNavigate
+}: AdminLinkProps): JSX.Element => {
     const pathname = usePathname()
     const key = pathname.includes('/dashboard') ? 'after' : 'before'
 
@@ -31,7 +39,7 @@ const AdminLink = ({ className, href, children, afterNavigate, beforeNavigate }:
     return (
         <>
             {result && (
-                <Link href={result?.path as string} className={className}>
+                <Link onClick={onClick} href={result?.path as string} className={className}>
                     {result?.label}
                 </Link>
             )}

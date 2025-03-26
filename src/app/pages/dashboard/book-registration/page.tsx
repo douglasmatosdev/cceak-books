@@ -25,6 +25,12 @@ export default function BookRegistration(): JSX.Element {
                 >
                     Escanear código ISBN
                 </Link>
+                <Link
+                    href={'/pages/dashboard/book-registration/list'}
+                    className="py-2 px-4 bg-primary text-white rounded-md text-center w-full mt-8"
+                >
+                    Carregar lista de códigos ISBN
+                </Link>
             </div>
         </div>
     )

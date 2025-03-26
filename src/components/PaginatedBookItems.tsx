@@ -74,12 +74,13 @@ export const PaginatedBookItems = ({
                 })}
             </div>
             <ReactPaginate
+                activeLinkClassName="bg-primary text-white rounded-full px-4 py-2"
                 breakLabel="..."
-                nextLabel="próximo >"
+                nextLabel={<div className="min-w-20">{'próximo >'}</div>}
                 onPageChange={handlePageClick}
                 pageRangeDisplayed={5}
                 pageCount={pageCount}
-                previousLabel="< anterior"
+                previousLabel={<div className="min-w-20">{'< anterior'}</div>}
                 renderOnZeroPageCount={null}
             />
         </PaginatedContainer>

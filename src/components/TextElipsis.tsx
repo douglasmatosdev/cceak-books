@@ -28,6 +28,28 @@ export const TextElipsis = ({ text, width, height, color }: TextElipsisProps): J
         } else {
             setDisplay('-webkit-box')
         }
+
+        const textRefCurrent = textRef.current
+        if (textRefCurrent) {
+            textRefCurrent?.addEventListener('mouseover', () => {
+                textRefCurrent.style.webkitLineClamp = '10'
+            })
+
+            textRefCurrent?.addEventListener('mouseleave', () => {
+                textRefCurrent.style.webkitLineClamp = String(numberOfLines)
+            })
+        }
+
+        return () => {
+            if (textRefCurrent) {
+                textRefCurrent.removeEventListener('mouseover', () => {
+                    textRefCurrent.style.webkitLineClamp = String(numberOfLines)
+                })
+                textRefCurrent?.removeEventListener('mouseleave', () => {
+                    textRefCurrent.style.webkitLineClamp = String(numberOfLines)
+                })
+            }
+        }
     }, [text, width, height])
 
     return (

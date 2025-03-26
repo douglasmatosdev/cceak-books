@@ -25,13 +25,19 @@ export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }): JSX.
     return (
         <PaginatedContainer disabled={currentItems.length <= itemsPerPage}>
             {loadingBooks ? <Loading /> : !books?.length ? <Empty /> : <AllBooks lends={lends} books={currentItems} />}
+
+            <div className="mx-auto w-full flex justify-center items-center -mb-12 mt-8">
+                {books?.length ? <span>{books?.length} livros encontrados</span> : null}
+            </div>
+
             <ReactPaginate
+                activeLinkClassName="bg-primary text-white rounded-full px-4 py-2"
                 breakLabel="..."
-                nextLabel="próximo >"
+                nextLabel={<div className="min-w-20">{'próximo >'}</div>}
                 onPageChange={handlePageClick}
                 pageRangeDisplayed={5}
                 pageCount={pageCount}
-                previousLabel="< anterior"
+                previousLabel={<div className="min-w-20">{'< anterior'}</div>}
                 renderOnZeroPageCount={null}
             />
         </PaginatedContainer>

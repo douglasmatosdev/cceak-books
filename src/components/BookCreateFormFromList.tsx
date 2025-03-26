@@ -1,7 +1,6 @@
 'use client'
 import Link from 'next/link'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { api } from '@/services/api'
 import { useToastify } from '@/hooks/useToastify'
 import { SelectPhoto } from './SelectPhoto'
@@ -9,9 +8,11 @@ import { ImCamera } from 'react-icons/im'
 
 import { v4 as uuidv4 } from 'uuid'
 
-type BookCreateFormProps = Book
+type BookCreateFormProps = {
+    setBooksInformations: React.Dispatch<React.SetStateAction<BrasilapiBook[]>>
+} & Book
 
-export default function BookCreateForm(props: BookCreateFormProps): JSX.Element {
+export default function BookCreateFormFromList(props: BookCreateFormProps): JSX.Element {
     const {
         isbn = '',
         title = '',
@@ -19,9 +20,10 @@ export default function BookCreateForm(props: BookCreateFormProps): JSX.Element 
         author = '',
         description = '',
         image = '',
-        amount,
+        amount = 1,
         category = '',
-        place = ''
+        place = '',
+        setBooksInformations
     } = props
 
     const [value, setValue] = useState<Book>({
@@ -36,8 +38,6 @@ export default function BookCreateForm(props: BookCreateFormProps): JSX.Element 
         place
     })
     const [getPhoto, setGetPhoto] = useState<boolean>(false)
-
-    const router = useRouter()
 
     const { toast } = useToastify()
 
@@ -60,7 +60,7 @@ export default function BookCreateForm(props: BookCreateFormProps): JSX.Element 
             })
             .then(response => {
                 if (response.status === 200) {
-                    router.push('/pages/dashboard')
+                    setBooksInformations(prev => prev.filter(b => +b.isbn !== +book.isbn))
                     toast('Livro cadastrado com sucesso!', 'success')
                 }
             })
