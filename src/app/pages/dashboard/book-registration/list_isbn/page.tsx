@@ -1,7 +1,7 @@
 'use client'
 import { api, services } from '@/services/api'
 import { Empty } from '@/components/Empty'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Img } from '@/components/Img'
 import { useToastify } from '@/hooks/useToastify'
 import { AiOutlineArrowUp, AiOutlineLoading3Quarters } from 'react-icons/ai'
@@ -139,6 +139,15 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
         })
     }
 
+    const getCodesWithErrrosUrl = useCallback(() => {
+        const blob = new Blob([codesWithErrors.join('\n')], { type: 'text/plain' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+
+        return url
+    }, [codesWithErrors])
+
     useEffect(() => {
         document.addEventListener('scroll', () => setShowBackToTopButton(window.scrollY > 100))
 
@@ -168,7 +177,7 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
                             onClick={handleRegisterAll}
                             className="w-full md:w-60 mt-4 bg-blue-500 text-white py-2 px-4 hover:bg-white hover:text-blue-500 border-2 border-blue-500 text-xl"
                         >
-                            Cadastrar todos
+                            CADASTRAR TODOS
                         </button>
                     </div>
                     <div className="w-full md:w-max  flex justify-end items-end">
@@ -185,11 +194,35 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
                                 }}
                                 className="w-full md:w-60 md:min-w-96 mt-4 bg-red-500 text-white py-2 px-4 hover:bg-white hover:text-red-500 border-2 border-red-500 text-xl"
                             >
-                                Fazer download dos códigos com erro
+                                BAIXAR CÓDIGOS COM ERROS
                             </button>
                         ) : null}
                     </div>
                 </div>
+                {codesWithErrors?.length ? (
+                    <div
+                        className="w-full max-w-[85%] mx-auto bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 mt-8"
+                        role="alert"
+                    >
+                        <p className="font-bold">Atenção</p>
+                        <p>
+                            Alguns códigos não são válidos para a Brasil API. Considere tentar outra API para obter os
+                            dados.
+                        </p>
+                        <p>
+                            <a
+                                className="text-blue-500 underline"
+                                href={getCodesWithErrrosUrl()}
+                                download="codigos_com_erros.txt"
+                            >
+                                Consulte os códigos com erros.
+                            </a>
+                        </p>
+                        <p>
+                            {'Ao clicar em "CADASTRAR TODOS", apenas os livros com códigos válidos serão cadastrados.'}
+                        </p>
+                    </div>
+                ) : null}
                 <div className="w-full h-full p-8 mx-auto flex flex-wrap gap-4">
                     {showBaxToTopButton ? (
                         <button

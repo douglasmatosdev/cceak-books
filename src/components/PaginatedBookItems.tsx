@@ -74,7 +74,11 @@ export const PaginatedBookItems = ({
                 })}
             </div>
             <div className="mx-auto w-full flex justify-center items-center -mb-12 mt-8">
-                {books?.length ? <span>{books?.length} livros encontrados</span> : null}
+                {books?.length ? (
+                    <span>
+                        {books?.length} {books?.length > 1 ? 'livros encontrados' : 'livro encontrado'}{' '}
+                    </span>
+                ) : null}
             </div>
             <ReactPaginate
                 activeLinkClassName="bg-primary text-white rounded-full px-4 py-2"

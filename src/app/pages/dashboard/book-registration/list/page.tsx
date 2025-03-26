@@ -24,6 +24,7 @@ export default function List(): JSX.Element {
         <div className="flex flex-col justify-center items-center p-8 w-full max-w-[740px] mx-auto">
             <BackButton classNameContainer="mb-8" />
             <h2>Digite ou cole uma lista de códigos ISBN</h2>
+            <h3>Deve haver apenas um código por linha</h3>
             <textarea
                 value={inputValue}
                 placeholder={`9788570460097\n9788570460097\n9788570460097`}

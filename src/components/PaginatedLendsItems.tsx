@@ -68,7 +68,11 @@ export const PaginatedLendsItems = ({
                 })}
             </div>
             <div className="mx-auto w-full flex justify-center items-center -mb-12 mt-8">
-                {lends?.length ? <span>{lends?.length} empréstimos encontrados</span> : null}
+                {lends?.length ? (
+                    <span>
+                        {lends?.length} {lends?.length > 1 ? 'empréstimos encontrados' : ' empréstimo encontrado'}
+                    </span>
+                ) : null}
             </div>
             <ReactPaginate
                 activeLinkClassName="bg-primary text-white rounded-full px-4 py-2"
