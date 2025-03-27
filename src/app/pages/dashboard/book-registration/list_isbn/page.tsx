@@ -40,7 +40,7 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
 
     const { toast } = useToastify()
 
-    const getBooksInformations = async (): Promise<void> => {
+    const getBooksInformations = useCallback(async (): Promise<void> => {
         const localCodes: string[] = searchParams?.list_isbn ? JSON.parse(searchParams.list_isbn) : []
         setCodes(localCodes)
         const localCodesWithErrors: string[] = []
@@ -67,7 +67,7 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
         setBooksInformations(localBooksInformations)
         setCodesWithErrors(localCodesWithErrors)
         setLoading(false)
-    }
+    }, [searchParams])
 
     useEffect(() => {
         getBooksInformations()
