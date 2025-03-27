@@ -20,9 +20,16 @@ interface SearchPageProps {
 export default function SearchPage({ searchParams }: SearchPageProps): JSX.Element {
     const [booksInformations, setBooksInformations] = useState<BrasilapiBook[]>([])
     const [loading, setLoading] = useState(true)
+    const [loadingPost, setLoadingPost] = useState(false)
     const [codesWithErrors, setCodesWithErrors] = useState<string[]>([])
     const [sended, setSended] = useState(false)
     const [showBaxToTopButton, setShowBackToTopButton] = useState(false)
+    const [filteredByUnique, setFilteredByUnique] = useState<BrasilapiBook[]>([])
+    const [countItems, setCountItems] = useState(0)
+    const [remainingTime, setRemainingTime] = useState(0)
+
+    const [codes, setCodes] = useState<string[]>([])
+    const [countCodeItems, setCountCodeItems] = useState<number>(0)
 
     const [apiSelected] = useState({
         google: false,
@@ -34,41 +41,32 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
     const { toast } = useToastify()
 
     const getBooksInformations = async (): Promise<void> => {
-        const codes = JSON.parse(searchParams.list_isbn)
+        const localCodes: string[] = JSON.parse(searchParams.list_isbn)
+        setCodes(localCodes)
         const localCodesWithErrors: string[] = []
         const localBooksInformations: BrasilapiBook[] = []
 
-        await Promise.all(codes.map(async (code: string) => searchFromBrasilApi(code)))
-            .then(response => {
-                if (response?.length === codes?.length) {
-                    const hasSomeError = response.some(error => error.error)
-                    const hasSomeSuccess = response.some(error => !error.error)
+        let localCount = 0
+        for (const code of localCodes) {
+            localCount++
+            setCountCodeItems(localCount)
+            await searchFromBrasilApi(code).then(response => {
+                if (response.control.error) {
+                    localCodesWithErrors.push(code)
+                    // toast(response.control.message || 'Livros não encontrados', 'error')
+                }
 
-                    if (hasSomeError && !hasSomeSuccess) {
-                        toast(response.find(he => he.error)?.message || 'Livros não encontrados', 'error')
-                    }
-
-                    if (hasSomeSuccess && !hasSomeError) {
-                        toast(response.find(he => !he.error)?.message || 'Livros encontrados com sucesso', 'success')
-                    }
-
-                    if (hasSomeSuccess && hasSomeError) {
-                        toast('Houve sucesso em alguns, mas teve erro em outros', 'warning')
-                    }
-
-                    response.forEach(({ control, data }) => {
-                        if (control.error) {
-                            localCodesWithErrors.push(control.code)
-                        } else {
-                            localBooksInformations.push(data)
-                        }
-                    })
+                if (!response.control.error) {
+                    localBooksInformations.push(response.data)
+                    // toast(response.control.message || 'Livros encontrados com sucesso', 'success')
                 }
             })
-            .finally(() => setLoading(false))
+            await new Promise(resolve => setTimeout(resolve, 500)) // Wait 500ms between each request
+        }
 
         setBooksInformations(localBooksInformations)
         setCodesWithErrors(localCodesWithErrors)
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -106,37 +104,58 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
     }
 
     const handleRegisterAll = async (): Promise<void> => {
-        const localBooksInformations = []
+        // Split the books into chunks of 500 items
+        const chunkSize = 100
+        const chunks = []
+        const localFilteredByUnique = books?.length
+            ? booksInformations.filter(bookInformation => books?.some(b => +b?.isbn !== +bookInformation?.isbn))
+            : booksInformations
+        setFilteredByUnique(localFilteredByUnique)
+        for (let i = 0; i < localFilteredByUnique.length; i += chunkSize) {
+            chunks.push(localFilteredByUnique.slice(i, i + chunkSize))
+        }
 
-        for (const book of booksInformations) {
-            if (books?.length > 0) {
-                const bookExists = books?.some(b => +b?.isbn === +book?.isbn)
-
-                if (bookExists) {
-                    toast('Livro com o mesmo código ISBN já cadastrado!', 'warning')
-
-                    continue
+        // Process each chunk sequentially
+        let countItems = 0
+        let countPost = 0
+        for (const chunk of chunks) {
+            countItems += chunk.length
+            for (const book of chunk) {
+                try {
+                    countPost++
+                    setLoadingPost(true)
+                    setCountItems(countPost)
+                    await api.sheet.books.post({
+                        ...(book as unknown as Book),
+                        id: uuidv4(),
+                        status: 'available',
+                        amount: 1
+                    })
+                    await new Promise(resolve => setTimeout(resolve, 500)) // Wait 500ms between each post
+                } catch (error) {
+                    console.error('Error trying to create book', error)
                 }
             }
 
-            localBooksInformations.push(
-                api.sheet.books.post({
-                    ...(book as unknown as Book),
-                    id: uuidv4(),
-                    status: 'available',
-                    amount: 1
-                })
-            )
-        }
+            if (countItems < localFilteredByUnique.length) {
+                setRemainingTime(30)
+                await new Promise(resolve => setTimeout(resolve, 30000)) // Wait 500ms between each post
+                setRemainingTime(0)
+                setLoadingPost(false)
 
-        await Promise.all(localBooksInformations).then(response => {
-            if (response?.length === localBooksInformations?.length) {
-                toast('Todos os livros foram cadastrados com sucesso!', 'success')
-                setBooksInformations([])
-                setSended(true)
-                window.location.href = '/pages/dashboard/books'
+                toast(`${chunk.length} livros foram cadastrados com sucesso`, 'success')
             }
-        })
+
+            if (countItems === localFilteredByUnique.length) {
+                toast(`Todos os livros foram cadastrados com sucesso`, 'success')
+
+                setTimeout(() => {
+                    setBooksInformations([])
+                    setSended(true)
+                    window.location.href = '/pages/dashboard/books'
+                }, 2000)
+            }
+        }
     }
 
     const getCodesWithErrrosUrl = useCallback(() => {
@@ -154,6 +173,16 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
         return () => document.removeEventListener('scroll', () => setShowBackToTopButton(window.scrollY > 100))
     }, [])
 
+    useEffect(() => {
+        if (remainingTime) {
+            const interval = setInterval(() => {
+                setRemainingTime(prev => prev - 1)
+            }, 1000)
+
+            return () => clearInterval(interval)
+        }
+    }, [remainingTime])
+
     if ((!booksInformations?.length && !loading) || sended) {
         return (
             <>
@@ -166,6 +195,30 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
     if (booksInformations?.length) {
         return (
             <div className="w-full h-full md:p-8 mx-auto">
+                {loadingPost && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                        <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+                            <h2 className="text-xl font-bold mb-4">Progresso do Cadastro</h2>
+                            <p className="mb-2">Cadastrando livros...</p>
+                            <div className="w-full bg-gray-200 rounded-full h-4 mb-4">
+                                <div
+                                    className="bg-blue-500 h-4 rounded-full"
+                                    style={{
+                                        width: `${(countItems / filteredByUnique.length) * 100}%`
+                                    }}
+                                ></div>
+                            </div>
+                            <p className="text-sm text-gray-600">
+                                {countItems} de {filteredByUnique.length} livros cadastrados
+                            </p>
+                            {remainingTime ? (
+                                <p className="text-sm text-gray-600 mt-2">
+                                    Continuaremos o cadastro em: {remainingTime}s
+                                </p>
+                            ) : null}
+                        </div>
+                    </div>
+                )}
                 <div className="w-full flex flex-col lg:flex lg:flex-row justify-between items-end px-8 md:px-28">
                     <div className="w-full">
                         <BackButton classNameContainer="mb-8" />
@@ -286,6 +339,23 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
                         </div>
                     )}
                 </button>
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+                        <h2 className="text-xl font-bold mb-4">Progresso da busca</h2>
+                        <p className="mb-2">Procurando livros...</p>
+                        <div className="w-full bg-gray-200 rounded-full h-4 mb-4">
+                            <div
+                                className="bg-blue-500 h-4 rounded-full"
+                                style={{
+                                    width: `${(countCodeItems / codes.length) * 100}%`
+                                }}
+                            ></div>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                            {countCodeItems} de {codes.length} códigos verificados
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     )
