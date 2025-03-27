@@ -41,7 +41,9 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
     const { toast } = useToastify()
 
     const getBooksInformations = useCallback(async (): Promise<void> => {
-        const localCodes: string[] = searchParams?.list_isbn ? JSON.parse(searchParams.list_isbn) : []
+        if (!searchParams?.list_isbn) return
+
+        const localCodes: string[] = JSON.parse(searchParams.list_isbn)
         setCodes(localCodes)
         const localCodesWithErrors: string[] = []
         const localBooksInformations: BrasilapiBook[] = []
