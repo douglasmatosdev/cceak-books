@@ -2,7 +2,7 @@
 'use client'
 import { api, services } from '@/services/api'
 import { Empty } from '@/components/Empty'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, Suspense } from 'react'
 import { Img } from '@/components/Img'
 import { useToastify } from '@/hooks/useToastify'
 import { AiOutlineArrowUp, AiOutlineLoading3Quarters } from 'react-icons/ai'
@@ -14,7 +14,7 @@ import { useSearchParams } from 'next/navigation'
 
 type ErrorObj = { error: boolean; message: string }
 
-export default function SearchPage(): JSX.Element {
+function SearchPageImpl(): JSX.Element {
     const [booksInformations, setBooksInformations] = useState<BrasilapiBook[]>([])
     const [loading, setLoading] = useState(true)
     const [loadingPost, setLoadingPost] = useState(false)
@@ -361,5 +361,12 @@ export default function SearchPage(): JSX.Element {
                 </div>
             </div>
         </div>
+    )
+}
+export default function SearchPage(): JSX.Element {
+    return (
+        <Suspense>
+            <SearchPageImpl />
+        </Suspense>
     )
 }
