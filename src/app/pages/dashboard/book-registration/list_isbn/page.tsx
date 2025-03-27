@@ -9,15 +9,11 @@ import { BackButton } from '@/components/BackButton'
 import BookCreateFormFromList from '@/components/BookCreateFormFromList'
 import { useEntities } from '@/hooks/useEntities'
 import { v4 as uuidv4 } from 'uuid'
+import { useRouter } from 'next/router'
 
 type ErrorObj = { error: boolean; message: string }
 
-interface SearchPageProps {
-    searchParams: {
-        list_isbn: string
-    }
-}
-export default function SearchPage({ searchParams }: SearchPageProps): JSX.Element {
+export default function SearchPage(): JSX.Element {
     const [booksInformations, setBooksInformations] = useState<BrasilapiBook[]>([])
     const [loading, setLoading] = useState(true)
     const [loadingPost, setLoadingPost] = useState(false)
@@ -31,6 +27,8 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
     const [codes, setCodes] = useState<string[]>([])
     const [countCodeItems, setCountCodeItems] = useState<number>(0)
 
+    const router = useRouter()
+
     const [apiSelected] = useState({
         google: false,
         brasilapi: true
@@ -41,9 +39,8 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
     const { toast } = useToastify()
 
     const getBooksInformations = useCallback(async (): Promise<void> => {
-        if (!searchParams?.list_isbn) return
-
-        const localCodes: string[] = JSON.parse(searchParams.list_isbn)
+        const listIsbn = router?.query?.list_isbn as string
+        const localCodes: string[] = JSON.parse(listIsbn || '[]')
         setCodes(localCodes)
         const localCodesWithErrors: string[] = []
         const localBooksInformations: BrasilapiBook[] = []
@@ -69,7 +66,7 @@ export default function SearchPage({ searchParams }: SearchPageProps): JSX.Eleme
         setBooksInformations(localBooksInformations)
         setCodesWithErrors(localCodesWithErrors)
         setLoading(false)
-    }, [searchParams])
+    }, [router?.query?.list_isbn])
 
     useEffect(() => {
         getBooksInformations()
