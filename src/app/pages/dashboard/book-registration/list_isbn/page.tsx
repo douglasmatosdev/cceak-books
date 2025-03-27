@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 'use client'
 import { api, services } from '@/services/api'
 import { Empty } from '@/components/Empty'
@@ -9,7 +10,7 @@ import { BackButton } from '@/components/BackButton'
 import BookCreateFormFromList from '@/components/BookCreateFormFromList'
 import { useEntities } from '@/hooks/useEntities'
 import { v4 as uuidv4 } from 'uuid'
-import { useRouter } from 'next/router'
+import { useSearchParams } from 'next/navigation'
 
 type ErrorObj = { error: boolean; message: string }
 
@@ -27,8 +28,6 @@ export default function SearchPage(): JSX.Element {
     const [codes, setCodes] = useState<string[]>([])
     const [countCodeItems, setCountCodeItems] = useState<number>(0)
 
-    const router = useRouter()
-
     const [apiSelected] = useState({
         google: false,
         brasilapi: true
@@ -38,9 +37,14 @@ export default function SearchPage(): JSX.Element {
 
     const { toast } = useToastify()
 
+    const searchParams = useSearchParams()
+
+    const list_isbn = searchParams.get('list_isbn')
+
     const getBooksInformations = useCallback(async (): Promise<void> => {
-        const listIsbn = router?.query?.list_isbn as string
-        const localCodes: string[] = JSON.parse(listIsbn || '[]')
+        if (!list_isbn) return
+
+        const localCodes: string[] = JSON.parse(list_isbn)
         setCodes(localCodes)
         const localCodesWithErrors: string[] = []
         const localBooksInformations: BrasilapiBook[] = []
@@ -66,7 +70,7 @@ export default function SearchPage(): JSX.Element {
         setBooksInformations(localBooksInformations)
         setCodesWithErrors(localCodesWithErrors)
         setLoading(false)
-    }, [router?.query?.list_isbn])
+    }, [list_isbn])
 
     useEffect(() => {
         getBooksInformations()
