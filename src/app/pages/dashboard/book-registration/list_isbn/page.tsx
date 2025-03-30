@@ -154,12 +154,21 @@ function SearchPageImpl(): JSX.Element {
                     countPost++
                     setLoadingPost(true)
                     setCountItems(countPost)
-                    await api.sheet.books.post({
-                        ...(book as unknown as Book),
-                        id: uuidv4(),
-                        status: 'available',
-                        amount: 1
-                    })
+                    await api.sheet.books
+                        .post({
+                            ...(book as unknown as Book),
+                            id: uuidv4(),
+                            status: 'available',
+                            amount: 1
+                        })
+                        .catch(error => {
+                            const message = error?.response?.data?.message
+                            const responseUrl = error?.response?.config?.url
+                            const wrongCode = responseUrl.split('/').pop()
+                            setCodesWithErrors(prev => [...prev, wrongCode])
+                            console.error('Error trying to create book', message)
+                            toast(message || 'Erro ao cadastrar livro', 'error')
+                        })
                     await new Promise(resolve => setTimeout(resolve, 500)) // Wait 500ms between each post
                 } catch (error) {
                     console.error('Error trying to create book', error)
