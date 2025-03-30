@@ -73,7 +73,7 @@ export const PaginatedUserItems = ({
                 ) : null}
             </div>
             <ReactPaginate
-                activeLinkClassName="bg-primary text-white rounded-full px-4 py-2"
+                activeLinkClassName="bg-primary text-white rounded-full px-2"
                 breakLabel="..."
                 nextLabel={
                     <div className="absolute right-0 top-8 bg-primary text-white rounded-full px-4 py-2">
