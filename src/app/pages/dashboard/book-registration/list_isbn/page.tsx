@@ -163,9 +163,6 @@ function SearchPageImpl(): JSX.Element {
                         })
                         .catch(error => {
                             const message = error?.response?.data?.message
-                            const responseUrl = error?.response?.config?.url
-                            const wrongCode = responseUrl.split('/').pop()
-                            setCodesWithErrors(prev => [...prev, wrongCode])
                             console.error('Error trying to create book', message)
                             toast(message || 'Erro ao cadastrar livro', 'error')
                         })
