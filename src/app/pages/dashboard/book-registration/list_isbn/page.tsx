@@ -279,7 +279,7 @@ function SearchPageImpl(): JSX.Element {
                                     const url = URL.createObjectURL(blob)
                                     const a = document.createElement('a')
                                     a.href = url
-                                    a.download = 'codigos_com_erros.txt'
+                                    a.download = `${codesWithErrors?.length}_codigos_com_erros-${new Date().getTime()}.txt`
                                     a.click()
                                     URL.revokeObjectURL(url)
                                 }}
@@ -320,7 +320,7 @@ function SearchPageImpl(): JSX.Element {
                             <a
                                 className="text-blue-500 underline"
                                 href={getCodesWithErrrosUrl()}
-                                download="codigos_com_erros.txt"
+                                download={`${codesWithErrors?.length}_codigos_com_erros-${new Date().getTime()}.txt`}
                             >
                                 Consulte os códigos com erros.
                             </a>
