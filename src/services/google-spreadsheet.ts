@@ -37,3 +37,5 @@ export const getGoogleSpreadsheet = async (): Promise<GoogleSpreadsheet> => {
 
     return googleSpreadsheet
 }
+
+export const GOOGLE_API_LIMIT = 60000

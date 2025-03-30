@@ -12,6 +12,7 @@ import { useEntities } from '@/hooks/useEntities'
 import { v4 as uuidv4 } from 'uuid'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { checkIfBookAlreadyExists } from '@/lib/checkIfBookAlreadyExists'
+import { GOOGLE_API_LIMIT } from '@/services/google-spreadsheet'
 
 type ErrorObj = { error: boolean; message: string }
 
@@ -172,8 +173,8 @@ function SearchPageImpl(): JSX.Element {
             }
 
             if (countItems < booksInformations.length) {
-                setRemainingTime(30)
-                await new Promise(resolve => setTimeout(resolve, 60000)) // Wait 60 seconds between each chunk because Google API has a limit of 60 requests per minute
+                setRemainingTime(GOOGLE_API_LIMIT)
+                await new Promise(resolve => setTimeout(resolve, GOOGLE_API_LIMIT)) // Wait 60 seconds between each chunk because Google API has a limit of 60 requests per minute
                 setRemainingTime(0)
                 setLoadingPost(false)
 
@@ -254,7 +255,7 @@ function SearchPageImpl(): JSX.Element {
                             </p>
                             {remainingTime ? (
                                 <p className="text-sm text-gray-600 mt-2">
-                                    Continuaremos o cadastro em: {remainingTime}s
+                                    Continuaremos o cadastro em: {remainingTime}s (Limite da API do Google)
                                 </p>
                             ) : null}
                         </div>
