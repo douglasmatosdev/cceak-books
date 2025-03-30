@@ -6,7 +6,7 @@ import { Img } from './Img'
 import { BookStatus } from './BookStatus'
 import { TextElipsis } from './TextElipsis'
 import { getBookAmountAndAvailable } from '@/hooks/getBookAmountAndAvailable'
-
+import { BackToTopButton } from './BackToTopButton'
 interface AllBooksProps {
     books: Book[]
     lends: Lend[]
@@ -17,6 +17,8 @@ function AllBooks({ books, lends }: AllBooksProps): JSX.Element {
     return (
         <div className="w-full flex flex-wrap gap-4  justify-center p-2 max-w-[1280px] mx-auto">
             {openModal?.title && <BookModal onClose={() => setOpenModal({})} book={openModal} />}
+
+            <BackToTopButton />
 
             {books?.map((book, index) => {
                 const bookAmountAndAvailable = getBookAmountAndAvailable(String(book?.id), books, lends)

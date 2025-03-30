@@ -5,7 +5,7 @@ import { Empty } from '@/components/Empty'
 import { useCallback, useEffect, useState, Suspense } from 'react'
 import { Img } from '@/components/Img'
 import { useToastify } from '@/hooks/useToastify'
-import { AiOutlineArrowUp, AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { BackButton } from '@/components/BackButton'
 import BookCreateFormFromList from '@/components/BookCreateFormFromList'
 import { useEntities } from '@/hooks/useEntities'
@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { checkIfBookAlreadyExists } from '@/lib/checkIfBookAlreadyExists'
 import { GOOGLE_API_LIMIT } from '@/services/google-spreadsheet'
+import { BackToTopButton } from '@/components/BackToTopButton'
 
 type ErrorObj = { error: boolean; message: string }
 
@@ -22,7 +23,7 @@ function SearchPageImpl(): JSX.Element {
     const [loadingPost, setLoadingPost] = useState(false)
     const [codesWithErrors, setCodesWithErrors] = useState<string[]>([])
     const [sended, setSended] = useState(false)
-    const [showBaxToTopButton, setShowBackToTopButton] = useState(false)
+
     const [filteredByUnique, setFilteredByUnique] = useState<BrasilapiBook[]>([])
     const [countItems, setCountItems] = useState(0)
     const [remainingTime, setRemainingTime] = useState(0)
@@ -203,12 +204,6 @@ function SearchPageImpl(): JSX.Element {
     }, [codesWithErrors])
 
     useEffect(() => {
-        document.addEventListener('scroll', () => setShowBackToTopButton(window.scrollY > 100))
-
-        return () => document.removeEventListener('scroll', () => setShowBackToTopButton(window.scrollY > 100))
-    }, [])
-
-    useEffect(() => {
         if (remainingTime) {
             const interval = setInterval(() => {
                 setRemainingTime(prev => prev - 1)
@@ -337,14 +332,7 @@ function SearchPageImpl(): JSX.Element {
                     </div>
                 ) : null}
                 <div className="w-full h-full p-8 mx-auto flex flex-wrap gap-4">
-                    {showBaxToTopButton ? (
-                        <button
-                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                            className="fixed bottom-8 right-8 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition-opacity"
-                        >
-                            <AiOutlineArrowUp className="text-white text-2xl" />
-                        </button>
-                    ) : null}
+                    <BackToTopButton />
                     {booksInformations?.map((book, index) => {
                         return (
                             <div key={book?.title + index} className="w-full h-full p-8 max-w-[640px] mx-auto border">
