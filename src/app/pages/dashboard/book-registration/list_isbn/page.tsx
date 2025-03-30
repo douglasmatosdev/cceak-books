@@ -136,7 +136,7 @@ function SearchPageImpl(): JSX.Element {
 
     const handleRegisterAll = async (): Promise<void> => {
         // Split the books into chunks of 500 items
-        const chunkSize = 100
+        const chunkSize = 59
         const chunks = []
 
         setFilteredByUnique(booksInformations)
@@ -166,7 +166,6 @@ function SearchPageImpl(): JSX.Element {
                             console.error('Error trying to create book', message)
                             toast(message || 'Erro ao cadastrar livro', 'error')
                         })
-                    await new Promise(resolve => setTimeout(resolve, 500)) // Wait 500ms between each post
                 } catch (error) {
                     console.error('Error trying to create book', error)
                 }
@@ -174,7 +173,7 @@ function SearchPageImpl(): JSX.Element {
 
             if (countItems < booksInformations.length) {
                 setRemainingTime(30)
-                await new Promise(resolve => setTimeout(resolve, 30000)) // Wait 500ms between each post
+                await new Promise(resolve => setTimeout(resolve, 60000)) // Wait 60 seconds between each chunk because Google API has a limit of 60 requests per minute
                 setRemainingTime(0)
                 setLoadingPost(false)
 
