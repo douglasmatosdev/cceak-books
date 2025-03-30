@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import ReactPaginate from 'react-paginate'
 import Link from 'next/link'
-import { FaPencilAlt, FaTrash } from 'react-icons/fa'
+import { FaArrowLeft, FaArrowRight, FaPencilAlt, FaTrash } from 'react-icons/fa'
 import { useToastify } from '@/hooks/useToastify'
 import { Img } from './Img'
 import { PaginatedContainer } from './styles'
@@ -83,11 +83,21 @@ export const PaginatedBookItems = ({
             <ReactPaginate
                 activeLinkClassName="bg-primary text-white rounded-full px-4 py-2"
                 breakLabel="..."
-                nextLabel={<div className="min-w-20">{'próximo >'}</div>}
+                nextLabel={
+                    <div className="absolute right-0 top-16 bg-primary text-white rounded-full px-4 py-2">
+                        <FaArrowRight />
+                    </div>
+                }
+                nextClassName="relative"
                 onPageChange={handlePageClick}
                 pageRangeDisplayed={5}
                 pageCount={pageCount}
-                previousLabel={<div className="min-w-20">{'< anterior'}</div>}
+                previousLabel={
+                    <div className="absolute left-0 top-16 bg-primary text-white rounded-full px-4 py-2">
+                        <FaArrowLeft />
+                    </div>
+                }
+                previousClassName="relative "
                 renderOnZeroPageCount={null}
             />
         </PaginatedContainer>

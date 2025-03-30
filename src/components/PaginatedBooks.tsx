@@ -7,6 +7,7 @@ import { Empty } from './Empty'
 import { PaginatedContainer } from './styles'
 import { Loading } from './Loading'
 import { useEntities } from '@/hooks/useEntities'
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 
 export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }): JSX.Element => {
     const [itemOffset, setItemOffset] = useState(0)
@@ -31,13 +32,24 @@ export const PaginatedBooks = ({ itemsPerPage }: { itemsPerPage: number }): JSX.
             </div>
 
             <ReactPaginate
+                className="relative"
                 activeLinkClassName="bg-primary text-white rounded-full px-4 py-2"
                 breakLabel="..."
-                nextLabel={<div className="min-w-20">{'próximo >'}</div>}
+                nextLabel={
+                    <div className="absolute right-0 top-16 bg-primary text-white rounded-full px-4 py-2">
+                        <FaArrowRight />
+                    </div>
+                }
+                nextClassName="relative"
                 onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
+                pageRangeDisplayed={1}
                 pageCount={pageCount}
-                previousLabel={<div className="min-w-20">{'< anterior'}</div>}
+                previousLabel={
+                    <div className="absolute left-0 top-16 bg-primary text-white rounded-full px-4 py-2">
+                        <FaArrowLeft />
+                    </div>
+                }
+                previousClassName="relative "
                 renderOnZeroPageCount={null}
             />
         </PaginatedContainer>
