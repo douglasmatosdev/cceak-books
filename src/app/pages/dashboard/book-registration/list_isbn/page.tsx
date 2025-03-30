@@ -173,7 +173,7 @@ function SearchPageImpl(): JSX.Element {
             }
 
             if (countItems < booksInformations.length) {
-                setRemainingTime(GOOGLE_API_LIMIT)
+                setRemainingTime(GOOGLE_API_LIMIT / 1000)
                 await new Promise(resolve => setTimeout(resolve, GOOGLE_API_LIMIT)) // Wait 60 seconds between each chunk because Google API has a limit of 60 requests per minute
                 setRemainingTime(0)
                 setLoadingPost(false)
