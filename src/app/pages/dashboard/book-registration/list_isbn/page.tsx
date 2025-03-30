@@ -10,7 +10,8 @@ import { BackButton } from '@/components/BackButton'
 import BookCreateFormFromList from '@/components/BookCreateFormFromList'
 import { useEntities } from '@/hooks/useEntities'
 import { v4 as uuidv4 } from 'uuid'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
+import { checkIfBookAlreadyExists } from '@/lib/checkIfBookAlreadyExists'
 
 type ErrorObj = { error: boolean; message: string }
 
@@ -28,53 +29,80 @@ function SearchPageImpl(): JSX.Element {
     const [codes, setCodes] = useState<string[]>([])
     const [countCodeItems, setCountCodeItems] = useState<number>(0)
 
+    const [thereAreExistingBooks, setThereAreExistingBooks] = useState<string[]>([])
+
     const [apiSelected] = useState({
         google: false,
         brasilapi: true
     })
 
-    const { books } = useEntities(['books'])
+    const { books, setBooks } = useEntities(['books'])
 
     const { toast } = useToastify()
+
+    const router = useRouter()
 
     const searchParams = useSearchParams()
 
     const list_isbn = searchParams.get('list_isbn')
 
-    const getBooksInformations = useCallback(async (): Promise<void> => {
-        if (!list_isbn) return
+    const getBooksInformations = useCallback(
+        async (list_isbn: string, books: Book[]): Promise<void> => {
+            if (!books?.length) {
+                const localBooks = await api.sheet.books.get().then(data => {
+                    setBooks(data)
 
-        const localCodes: string[] = JSON.parse(list_isbn)
-        setCodes(localCodes)
-        const localCodesWithErrors: string[] = []
-        const localBooksInformations: BrasilapiBook[] = []
+                    return data
+                })
 
-        let localCount = 0
-        for (const code of localCodes) {
-            localCount++
-            setCountCodeItems(localCount)
-            await searchFromBrasilApi(code).then(response => {
-                if (response.control.error) {
-                    localCodesWithErrors.push(code)
-                    // toast(response.control.message || 'Livros não encontrados', 'error')
-                }
+                books = localBooks
+            }
 
-                if (!response.control.error) {
-                    localBooksInformations.push(response.data)
-                    // toast(response.control.message || 'Livros encontrados com sucesso', 'success')
-                }
-            })
-            await new Promise(resolve => setTimeout(resolve, 500)) // Wait 500ms between each request
-        }
+            const localCodes: string[] = JSON.parse(list_isbn)
+            const localCodesWithErrors: string[] = []
+            const localBooksInformations: BrasilapiBook[] = []
 
-        setBooksInformations(localBooksInformations)
-        setCodesWithErrors(localCodesWithErrors)
-        setLoading(false)
-    }, [list_isbn])
+            const localObjectCodeIsbn = localCodes.map(code => ({ isbn: code })) as unknown as BrasilapiBook[]
+            const { alreadyExists, filteredBooks } = await checkIfBookAlreadyExists(books, localObjectCodeIsbn)
 
-    useEffect(() => {
-        getBooksInformations()
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+            if (!filteredBooks.length) {
+                router.push('/pages/dashboard/book-registration/list')
+                setLoading(false)
+
+                return
+            }
+
+            setThereAreExistingBooks(alreadyExists || [])
+            const localCodesFilted = filteredBooks.map(code => code.isbn)
+            setCodes(localCodesFilted)
+
+            let localCount = 0
+
+            for (const code of localCodesFilted) {
+                localCount++
+                setCountCodeItems(localCount)
+                await searchFromBrasilApi(code).then(response => {
+                    if (response.control.error) {
+                        localCodesWithErrors.push(code)
+                        // toast(response.control.message || 'Livros não encontrados', 'error')
+                    }
+
+                    if (!response.control.error) {
+                        localBooksInformations.push(response.data)
+                        // toast(response.control.message || 'Livros encontrados com sucesso', 'success')
+                    }
+                })
+                await new Promise(resolve => setTimeout(resolve, 500)) // Wait 500ms between each request
+            }
+
+            setBooksInformations(localBooksInformations)
+            setCodesWithErrors(localCodesWithErrors)
+            setLoading(false)
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [books, list_isbn]
+    )
 
     const searchFromBrasilApi = async (code: string): Promise<{ control: ErrorObj; data: BrasilapiBook }> => {
         return await services
@@ -110,12 +138,10 @@ function SearchPageImpl(): JSX.Element {
         // Split the books into chunks of 500 items
         const chunkSize = 100
         const chunks = []
-        const localFilteredByUnique = books?.length
-            ? booksInformations.filter(bookInformation => books?.some(b => +b?.isbn !== +bookInformation?.isbn))
-            : booksInformations
-        setFilteredByUnique(localFilteredByUnique)
-        for (let i = 0; i < localFilteredByUnique.length; i += chunkSize) {
-            chunks.push(localFilteredByUnique.slice(i, i + chunkSize))
+
+        setFilteredByUnique(booksInformations)
+        for (let i = 0; i < booksInformations.length; i += chunkSize) {
+            chunks.push(booksInformations.slice(i, i + chunkSize))
         }
 
         // Process each chunk sequentially
@@ -140,7 +166,7 @@ function SearchPageImpl(): JSX.Element {
                 }
             }
 
-            if (countItems < localFilteredByUnique.length) {
+            if (countItems < booksInformations.length) {
                 setRemainingTime(30)
                 await new Promise(resolve => setTimeout(resolve, 30000)) // Wait 500ms between each post
                 setRemainingTime(0)
@@ -149,7 +175,7 @@ function SearchPageImpl(): JSX.Element {
                 toast(`${chunk.length} livros foram cadastrados com sucesso`, 'success')
             }
 
-            if (countItems === localFilteredByUnique.length) {
+            if (countItems === booksInformations.length) {
                 toast(`Todos os livros foram cadastrados com sucesso`, 'success')
 
                 setTimeout(() => {
@@ -185,6 +211,13 @@ function SearchPageImpl(): JSX.Element {
             return () => clearInterval(interval)
         }
     }, [remainingTime])
+
+    useEffect(() => {
+        if (!list_isbn) return
+
+        getBooksInformations(list_isbn, books)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [list_isbn])
 
     if ((!booksInformations?.length && !loading) || sended) {
         return (
@@ -259,6 +292,20 @@ function SearchPageImpl(): JSX.Element {
                         ) : null}
                     </div>
                 </div>
+                {thereAreExistingBooks?.length ? (
+                    <div
+                        className="w-full max-w-[85%] mx-auto bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4 mt-8"
+                        role="alert"
+                    >
+                        <p className="font-bold">Informação</p>
+                        <p>Os livros com os seguintes códigos ISBN já foram cadastrados anteriormente:</p>
+                        <ul className="list-disc list-inside">
+                            {thereAreExistingBooks.map((isbn, index) => (
+                                <li key={index}>{isbn}</li>
+                            ))}
+                        </ul>
+                    </div>
+                ) : null}
                 {codesWithErrors?.length ? (
                     <div
                         className="w-full max-w-[85%] mx-auto bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 mt-8"
