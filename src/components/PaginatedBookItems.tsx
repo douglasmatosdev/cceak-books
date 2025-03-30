@@ -84,7 +84,7 @@ export const PaginatedBookItems = ({
                 activeLinkClassName="bg-primary text-white rounded-full px-4 py-2"
                 breakLabel="..."
                 nextLabel={
-                    <div className="absolute right-0 top-16 bg-primary text-white rounded-full px-4 py-2">
+                    <div className="absolute right-0 top-8 bg-primary text-white rounded-full px-4 py-2">
                         <FaArrowRight />
                     </div>
                 }
@@ -93,7 +93,7 @@ export const PaginatedBookItems = ({
                 pageRangeDisplayed={5}
                 pageCount={pageCount}
                 previousLabel={
-                    <div className="absolute left-0 top-16 bg-primary text-white rounded-full px-4 py-2">
+                    <div className="absolute left-0 top-8 bg-primary text-white rounded-full px-4 py-2">
                         <FaArrowLeft />
                     </div>
                 }
