@@ -92,7 +92,7 @@ function SearchPageImpl(): JSX.Element {
                         // toast(response.control.message || 'Livros encontrados com sucesso', 'success')
                     }
                 })
-                await new Promise(resolve => setTimeout(resolve, 100)) // Wait 500ms between each request
+                await new Promise(resolve => setTimeout(resolve, 500)) // Wait 500ms between each request
             }
 
             setBooksInformations(localBooksInformations)
