@@ -53,23 +53,23 @@ export default function Books(): JSX.Element {
                     Cadastrar livro
                 </Link>
             </div>
-            {loading ? (
-                <Loading />
-            ) : !filteredBooks?.length ? (
-                <Empty />
-            ) : (
-                <div className="px-4">
-                    <div className="flex justify-between items-center mb-8">
-                        <input
-                            type="text"
-                            placeholder="Pesquise pelo título do livro"
-                            className="border-2 border-gray-300 w-full h-10 p-2"
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <PaginatedBookItems itemsPerPage={10} books={filteredBooks} onDelete={handleDelete} />
+            <div className="px-4">
+                <div className="flex justify-between items-center mb-8">
+                    <input
+                        type="text"
+                        placeholder="Pesquise pelo título do livro"
+                        className="border-2 border-gray-300 w-full h-10 p-2"
+                        onChange={handleChange}
+                    />
                 </div>
-            )}
+                {loading ? (
+                    <Loading />
+                ) : !filteredBooks?.length ? (
+                    <Empty />
+                ) : (
+                    <PaginatedBookItems itemsPerPage={10} books={filteredBooks} onDelete={handleDelete} />
+                )}
+            </div>
         </div>
     )
 }
