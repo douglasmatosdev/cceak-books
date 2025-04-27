@@ -116,7 +116,8 @@ function SearchPageImpl(): JSX.Element {
                     imageLinks: {
                         thumbnail: bookDetails?.cover_url
                     },
-                    categories: bookDetails?.subjects
+                    categories: bookDetails?.subjects,
+                    authors: bookDetails?.authors?.join(', ')
                 } as unknown as BrasilapiBook
 
                 return { control: { error: false, message: 'Livro encontrado' }, data: parsed }
