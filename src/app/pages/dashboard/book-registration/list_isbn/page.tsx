@@ -116,8 +116,7 @@ function SearchPageImpl(): JSX.Element {
                     imageLinks: {
                         thumbnail: bookDetails?.cover_url
                     },
-                    categories: bookDetails?.subjects,
-                    authors: bookDetails?.authors?.join(', ')
+                    categories: bookDetails?.subjects
                 } as unknown as BrasilapiBook
 
                 return { control: { error: false, message: 'Livro encontrado' }, data: parsed }
@@ -351,13 +350,11 @@ function SearchPageImpl(): JSX.Element {
                                         isbn={+book?.isbn}
                                         title={book?.title}
                                         subtitle={book?.subtitle}
-                                        author={book?.authors?.map(a => a)?.join(', ')}
+                                        author={book?.authors?.join(', ')}
                                         description={(book as unknown as GoogleApiBooks)?.description}
                                         image={(book as unknown as GoogleApiBooks)?.imageLinks?.thumbnail as string}
                                         amount={1}
-                                        category={(book as unknown as GoogleApiBooks)?.categories
-                                            ?.map(c => c)
-                                            ?.join(', ')}
+                                        category={(book as unknown as GoogleApiBooks)?.categories?.join(', ')}
                                         place=""
                                     />
                                 </div>
