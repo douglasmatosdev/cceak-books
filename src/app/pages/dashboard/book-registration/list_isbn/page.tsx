@@ -161,7 +161,9 @@ function SearchPageImpl(): JSX.Element {
                             ...(book as unknown as Book),
                             id: uuidv4(),
                             status: 'available',
-                            amount: 1
+                            amount: 1,
+                            author: book?.authors?.join(', '),
+                            category: book?.subjects?.join(', ')
                         })
                         .catch(error => {
                             const message = error?.response?.data?.message
@@ -354,7 +356,7 @@ function SearchPageImpl(): JSX.Element {
                                         description={(book as unknown as GoogleApiBooks)?.description}
                                         image={(book as unknown as GoogleApiBooks)?.imageLinks?.thumbnail as string}
                                         amount={1}
-                                        category={(book as unknown as GoogleApiBooks)?.categories?.join(', ')}
+                                        category={book?.subjects?.join(', ')}
                                         place=""
                                     />
                                 </div>
