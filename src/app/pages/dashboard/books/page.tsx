@@ -6,11 +6,19 @@ import Link from 'next/link'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { BackButton } from '@/components/BackButton'
 import { Loading } from '@/components/Loading'
+import OutsideClickHandler from 'react-outside-click-handler'
+
+export type FilterBook = {
+    label: 'Título' | 'Autor' | 'Categoria' | 'ISBN'
+    value: 'title' | 'author' | 'category' | 'isbn'
+}
 
 export default function Books(): JSX.Element {
     const [books, setBooks] = useState<Book[]>([])
     const [filteredBooks, setFilteredBooks] = useState<Book[]>(books)
     const [loading, setLoading] = useState(true)
+    const [filter, setFilter] = useState<FilterBook>({ label: 'Título', value: 'title' })
+    const [showFilter, setShowFilter] = useState(false)
 
     const handleDelete = async (id: string): Promise<void> => {
         await api.sheet.books.delete(id).then(() => {
@@ -24,7 +32,7 @@ export default function Books(): JSX.Element {
         const value = e.target.value
 
         if (value) {
-            setFilteredBooks(books.filter(book => book.title.toLowerCase().match(value.toLowerCase())))
+            setFilteredBooks(books.filter(book => String(book[filter.value]).toLowerCase().match(value.toLowerCase())))
         } else {
             setFilteredBooks(books)
         }
@@ -42,10 +50,20 @@ export default function Books(): JSX.Element {
             })
     }, [])
 
+    const handleFilterBook = (event: React.MouseEvent<HTMLDivElement>): void => {
+        const selectedFilter = event.currentTarget.getAttribute('data-filter')
+        const selectedLabel = event.currentTarget.getAttribute('data-label')
+
+        if (selectedFilter && selectedLabel) {
+            setFilter({ label: selectedLabel as FilterBook['label'], value: selectedFilter as FilterBook['value'] })
+            setShowFilter(false)
+        }
+    }
+
     return (
         <div className="w-full max-w-[740px] mx-auto">
-            <BackButton classNameContainer="ml-4 mb-8" />
-            <div className="w-full flex justify-center items-center mb-8">
+            <div className="w-full flex justify-between items-center mb-8 p-4">
+                <BackButton />
                 <Link
                     href={'/pages/dashboard/book-registration'}
                     className="py-2 px-4 bg-primary text-white rounded-lg"
@@ -54,7 +72,69 @@ export default function Books(): JSX.Element {
                 </Link>
             </div>
             <div className="px-4">
-                <div className="flex justify-between items-center mb-8">
+                <div className="flex flex-col md:flex-row-reverse  mb-8 md:px-8">
+                    <div className="relative w-full md:w-32 md:ml-4 h-10 mb-2 flex justify-center items-center border cursor-pointer">
+                        <div
+                            onClick={() => setShowFilter(!showFilter)}
+                            className="w-full flex justify-center items-center"
+                        >
+                            <span>{filter.label}</span>
+                        </div>
+                        {showFilter ? (
+                            <OutsideClickHandler onOutsideClick={() => showFilter && setShowFilter(false)}>
+                                <div className="absolute top-full right-0 w-full flex flex-col justify-center items-center border bg-white">
+                                    <div
+                                        onClick={handleFilterBook}
+                                        data-filter="title"
+                                        data-label="Título"
+                                        className={
+                                            filter.value === 'title'
+                                                ? 'hidden'
+                                                : 'w-full flex justify-center items-center p-2  hover:bg-slate-300 odd:bg-slate-100'
+                                        }
+                                    >
+                                        Título
+                                    </div>
+                                    <div
+                                        onClick={handleFilterBook}
+                                        data-filter="author"
+                                        data-label="Autor"
+                                        className={
+                                            filter.value === 'author'
+                                                ? 'hidden'
+                                                : 'w-full flex justify-center items-center p-2 hover:bg-slate-300 odd:bg-slate-100'
+                                        }
+                                    >
+                                        Autor
+                                    </div>
+                                    <div
+                                        onClick={handleFilterBook}
+                                        data-filter="category"
+                                        data-label="Categoria"
+                                        className={
+                                            filter.value === 'category'
+                                                ? 'hidden'
+                                                : 'w-full flex justify-center items-center p-2 hover:bg-slate-300 odd:bg-slate-100'
+                                        }
+                                    >
+                                        Categoria
+                                    </div>
+                                    <div
+                                        onClick={handleFilterBook}
+                                        data-filter="isbn"
+                                        data-label="ISBN"
+                                        className={
+                                            filter.value === 'isbn'
+                                                ? 'hidden'
+                                                : 'w-full flex justify-center items-center p-2 hover:bg-slate-300 odd:bg-slate-100'
+                                        }
+                                    >
+                                        ISBN
+                                    </div>
+                                </div>
+                            </OutsideClickHandler>
+                        ) : null}
+                    </div>
                     <input
                         type="text"
                         placeholder="Pesquise pelo título do livro"

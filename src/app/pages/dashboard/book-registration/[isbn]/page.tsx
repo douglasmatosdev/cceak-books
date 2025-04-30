@@ -42,7 +42,8 @@ export default function SearchPage({ params }: SearchPageProps): JSX.Element {
                     imageLinks: {
                         thumbnail: bookDetails?.cover_url
                     },
-                    categories: bookDetails?.subjects
+                    categories: bookDetails?.subjects?.join(', '),
+                    authors: bookDetails?.authors?.join(', ')
                 } as unknown as GoogleApiBooks
                 setBookInfo(parsed)
                 setLoading(false)
@@ -83,11 +84,11 @@ export default function SearchPage({ params }: SearchPageProps): JSX.Element {
                         isbn={+params?.isbn}
                         title={bookInfo?.title}
                         subtitle={bookInfo?.subtitle}
-                        author={bookInfo?.authors?.join(', ')}
+                        author={String(bookInfo?.authors)}
                         description={bookInfo?.description}
                         image={bookInfo?.imageLinks?.thumbnail as string}
                         amount={1}
-                        category={bookInfo?.categories?.join(', ')}
+                        category={String(bookInfo?.categories)}
                         place=""
                     />
                 </div>
